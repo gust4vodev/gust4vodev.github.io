@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0C0906;
+    --bg:#090806;
     --ink:#F1ECDD;
     --ink-soft:#B7AD98;
     --ink-faint:#786E58;
@@ -181,9 +181,12 @@
   var I0 = 2.5;               /* fixed injected current — independent of network size/density */
   var RELAX_ITERS = 18;       /* Gauss-Seidel sweeps per frame (warm-started, so few suffice) */
   var SINK_FRAMES = 150;      /* frames each rotating sink stays the drain */
-  var VISIBLE_D = D_MIN * 1.4;
-  var FOUND_D = 0.75;         /* a food's own tube must be near-fully established, not just flickering */
+  var VISIBLE_D = D_MIN * 1.15;   /* lower bar: lets faint micro-branches stay visible, not just the winners */
+  var VISUAL_D_REF = 0.5;         /* reference "fully thick" value for rendering — most real tubes never reach D_MAX=1.0 */
+  var FOUND_D = 0.75;              /* a food's own tube must be near-fully established, not just flickering */
   var MOUSE_RADIUS = 160;
+  var SAT_COUNT = 10;              /* satellite micro-branches sprouting from each labeled point */
+  var SAT_RADIUS = 85;
 
   var W, H;
   var points = [];            /* {x,y} lattice + food nodes */
@@ -197,8 +200,12 @@
   var sinkTimer = 0;
   var mouse = null;
 
-  var accentRgb = {r:232,g:163,b:61};
-  var mossRgb = {r:123,g:174,b:143};
+  /* the network's own palette is deliberately duller than the UI accent
+     (var(--accent), still used for node pills/title) — a scientific-diagram
+     read, not a neon one. Weak/secondary tubes: near-invisible dark olive.
+     Strong/primary tubes: pale warm off-white, not saturated orange. */
+  var netHighRgb = {r:236,g:221,b:186};
+  var netLowRgb = {r:42,g:47,b:38};
 
   function shuffle(arr){
     for(var i=arr.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=arr[i]; arr[i]=arr[j]; arr[j]=t; }
@@ -234,10 +241,10 @@
     function addEdge(a,b){
       var len = Math.hypot(points[a].x-points[b].x, points[a].y-points[b].y);
       if(len < 0.001) return;
-      /* a small stable perpendicular bow per edge, so rendered tubes read as
-         organic curves rather than the dead-straight, angular look of the
-         underlying lattice (which otherwise reads like a retro game map). */
-      edges.push({a:a, b:b, len:len, D: D_MIN + Math.random()*0.05, Q:0, bow:(Math.random()-0.5)*len*0.5});
+      /* a SMALL stable perpendicular bow per edge — just enough to avoid the
+         dead-straight, angular "retro game map" look of the raw lattice.
+         Too much bow (tried 0.5x len earlier) reads as hand-drawn wobble instead. */
+      edges.push({a:a, b:b, len:len, D: D_MIN + Math.random()*0.05, Q:0, bow:(Math.random()-0.5)*len*0.15});
     }
     /* deliberately sparse (no diagonals): fewer parallel redundant paths means
        current concentrates into clear, visible tubes much faster. */
@@ -261,6 +268,21 @@
       var link = Math.min(4, dists.length);
       for(var k=0;k<link;k++){ addEdge(fi, dists[k].i); }
       foodIdx.push(fi);
+
+      /* a satellite micro-cluster sprouting from the food point itself — this is
+         what makes the network read as having GROWN from each concept, rather
+         than a single line drawn between five labels. */
+      for(var s=0; s<SAT_COUNT; s++){
+        var ang = Math.random()*Math.PI*2, rad = 15 + Math.random()*SAT_RADIUS;
+        var sxp = food.x + Math.cos(ang)*rad, syp = food.y + Math.sin(ang)*rad;
+        var si = points.length;
+        points.push({x:sxp, y:syp});
+        var cands = [];
+        for(var q=0;q<si;q++){ cands.push({i:q, d: Math.hypot(points[q].x-sxp, points[q].y-syp)}); }
+        cands.sort(function(a,b){ return a.d-b.d; });
+        var link2 = Math.min(2, cands.length);
+        for(var k2=0;k2<link2;k2++){ addEdge(si, cands[k2].i); }
+      }
     });
 
     adj = points.map(function(){ return []; });
@@ -377,37 +399,32 @@
   function render(){
     ctx.clearRect(0,0,W,H);
     ctx.lineCap = 'round';
+    var junctionD = {}; /* point index -> strongest incident visible D, for nodules */
     for(var i=0;i<edges.length;i++){
       var e = edges[i];
       if(e.D < VISIBLE_D) continue;
-      var t = Math.min(1, (e.D-VISIBLE_D)/(D_MAX-VISIBLE_D));
-      var rgb;
-      if(t < 0.5){
-        var t1 = t/0.5;
-        rgb = { r: mossRgb.r*t1, g: mossRgb.g*t1, b: mossRgb.b*t1 };
-      } else {
-        var t2 = (t-0.5)/0.5;
-        rgb = {
-          r: mossRgb.r + (accentRgb.r-mossRgb.r)*t2,
-          g: mossRgb.g + (accentRgb.g-mossRgb.g)*t2,
-          b: mossRgb.b + (accentRgb.b-mossRgb.b)*t2
-        };
-      }
-      var alpha = 0.15 + t*0.85;
-      var lw = 0.6 + t*3.6;
-      var glow = 2 + t*6;
+      var t = Math.min(1, (e.D-VISIBLE_D)/(VISUAL_D_REF-VISIBLE_D));
+      var rgb = {
+        r: netLowRgb.r + (netHighRgb.r-netLowRgb.r)*t,
+        g: netLowRgb.g + (netHighRgb.g-netLowRgb.g)*t,
+        b: netLowRgb.b + (netHighRgb.b-netLowRgb.b)*t
+      };
+      /* scientific-diagram restraint, not neon: modest alpha/glow ceilings */
+      var alpha = 0.06 + t*0.5;
+      var lw = 0.5 + t*2.6;
+      var glow = 0.4 + t*1.8;
       var a = points[e.a], b = points[e.b];
       if(mouse){
         var mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
         var d = Math.hypot(mx-mouse.x, my-mouse.y);
         if(d < MOUSE_RADIUS){
           var boost = 1 - d/MOUSE_RADIUS;
-          alpha = Math.min(1, alpha + boost*0.4);
-          lw += boost*1.4;
-          glow += boost*8;
+          alpha = Math.min(1, alpha + boost*0.3);
+          lw += boost*1.0;
+          glow += boost*2.5;
         }
       }
-      ctx.shadowColor = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+',0.7)';
+      ctx.shadowColor = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+',0.4)';
       ctx.shadowBlur = glow;
       ctx.strokeStyle = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')';
       ctx.lineWidth = lw;
@@ -420,8 +437,29 @@
       ctx.moveTo(a.x,a.y);
       ctx.quadraticCurveTo(cx,cy,b.x,b.y);
       ctx.stroke();
+
+      if(!junctionD[e.a] || e.D>junctionD[e.a]) junctionD[e.a]=e.D;
+      if(!junctionD[e.b] || e.D>junctionD[e.b]) junctionD[e.b]=e.D;
     }
     ctx.shadowBlur = 0;
+
+    /* small nodules at real branch points — junctions where 3+ visible tubes
+       actually meet, not one per lattice point (that would look mechanical). */
+    for(var pi in junctionD){
+      if(adj[pi].filter(function(link){ return edges[link.edge].D >= VISIBLE_D; }).length < 3) continue;
+      var dj = junctionD[pi];
+      var tj = Math.min(1, (dj-VISIBLE_D)/(VISUAL_D_REF-VISIBLE_D));
+      var rgbj = {
+        r: netLowRgb.r + (netHighRgb.r-netLowRgb.r)*tj,
+        g: netLowRgb.g + (netHighRgb.g-netLowRgb.g)*tj,
+        b: netLowRgb.b + (netHighRgb.b-netLowRgb.b)*tj
+      };
+      var p = points[pi];
+      ctx.fillStyle = 'rgba('+rgbj.r+','+rgbj.g+','+rgbj.b+','+(0.3+tj*0.5)+')';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 0.8+tj*1.6, 0, Math.PI*2);
+      ctx.fill();
+    }
   }
 
   function loop(ts){
