@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physarum — Gustavo Djonatan Galhaci</title>
+<meta name="description" content="Uma simulação de Physarum polycephalum que encontra, sozinha, o caminho até o portfólio de Gustavo Djonatan Galhaci.">
+<meta name="theme-color" content="#0C0906">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23140F0A'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='36' font-weight='700' fill='%23E8A33D' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0C0906;
+    --ink:#F1ECDD;
+    --ink-soft:#B7AD98;
+    --ink-faint:#786E58;
+    --accent:#E8A33D;
+    --moss:#7BAE8F;
+    --line:rgba(241,236,221,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Mono',monospace;
+    overflow:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+  canvas{position:fixed; inset:0; width:100%; height:100%; display:block;}
+
+  .ui{
+    position:fixed; inset:0; z-index:2; pointer-events:none;
+    display:flex; flex-direction:column; justify-content:space-between;
+    padding:28px; height:100%;
+  }
+  .top-row{display:flex; justify-content:space-between; align-items:flex-start; gap:20px;}
+  .back{
+    pointer-events:auto;
+    font-size:0.78rem; letter-spacing:0.04em; color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:20px; padding:8px 16px;
+    background:rgba(241,236,221,0.03);
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .back:hover{border-color:var(--accent); color:var(--accent);}
+
+  .title-block{text-align:right;}
+  .title-block h1{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-size:clamp(1.6rem,4vw,2.6rem);
+    font-weight:800;
+    margin:0;
+    letter-spacing:0.02em;
+  }
+  .title-block .tagline{
+    margin:4px 0 0;
+    font-size:0.8rem;
+    color:var(--accent);
+    font-style:italic;
+  }
+
+  .caption-block{
+    max-width:56ch;
+    padding:14px 18px;
+    border-radius:8px;
+    background:linear-gradient(to top, rgba(12,9,6,0.7), rgba(12,9,6,0.4) 70%, transparent);
+    backdrop-filter:blur(2px);
+    -webkit-backdrop-filter:blur(2px);
+  }
+  .caption{
+    font-size:0.94rem;
+    line-height:1.55;
+    color:var(--ink-soft);
+    margin:0;
+  }
+  .caption strong{color:var(--ink); font-weight:600;}
+
+  .hint{
+    font-size:0.85rem; color:var(--accent); font-style:italic;
+    transition:opacity .2s ease;
+    min-height:1.3em;
+    margin-top:10px;
+  }
+
+  .nodes a{
+    position:absolute;
+    pointer-events:auto;
+    transform:translate(-50%,-50%);
+    font-size:0.74rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--ink-faint);
+    text-decoration:none;
+    padding:9px 14px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    background:rgba(12,9,6,0.55);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+    transition:color .5s ease, border-color .5s ease, box-shadow .5s ease, transform .2s ease;
+    animation:nodeIdle 3.4s ease-in-out infinite;
+  }
+  .nodes a:hover{ transform:translate(-50%,-50%) scale(1.06); border-color:var(--accent); color:var(--ink); }
+  .nodes a.found{
+    color:var(--ink);
+    border-color:var(--accent);
+    box-shadow:0 0 24px rgba(232,163,61,0.35);
+    animation:none;
+  }
+  @keyframes nodeIdle{
+    0%,100%{ opacity:0.7; }
+    50%{ opacity:1; }
+  }
+
+  .lab-footnote{
+    pointer-events:auto;
+    font-size:0.68rem; color:var(--ink-faint);
+  }
+  .lab-footnote a{color:var(--ink-soft);}
+
+  @media (max-width:640px){
+    .top-row{flex-direction:column;}
+    .title-block{text-align:left;}
+    .caption{font-size:0.72rem;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="sim" aria-hidden="true"></canvas>
+
+<div class="ui">
+  <div class="top-row">
+    <a class="back" href="index.html">← portfólio</a>
+    <div class="title-block">
+      <h1>PHYSARUM</h1>
+      <p class="tagline">"I don't design the path. I design the system that finds it."</p>
+    </div>
+  </div>
+  <div class="caption-block">
+    <p class="caption">Inspirado no <strong>Physarum polycephalum</strong> — um organismo que reforça os caminhos eficientes e deixa os outros desaparecer, sem nenhum controle central.<br>Explore a rede. Cada nó é uma parte do sistema.</p>
+    <p class="hint" id="statusHint" data-default="a rede está se formando…">a rede está se formando…</p>
+    <p class="lab-footnote">Experimento pessoal — o portfólio "de verdade" está em <a href="index.html">index.html</a>.</p>
+  </div>
+</div>
+
+<nav class="nodes" id="nodesNav" aria-label="Navegação para o portfólio">
+  <a href="index.html#resultados" data-key="data" data-context="Transformar informação dispersa em estrutura." style="left:18%; top:30%;">DATA</a>
+  <a href="index.html#case-automacao" data-key="automation" data-context="Fazer o sistema rodar sem intervenção constante." style="left:80%; top:20%;">AUTOMATION</a>
+  <a href="index.html#case-auditoria" data-key="process" data-context="Encontrar onde a complexidade pode ser eliminada." style="left:50%; top:80%;">PROCESS</a>
+  <a href="index.html#case-alocacao" data-key="business" data-context="Conectar tudo a um resultado." style="left:85%; top:62%;">BUSINESS</a>
+  <a href="index.html#cases" data-key="projects" data-context="Onde tudo isso vira entrega real." style="left:8%; top:50%;">PROJECTS</a>
+</nav>
+
+<script>
+/*
+  Physarum network model — a real approximation of Tero et al. 2010 (Science),
+  "Rules for Biologically Inspired Adaptive Network Design" (the Tokyo-rail study).
+
+  The organism is modeled as a graph of tubes. Each tube has a conductance D.
+  Flow through the network is solved like an electrical circuit (Kirchhoff's law):
+  Q_ij = (D_ij / L_ij) * (p_i - p_j), pressures relaxed to satisfy conservation
+  at every node except a chosen source/sink pair. Conductance then adapts toward
+  the flow it just carried: dD/dt = |Q|^gamma - D. Heavily used tubes thicken and
+  starve out the alternatives — that's the entire "network optimizes itself" effect,
+  no pathfinding or pheromone-trail heuristics involved.
+*/
+(function(){
+  var canvas = document.getElementById('sim');
+  var ctx = canvas.getContext('2d');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var dpr = Math.min(window.devicePixelRatio || 1, 1.6);
+
+  var GAMMA = 1.7;            /* >1: sparser, more decisive pruning (matches real Physarum) */
+  var DT = 0.065;             /* conductance integration step per frame */
+  var D_MIN = 0.03;
+  var D_MAX = 1.0;
+  var I0 = 2.5;               /* fixed injected current — independent of network size/density */
+  var RELAX_ITERS = 18;       /* Gauss-Seidel sweeps per frame (warm-started, so few suffice) */
+  var SINK_FRAMES = 150;      /* frames each rotating sink stays the drain */
+  var VISIBLE_D = D_MIN * 1.4;
+  var FOUND_D = 0.75;         /* a food's own tube must be near-fully established, not just flickering */
+  var MOUSE_RADIUS = 160;
+
+  var W, H;
+  var points = [];            /* {x,y} lattice + food nodes */
+  var edges = [];             /* {a,b,len,D,Q} */
+  var adj = [];                /* adj[i] = [{edge, other}] */
+  var pressure = [];
+  var foodIdx = [];           /* indices into points[] for the 5 labeled nodes */
+  var foods = [];             /* DOM refs + found state, parallel to foodIdx */
+  var sinkQueue = [];
+  var currentSink = null;
+  var sinkTimer = 0;
+  var mouse = null;
+
+  var accentRgb = {r:232,g:163,b:61};
+  var mossRgb = {r:123,g:174,b:143};
+
+  function shuffle(arr){
+    for(var i=arr.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=arr[i]; arr[i]=arr[j]; arr[j]=t; }
+    return arr;
+  }
+
+  function refillSinkQueue(){
+    var order = [];
+    for(var i=0;i<foodIdx.length;i++) order.push(i);
+    sinkQueue = shuffle(order);
+  }
+
+  function buildGraph(){
+    points = [];
+    edges = [];
+
+    var spacing = 60;
+    var cols = Math.max(4, Math.round(W/spacing));
+    var rows = Math.max(4, Math.round(H/spacing));
+    var sx = W/cols, sy = H/rows;
+    var grid = [];
+    for(var r=0; r<=rows; r++){
+      grid.push([]);
+      for(var c=0; c<=cols; c++){
+        var idx = points.length;
+        points.push({
+          x: c*sx + (Math.random()-0.5)*sx*0.85,
+          y: r*sy + (Math.random()-0.5)*sy*0.85
+        });
+        grid[r].push(idx);
+      }
+    }
+    function addEdge(a,b){
+      var len = Math.hypot(points[a].x-points[b].x, points[a].y-points[b].y);
+      if(len < 0.001) return;
+      /* a small stable perpendicular bow per edge, so rendered tubes read as
+         organic curves rather than the dead-straight, angular look of the
+         underlying lattice (which otherwise reads like a retro game map). */
+      edges.push({a:a, b:b, len:len, D: D_MIN + Math.random()*0.05, Q:0, bow:(Math.random()-0.5)*len*0.5});
+    }
+    /* deliberately sparse (no diagonals): fewer parallel redundant paths means
+       current concentrates into clear, visible tubes much faster. */
+    for(var r2=0; r2<=rows; r2++){
+      for(var c2=0; c2<=cols; c2++){
+        var here = grid[r2][c2];
+        if(c2<cols) addEdge(here, grid[r2][c2+1]);
+        if(r2<rows) addEdge(here, grid[r2+1][c2]);
+      }
+    }
+
+    /* attach the 5 labeled food points as real graph nodes, wired into
+       their nearest lattice neighbours so they're properly embedded. */
+    foodIdx = [];
+    foods.forEach(function(food){
+      var fi = points.length;
+      points.push({x: food.x, y: food.y});
+      var dists = [];
+      for(var p=0;p<fi;p++){ dists.push({i:p, d: Math.hypot(points[p].x-food.x, points[p].y-food.y)}); }
+      dists.sort(function(a,b){ return a.d-b.d; });
+      var link = Math.min(4, dists.length);
+      for(var k=0;k<link;k++){ addEdge(fi, dists[k].i); }
+      foodIdx.push(fi);
+    });
+
+    adj = points.map(function(){ return []; });
+    edges.forEach(function(e, ei){
+      adj[e.a].push({edge:ei, other:e.b});
+      adj[e.b].push({edge:ei, other:e.a});
+    });
+    pressure = new Float32Array(points.length);
+    refillSinkQueue();
+    currentSink = null;
+    sinkTimer = 0;
+  }
+
+  function readFoods(){
+    var nav = document.getElementById('nodesNav');
+    foods = Array.prototype.map.call(nav.querySelectorAll('a'), function(a){
+      var rect = a.getBoundingClientRect();
+      return { el:a, x: rect.left+rect.width/2, y: rect.top+rect.height/2, found:false };
+    });
+  }
+
+  /* Fixed CURRENT injection (not fixed voltage): a constant amount of "flow" I0
+     enters at the source and must exit at the sink, however many parallel paths
+     exist between them. Pinning voltage instead would let the effective current
+     shrink as the graph gets denser/more redundant — with hundreds of parallel
+     lattice paths, individual edges would never carry enough flow to bootstrap
+     the reinforcement feedback loop, and everything would stall at the D_MIN floor. */
+  /* All food points except one rotating "drain" push current simultaneously,
+     every single frame — not one pair at a time. That's what keeps every
+     already-formed tube continuously alive: nothing ever sits idle long enough
+     to starve and disappear between turns, the way a strict pairwise pulse would. */
+  function relax(sinkIdx, sourceIndices){
+    pressure[sinkIdx] = 0; /* reference ground */
+    for(var it=0; it<RELAX_ITERS; it++){
+      for(var i=0;i<points.length;i++){
+        if(i===sinkIdx) continue;
+        var neighbors = adj[i];
+        if(!neighbors.length) continue;
+        var num=0, den=0;
+        for(var k=0;k<neighbors.length;k++){
+          var e = edges[neighbors[k].edge];
+          var w = e.D/e.len;
+          num += w*pressure[neighbors[k].other];
+          den += w;
+        }
+        var inject = sourceIndices.indexOf(i) !== -1 ? I0 : 0;
+        if(den>0) pressure[i] = (num+inject)/den;
+      }
+    }
+  }
+
+  function updateConductance(){
+    for(var i=0;i<edges.length;i++){
+      var e = edges[i];
+      var w = e.D/e.len;
+      var q = w*(pressure[e.a]-pressure[e.b]);
+      e.Q = q;
+      var reinforcement = Math.pow(Math.abs(q), GAMMA);
+      e.D += DT*(reinforcement - e.D);
+      if(e.D < D_MIN) e.D = D_MIN;
+      if(e.D > D_MAX) e.D = D_MAX;
+    }
+  }
+
+  function step(){
+    if(sinkTimer <= 0){
+      if(!sinkQueue.length) refillSinkQueue();
+      currentSink = sinkQueue.pop();
+      sinkTimer = SINK_FRAMES;
+    }
+    sinkTimer--;
+
+    var sinkFood = foodIdx[currentSink];
+    var sourceFoods = [];
+    for(var i=0;i<foodIdx.length;i++){ if(i !== currentSink) sourceFoods.push(foodIdx[i]); }
+    relax(sinkFood, sourceFoods);
+    updateConductance();
+  }
+
+  function checkFoods(){
+    var anyLeft = false;
+    foods.forEach(function(food, i){
+      if(food.found) return;
+      anyLeft = true;
+      var idx = foodIdx[i];
+      var maxD = 0;
+      adj[idx].forEach(function(link){ var d = edges[link.edge].D; if(d>maxD) maxD=d; });
+      if(maxD > FOUND_D){ food.found = true; food.el.classList.add('found'); }
+    });
+    if(!anyLeft) setStatusDefault('rede convergida — todos os nós conectados');
+  }
+
+  /* The hint line does double duty: it shows the simulation status by default,
+     but swaps to a node's own context line while that node is hovered/focused,
+     then reverts — hovering must never permanently overwrite the real status. */
+  var hoveredContext = null;
+  function setStatusDefault(text){
+    var hint = document.getElementById('statusHint');
+    if(hint) hint.setAttribute('data-default', text);
+    if(hint && !hoveredContext) hint.textContent = text;
+  }
+  function wireNodeContext(){
+    var hint = document.getElementById('statusHint');
+    document.querySelectorAll('.nodes a').forEach(function(a){
+      var ctx = a.getAttribute('data-context');
+      if(!ctx) return;
+      a.addEventListener('mouseenter', function(){ hoveredContext = ctx; if(hint) hint.textContent = ctx; });
+      a.addEventListener('focus', function(){ hoveredContext = ctx; if(hint) hint.textContent = ctx; });
+      a.addEventListener('mouseleave', function(){ hoveredContext = null; if(hint) hint.textContent = hint.getAttribute('data-default'); });
+      a.addEventListener('blur', function(){ hoveredContext = null; if(hint) hint.textContent = hint.getAttribute('data-default'); });
+    });
+  }
+
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    ctx.lineCap = 'round';
+    for(var i=0;i<edges.length;i++){
+      var e = edges[i];
+      if(e.D < VISIBLE_D) continue;
+      var t = Math.min(1, (e.D-VISIBLE_D)/(D_MAX-VISIBLE_D));
+      var rgb;
+      if(t < 0.5){
+        var t1 = t/0.5;
+        rgb = { r: mossRgb.r*t1, g: mossRgb.g*t1, b: mossRgb.b*t1 };
+      } else {
+        var t2 = (t-0.5)/0.5;
+        rgb = {
+          r: mossRgb.r + (accentRgb.r-mossRgb.r)*t2,
+          g: mossRgb.g + (accentRgb.g-mossRgb.g)*t2,
+          b: mossRgb.b + (accentRgb.b-mossRgb.b)*t2
+        };
+      }
+      var alpha = 0.15 + t*0.85;
+      var lw = 0.6 + t*3.6;
+      var glow = 2 + t*6;
+      var a = points[e.a], b = points[e.b];
+      if(mouse){
+        var mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+        var d = Math.hypot(mx-mouse.x, my-mouse.y);
+        if(d < MOUSE_RADIUS){
+          var boost = 1 - d/MOUSE_RADIUS;
+          alpha = Math.min(1, alpha + boost*0.4);
+          lw += boost*1.4;
+          glow += boost*8;
+        }
+      }
+      ctx.shadowColor = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+',0.7)';
+      ctx.shadowBlur = glow;
+      ctx.strokeStyle = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')';
+      ctx.lineWidth = lw;
+      var dx = b.x-a.x, dy = b.y-a.y;
+      var nx = -dy, ny = dx;
+      var nlen = Math.hypot(nx,ny) || 1;
+      var cx = (a.x+b.x)/2 + (nx/nlen)*e.bow;
+      var cy = (a.y+b.y)/2 + (ny/nlen)*e.bow;
+      ctx.beginPath();
+      ctx.moveTo(a.x,a.y);
+      ctx.quadraticCurveTo(cx,cy,b.x,b.y);
+      ctx.stroke();
+    }
+    ctx.shadowBlur = 0;
+  }
+
+  function loop(ts){
+    if(document.hidden){ requestAnimationFrame(loop); return; }
+    step();
+    render();
+    checkFoods();
+    requestAnimationFrame(loop);
+  }
+
+  function staticRender(){
+    for(var i=0;i<700;i++){ step(); }
+    render();
+    foods.forEach(function(f){ f.found=true; f.el.classList.add('found'); });
+    setStatusDefault('rede convergida — todos os nós conectados');
+  }
+
+  function resize(){
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = Math.floor(W*dpr); canvas.height = Math.floor(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    readFoods();
+    buildGraph();
+  }
+
+  window.addEventListener('pointermove', function(e){
+    mouse = { x: e.clientX, y: e.clientY };
+  });
+  window.addEventListener('pointerleave', function(){ mouse = null; });
+
+  var resizeTimer, lastWidth = 0;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function(){
+      if(Math.abs(window.innerWidth - lastWidth) < 40) return;
+      lastWidth = window.innerWidth;
+      resize();
+      if(reduceMotion) staticRender();
+    }, 250);
+  });
+
+  wireNodeContext();
+  resize();
+  lastWidth = window.innerWidth;
+  if(reduceMotion){
+    staticRender();
+  } else {
+    requestAnimationFrame(loop);
+  }
+})();
+</script>
+</body>
+</html>
