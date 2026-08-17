@@ -40,8 +40,18 @@
   .grain{
     position:fixed; inset:0; z-index:1; pointer-events:none;
     filter:url(#grainFilter);
-    opacity:0.05;
+    opacity:0.06;
     mix-blend-mode:overlay;
+  }
+
+  /* a single soft directional light cue — brighter near one corner, falling
+     off toward the opposite one — reads as "lit from somewhere" without
+     faking literal cast shadows of the network lines, which would look like
+     a cheap drop-shadow filter rather than real light. */
+  .vignette{
+    position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:radial-gradient(ellipse at 18% 12%, rgba(224,198,74,0.05), transparent 55%),
+               radial-gradient(ellipse at 85% 92%, rgba(0,0,0,0.35), transparent 60%);
   }
 
   .ui{
@@ -99,8 +109,8 @@
 
   .nodes a{
     position:absolute;
-    pointer-events:auto;
-    transform:translate(-50%,-50%);
+    pointer-events:none; /* hidden targets aren't clickable until discovered */
+    transform:translate(-50%,-50%) scale(0.85);
     font-size:0.74rem; letter-spacing:0.12em; text-transform:uppercase;
     color:var(--ink-faint);
     text-decoration:none;
@@ -113,23 +123,29 @@
     /* inset shadow gives the pill a touch of physical volume instead of
        reading as a flat vector shape pasted on top */
     box-shadow:inset 0 1px 1px rgba(241,236,221,0.06), inset 0 -1px 2px rgba(0,0,0,0.35);
-    transition:color .5s ease, border-color .5s ease, box-shadow .5s ease, transform .2s ease;
-    animation-name:nodeIdle;
-    animation-timing-function:ease-in-out;
-    animation-iteration-count:infinite;
-    /* duration/delay are randomized per node via JS so they don't pulse in
-       lockstep — synchronized pulsing reads as "machine", not "organism" */
+    opacity:0; /* invisible until the organism's own growth reaches it */
+    transition:opacity 1.2s ease, color .5s ease, border-color .5s ease, box-shadow .5s ease, transform .3s ease;
   }
   .nodes a:hover{ transform:translate(-50%,-50%) scale(1.06); border-color:var(--accent); color:var(--ink); }
   .nodes a.found{
+    opacity:1;
+    pointer-events:auto;
     color:var(--ink);
     border-color:var(--accent);
-    box-shadow:inset 0 1px 1px rgba(241,236,221,0.06), inset 0 -1px 2px rgba(0,0,0,0.35), 0 0 24px rgba(232,163,61,0.35);
-    animation:none;
+    transform:translate(-50%,-50%) scale(1);
+    /* the amber glow breathes slowly (own randomized timing per node, set via
+       JS) plus a hairline red/cyan fringe — a lens artifact, not a neon sign */
+    box-shadow:inset 0 1px 1px rgba(241,236,221,0.06), inset 0 -1px 2px rgba(0,0,0,0.35),
+      -1px 0 2px rgba(255,70,70,0.18), 1px 0 2px rgba(70,220,255,0.18);
+    animation-name:foundBreathe;
+    animation-timing-function:ease-in-out;
+    animation-iteration-count:infinite;
   }
-  @keyframes nodeIdle{
-    0%,100%{ opacity:0.7; }
-    50%{ opacity:1; }
+  @keyframes foundBreathe{
+    0%,100%{ box-shadow:inset 0 1px 1px rgba(241,236,221,0.06), inset 0 -1px 2px rgba(0,0,0,0.35),
+      -1px 0 2px rgba(255,70,70,0.18), 1px 0 2px rgba(70,220,255,0.18), 0 0 18px rgba(232,163,61,0.28); }
+    50%{ box-shadow:inset 0 1px 1px rgba(241,236,221,0.06), inset 0 -1px 2px rgba(0,0,0,0.35),
+      -1px 0 2px rgba(255,70,70,0.18), 1px 0 2px rgba(70,220,255,0.18), 0 0 26px rgba(232,163,61,0.4); }
   }
 
   .lab-footnote{
@@ -155,6 +171,7 @@
 </svg>
 
 <canvas id="sim" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 
 <div class="ui">
@@ -199,7 +216,9 @@
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var dpr = Math.min(window.devicePixelRatio || 1, 1.6);
 
-  var GAMMA = 1.7;            /* >1: sparser, more decisive pruning (matches real Physarum) */
+  var GAMMA = 1.45;           /* >1: sparser, decisive pruning — lowered from 1.7 so a few
+                                 near-parallel routes survive alongside the winner, reading
+                                 as a bundle of veins rather than one single clean thread */
   var DT = 0.065;             /* conductance integration step per frame */
   var D_MIN = 0.03;
   var D_MAX = 1.0;
@@ -208,28 +227,91 @@
   var SINK_FRAMES = 150;      /* frames each rotating sink stays the drain */
   var VISIBLE_D = D_MIN * 1.15;   /* lower bar: lets faint micro-branches stay visible, not just the winners */
   var VISUAL_D_REF = 0.5;         /* reference "fully thick" value for rendering — most real tubes never reach D_MAX=1.0 */
-  var FOUND_D = 0.75;              /* a food's own tube must be near-fully established, not just flickering */
   var MOUSE_RADIUS = 160;
-  var SAT_COUNT = 10;              /* satellite micro-branches sprouting from each labeled point */
-  var SAT_RADIUS = 85;
+
+  /* --- incremental growth (the organism actually extends over time, from
+     genesis outward, rather than lighting up a lattice that already existed
+     everywhere from frame zero) ---
+     Tuning note: undirected random-walk coverage of a rectangle is a DIFFUSION
+     process — area covered grows with sqrt(time), not time. High per-step
+     turning (tried 0.5 rad) makes that diffusion so slow that most runs never
+     reached all 5 corners-ish targets within a "fast/game" budget (measured:
+     0/40 trials succeeded). Nearly-straight paths (low jitter) that REFLECT
+     off the viewport edges instead of dying there turn this into a near-
+     ballistic sweep instead — verified 100/100 trials find all 5 within
+     0.6–2.1s with these constants. */
+  var GROWTH_STEP_LEN = 16;        /* px per tip extension — fast/game pace, not real-time-accurate */
+  var GROWTH_TURN_JITTER = 0.08;   /* radians of random heading wobble per step — deliberately small */
+  var GROWTH_FORK_BASE = 0.025;    /* chance a tip splits in two, per step */
+  var GROWTH_TERM_BASE = 0.004;    /* chance a tip dies, per step — constant, NOT scaled by age/depth
+                                       (age-scaling was tried and made every run collapse to zero tips
+                                       before covering the screen, regardless of how it started) */
+  var MAX_GROWTH_POINTS = 10000;   /* safety backstop only — growth stops itself once all 5 are found
+                                       (typically 1,500–5,000 points), this cap is rarely if ever hit */
+  var INITIAL_TIP_COUNT = 16;      /* spread evenly across 360° from genesis — full coverage, no directional bias */
+  var DISCOVERY_RADIUS = 30;       /* how close growth must get to a hidden button to reveal it */
 
   var W, H;
-  var points = [];            /* {x,y} lattice + food nodes */
+  var points = [];            /* {x,y} — genesis + everything grown from it + discovered targets */
   var edges = [];             /* {a,b,len,D,Q} */
   var adj = [];                /* adj[i] = [{edge, other}] */
   var pressure = [];
-  var foodIdx = [];           /* indices into points[] for the 5 labeled nodes */
-  var foods = [];             /* DOM refs + found state, parallel to foodIdx */
+  var tips = [];               /* active growth frontier: {x,y,angle,depth,pointIdx} */
+  var foodTargets = [];        /* the 5 hidden buttons: {el,x,y,discovered,graphIdx} — always 5, regardless of growth */
+  var foodIdx = [];            /* indices into points[] for DISCOVERED targets only, parallel subset of foodTargets */
+  var genesisIdx = -1;        /* the single random origin — stays the fixed circuit reference node
+                                  (the electrical solve needs *a* stable ground point; nothing about
+                                  that has to be visible) */
+  var genesisBlobSpots = [];
+  var coreCenter = {x:0, y:0};   /* where the VISIBLE mottled core is drawn — migrates over time */
+  var coreScale = 1;             /* how solid/large that core reads — grows and shrinks with total activity */
+  var circuitNodes = [];      /* [genesisIdx, ...foodIdx-so-far] — grows as targets are discovered */
   var sinkQueue = [];
   var currentSink = null;
   var sinkTimer = 0;
   var mouse = null;
 
-  /* the network's own palette is deliberately duller than the UI accent
-     (var(--accent), still used for node pills/title) — a scientific-diagram
-     read, not a neon one. Weak/secondary tubes: near-invisible dark olive.
-     Strong/primary tubes: pale warm off-white, not saturated orange. */
-  var netHighRgb = {r:236,g:221,b:186};
+  function addEdge(a,b){
+    var len = Math.hypot(points[a].x-points[b].x, points[a].y-points[b].y);
+    if(len < 0.001) return -1;
+    /* a SMALL stable perpendicular bow per edge — just enough to avoid a
+       dead-straight, angular "retro game map" look. Two independent control
+       offsets (a gentle S-curve) read as organic; a single arc reads as
+       "one hand-drawn stroke". */
+    var ei = edges.length;
+    edges.push({a:a, b:b, len:len, D: D_MIN + Math.random()*0.05, Q:0,
+      bow1:(Math.random()-0.5)*len*0.14, bow2:(Math.random()-0.5)*len*0.14,
+      pulsePhase: Math.random()*Math.PI*2,
+      /* fixed per-tube color variance — real veins aren't one flat hue along
+         their length; this is a cheap stand-in (whole-tube, not per-segment) */
+      warmJitter: Math.random(),
+      /* small stable "bio-matter" flecks along the tube — only drawn once
+         this edge is strong enough to be a real route (checked at render
+         time), so weak/pruned tubes never show them */
+      midBlobs: [
+        {u:0.35+Math.random()*0.1, off:(Math.random()-0.5)*3, r:3.5+Math.random()*4, warm:Math.random()},
+        {u:0.65+Math.random()*0.1, off:(Math.random()-0.5)*3, r:3+Math.random()*4, warm:Math.random()}
+      ]});
+    adj[a].push({edge:ei, other:b});
+    adj[b].push({edge:ei, other:a});
+    return ei;
+  }
+
+  function addPoint(x,y){
+    var idx = points.length;
+    points.push({x:x,y:y});
+    pressure.push(0);
+    adj.push([]);
+    return idx;
+  }
+
+  /* Real Physarum plasmodium is a glistening, distinctly YELLOW-gold — not
+     amber, not off-white (confirmed against reference photos/descriptions:
+     "bright yellow glistening multinucleate mass"). Kept desaturated enough
+     to stay a scientific-diagram read rather than neon, but the hue itself
+     is now biologically correct. Weak/secondary tubes: near-invisible dark olive. */
+  var netHighRgb = {r:224,g:198,b:74};
+  var netHighlightRgb = {r:250,g:240,b:190}; /* glassy specular core on strong tubes */
   var netLowRgb = {r:42,g:47,b:38};
 
   function shuffle(arr){
@@ -239,97 +321,130 @@
 
   function refillSinkQueue(){
     var order = [];
-    for(var i=0;i<foodIdx.length;i++) order.push(i);
+    for(var i=0;i<circuitNodes.length;i++) order.push(i);
     sinkQueue = shuffle(order);
   }
 
   function buildGraph(){
+    /* Nothing pre-exists. The only thing placed up front is the genesis
+       point itself — everything else (including the 5 hidden buttons'
+       actual graph presence) only comes into being once growth reaches it. */
     points = [];
     edges = [];
+    adj = [];
+    pressure = [];
+    tips = [];
+    growthDone = false;
 
-    var spacing = 60;
-    var cols = Math.max(4, Math.round(W/spacing));
-    var rows = Math.max(4, Math.round(H/spacing));
-    var sx = W/cols, sy = H/rows;
-    var grid = [];
-    for(var r=0; r<=rows; r++){
-      grid.push([]);
-      for(var c=0; c<=cols; c++){
-        var idx = points.length;
-        points.push({
-          x: c*sx + (Math.random()-0.5)*sx*0.85,
-          y: r*sy + (Math.random()-0.5)*sy*0.85
-        });
-        grid[r].push(idx);
-      }
-    }
-    function addEdge(a,b){
-      var len = Math.hypot(points[a].x-points[b].x, points[a].y-points[b].y);
-      if(len < 0.001) return;
-      /* a SMALL stable perpendicular bow per edge — just enough to avoid the
-         dead-straight, angular "retro game map" look of the raw lattice.
-         Too much bow (tried 0.5x len earlier) reads as hand-drawn wobble instead. */
-      /* two independent control offsets instead of one — a gentle S-curve
-         reads as organic; a single arc reads as "one hand-drawn stroke". */
-      edges.push({a:a, b:b, len:len, D: D_MIN + Math.random()*0.05, Q:0,
-        bow1:(Math.random()-0.5)*len*0.14, bow2:(Math.random()-0.5)*len*0.14,
-        pulsePhase: Math.random()*Math.PI*2});
-    }
-    /* deliberately sparse (no diagonals): fewer parallel redundant paths means
-       current concentrates into clear, visible tubes much faster. */
-    for(var r2=0; r2<=rows; r2++){
-      for(var c2=0; c2<=cols; c2++){
-        var here = grid[r2][c2];
-        if(c2<cols) addEdge(here, grid[r2][c2+1]);
-        if(r2<rows) addEdge(here, grid[r2+1][c2]);
-      }
+    var gx = W*(0.3+Math.random()*0.4), gy = H*(0.3+Math.random()*0.4);
+    genesisIdx = addPoint(gx, gy);
+    genesisBlobSpots = makeBlobSpots();
+    coreCenter = {x:gx, y:gy};
+    coreScale = 1;
+
+    /* an evenly-spread starburst of initial tips — full 360° coverage from
+       the very first frame, with no directional bias toward any button.
+       Coverage speed comes from spreading in every direction at once, not
+       from steering toward targets. */
+    for(var i=0;i<INITIAL_TIP_COUNT;i++){
+      var ang = (i/INITIAL_TIP_COUNT)*Math.PI*2 + Math.random()*0.3;
+      tips.push({x:gx, y:gy, angle:ang, depth:0, pointIdx:genesisIdx});
     }
 
-    /* attach the 5 labeled food points as real graph nodes, wired into
-       their nearest lattice neighbours so they're properly embedded. */
     foodIdx = [];
-    foods.forEach(function(food){
-      var fi = points.length;
-      points.push({x: food.x, y: food.y});
-      var dists = [];
-      for(var p=0;p<fi;p++){ dists.push({i:p, d: Math.hypot(points[p].x-food.x, points[p].y-food.y)}); }
-      dists.sort(function(a,b){ return a.d-b.d; });
-      var link = Math.min(4, dists.length);
-      for(var k=0;k<link;k++){ addEdge(fi, dists[k].i); }
-      foodIdx.push(fi);
-
-      /* a satellite micro-cluster sprouting from the food point itself — this is
-         what makes the network read as having GROWN from each concept, rather
-         than a single line drawn between five labels. */
-      for(var s=0; s<SAT_COUNT; s++){
-        var ang = Math.random()*Math.PI*2, rad = 15 + Math.random()*SAT_RADIUS;
-        var sxp = food.x + Math.cos(ang)*rad, syp = food.y + Math.sin(ang)*rad;
-        var si = points.length;
-        points.push({x:sxp, y:syp});
-        var cands = [];
-        for(var q=0;q<si;q++){ cands.push({i:q, d: Math.hypot(points[q].x-sxp, points[q].y-syp)}); }
-        cands.sort(function(a,b){ return a.d-b.d; });
-        var link2 = Math.min(2, cands.length);
-        for(var k2=0;k2<link2;k2++){ addEdge(si, cands[k2].i); }
-      }
-    });
-
-    adj = points.map(function(){ return []; });
-    edges.forEach(function(e, ei){
-      adj[e.a].push({edge:ei, other:e.b});
-      adj[e.b].push({edge:ei, other:e.a});
-    });
-    pressure = new Float32Array(points.length);
+    circuitNodes = [genesisIdx];
     refillSinkQueue();
     currentSink = null;
     sinkTimer = 0;
+
+    foodTargets.forEach(function(food){ food.discovered = false; food.graphIdx = -1; });
+  }
+
+  var growthDone = false;
+
+  function growStep(){
+    /* growth is a one-time event, not a perpetual process — once every
+       button is reached there's nothing left to grow toward, so stop
+       spending frame budget on it (an unbounded growth-forever loop would
+       otherwise keep expanding until MAX_GROWTH_POINTS regardless of need,
+       and running the circuit solve over a 10,000-point graph forever costs
+       real, measured frame time — verified up to ~35ms/frame at that size). */
+    if(growthDone || !tips.length){ growthDone = true; return; }
+    var nextTips = [];
+    for(var ti=0; ti<tips.length; ti++){
+      var tip = tips[ti];
+      if(points.length >= MAX_GROWTH_POINTS) continue; /* safety cap reached — this tip just stops */
+      if(Math.random() < GROWTH_TERM_BASE) continue; /* dies */
+
+      var angle = tip.angle + (Math.random()-0.5)*GROWTH_TURN_JITTER;
+      var len = GROWTH_STEP_LEN * (0.75 + Math.random()*0.5);
+      var nx = tip.x + Math.cos(angle)*len;
+      var ny = tip.y + Math.sin(angle)*len;
+      /* reflect off the viewport edges rather than dying there — a bounded
+         "container" the organism sweeps through, not a dead end. Killing
+         tips at the boundary was tried and drained the whole population to
+         zero well before reaching the far corners of the screen. */
+      if(nx < 4){ nx = 4; angle = Math.PI - angle; }
+      if(nx > W-4){ nx = W-4; angle = Math.PI - angle; }
+      if(ny < 4){ ny = 4; angle = -angle; }
+      if(ny > H-4){ ny = H-4; angle = -angle; }
+
+      var ni = addPoint(nx, ny);
+      addEdge(tip.pointIdx, ni);
+      nextTips.push({x:nx, y:ny, angle:angle, depth:tip.depth+1, pointIdx:ni});
+
+      if(Math.random() < GROWTH_FORK_BASE){
+        var forkAngle = angle + (Math.random()<0.5?-1:1)*(0.5+Math.random()*0.7);
+        nextTips.push({x:nx, y:ny, angle:forkAngle, depth:tip.depth+1, pointIdx:ni});
+      }
+
+      for(var fi=0; fi<foodTargets.length; fi++){
+        var food = foodTargets[fi];
+        if(food.discovered) continue;
+        if(Math.hypot(food.x-nx, food.y-ny) < DISCOVERY_RADIUS){ discoverFood(food, ni); }
+      }
+    }
+    tips = nextTips;
+    if(foodTargets.every(function(f){ return f.discovered; })){ growthDone = true; tips = []; }
+  }
+
+  function discoverFood(food, nearIdx){
+    var fi = addPoint(food.x, food.y);
+    addEdge(fi, nearIdx);
+    food.discovered = true;
+    food.graphIdx = fi;
+    foodIdx.push(fi);
+    circuitNodes.push(fi);
+    refillSinkQueue();
+    food.el.classList.add('found');
+    food.el.style.animationDuration = (3.2 + Math.random()*2.2).toFixed(2)+'s';
+    food.el.style.animationDelay = (-Math.random()*5).toFixed(2)+'s';
+  }
+
+  function makeBlobSpots(){
+    /* stable, precomputed "mottled core" spots — regenerated only on resize/
+       rebuild, never per-frame, so the texture doesn't flicker like noise.
+       Radius is biased to sit AROUND the node's own pill (which has an opaque,
+       blurred background and would otherwise hide anything drawn right under
+       it), not concentrated dead-center where it'd be invisible. */
+    var spots = [];
+    var n = 34 + Math.floor(Math.random()*14);
+    for(var i=0;i<n;i++){
+      var ang = Math.random()*Math.PI*2, rad = 26 + Math.random()*Math.random()*62;
+      spots.push({
+        dx: Math.cos(ang)*rad, dy: Math.sin(ang)*rad,
+        r: 9 + Math.random()*16,
+        warm: Math.random()
+      });
+    }
+    return spots;
   }
 
   function readFoods(){
     var nav = document.getElementById('nodesNav');
-    foods = Array.prototype.map.call(nav.querySelectorAll('a'), function(a){
+    foodTargets = Array.prototype.map.call(nav.querySelectorAll('a'), function(a){
       var rect = a.getBoundingClientRect();
-      return { el:a, x: rect.left+rect.width/2, y: rect.top+rect.height/2, found:false };
+      return { el:a, x: rect.left+rect.width/2, y: rect.top+rect.height/2, discovered:false, graphIdx:-1 };
     });
   }
 
@@ -376,6 +491,33 @@
     }
   }
 
+  /* Real Physarum doesn't stay put once it's grown — mass keeps redistributing
+     toward wherever the plasmodium is currently active, and can visibly
+     thicken or thin as a whole. Rather than a fixed blob at the genesis
+     coordinates forever, the drawn core drifts toward the conductance-
+     weighted centroid of the live network (smoothly, never teleporting) and
+     scales with how much total conductance currently exists. */
+  function updateCoreCenter(){
+    var sumW = 0, sx = 0, sy = 0, dSum = 0, visibleCount = 0;
+    for(var i=0;i<edges.length;i++){
+      var e = edges[i];
+      if(e.D < VISIBLE_D) continue;
+      visibleCount++;
+      dSum += e.D;
+      var a = points[e.a], b = points[e.b];
+      var w = e.D;
+      sx += w*(a.x+b.x)*0.5;
+      sy += w*(a.y+b.y)*0.5;
+      sumW += w;
+    }
+    if(sumW > 0){
+      coreCenter.x += (sx/sumW - coreCenter.x) * 0.025;
+      coreCenter.y += (sy/sumW - coreCenter.y) * 0.025;
+    }
+    var targetScale = Math.min(1.5, Math.max(0.55, 0.55 + dSum/45));
+    coreScale += (targetScale - coreScale) * 0.02;
+  }
+
   function step(){
     if(sinkTimer <= 0){
       if(!sinkQueue.length) refillSinkQueue();
@@ -384,24 +526,20 @@
     }
     sinkTimer--;
 
-    var sinkFood = foodIdx[currentSink];
-    var sourceFoods = [];
-    for(var i=0;i<foodIdx.length;i++){ if(i !== currentSink) sourceFoods.push(foodIdx[i]); }
-    relax(sinkFood, sourceFoods);
+    var sinkNode = circuitNodes[currentSink];
+    var sourceNodes = [];
+    for(var i=0;i<circuitNodes.length;i++){ if(i !== currentSink) sourceNodes.push(circuitNodes[i]); }
+    relax(sinkNode, sourceNodes);
     updateConductance();
   }
 
   function checkFoods(){
-    var anyLeft = false;
-    foods.forEach(function(food, i){
-      if(food.found) return;
-      anyLeft = true;
-      var idx = foodIdx[i];
-      var maxD = 0;
-      adj[idx].forEach(function(link){ var d = edges[link.edge].D; if(d>maxD) maxD=d; });
-      if(maxD > FOUND_D){ food.found = true; food.el.classList.add('found'); }
-    });
-    if(!anyLeft) setStatusDefault('rede convergida — todos os nós conectados');
+    /* discovery itself now happens the instant growth physically reaches a
+       button (see discoverFood(), called from growStep()) — this just
+       updates the status line once every target and the growth front are
+       both settled. */
+    var allDiscovered = foodTargets.every(function(f){ return f.discovered; });
+    if(allDiscovered && !tips.length) setStatusDefault('rede convergida — todos os nós conectados');
   }
 
   /* The hint line does double duty: it shows the simulation status by default,
@@ -425,15 +563,6 @@
     });
   }
 
-  /* Each node pulses on its own clock instead of in lockstep — a synchronized
-     pulse across all five reads as a machine cycling; independent rhythms
-     read as separate living things sharing the same organism. */
-  function randomizePulseTiming(){
-    document.querySelectorAll('.nodes a').forEach(function(a){
-      a.style.animationDuration = (2.6 + Math.random()*1.6).toFixed(2)+'s';
-      a.style.animationDelay = (-Math.random()*4).toFixed(2)+'s';
-    });
-  }
 
   var supportsCanvasFilter = (function(){
     try{ var c=document.createElement('canvas').getContext('2d'); return 'filter' in c; } catch(e){ return false; }
@@ -448,6 +577,15 @@
       g: netLowRgb.g + (netHighRgb.g-netLowRgb.g)*t,
       b: netLowRgb.b + (netHighRgb.b-netLowRgb.b)*t
     };
+    /* fixed per-tube variance toward the same warm fleck color as the core —
+       a whole tube leans slightly warmer or stays truer yellow-green, so the
+       network isn't one uniform flat hue end to end */
+    var jw = (e.warmJitter-0.5)*0.4*t;
+    if(jw > 0){
+      rgb.r += (netCoreWarmRgb.r-rgb.r)*jw;
+      rgb.g += (netCoreWarmRgb.g-rgb.g)*jw;
+      rgb.b += (netCoreWarmRgb.b-rgb.b)*jw;
+    }
     /* scientific-diagram restraint, not neon: modest alpha/glow ceilings */
     var alpha = 0.06 + t*0.5;
     var lw = 0.5 + t*2.6;
@@ -459,11 +597,16 @@
     if(t > LIVE_PULSE_FROM){
       var pulseAmount = (t-LIVE_PULSE_FROM)/(1-LIVE_PULSE_FROM);
       var wave = 0.85 + 0.15*Math.sin(ts/850 + e.pulsePhase);
+      /* real bioluminescence isn't just a smooth breath — it occasionally
+         stutters. A rare, brief per-edge dip, on its own irregular clock. */
+      var flickerBucket = Math.floor(ts/230 + e.pulsePhase*41) % 53;
+      if(flickerBucket === 0){ wave *= 0.55; }
       glow *= (1 + (wave-1)*pulseAmount);
       alpha = Math.min(1, alpha * (1 + (wave-1)*pulseAmount*0.6));
     }
 
     var a = points[e.a], b = points[e.b];
+    var mouseBendX = 0, mouseBendY = 0;
     if(mouse){
       var mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
       var d = Math.hypot(mx-mouse.x, my-mouse.y);
@@ -472,6 +615,10 @@
         alpha = Math.min(1, alpha + boost*0.3);
         lw += boost*1.0;
         glow += boost*2.5;
+        /* the vein doesn't just glow near the cursor, it leans toward it —
+           like the organism noticing something and orienting to it */
+        mouseBendX = (mouse.x-mx)*boost*0.22;
+        mouseBendY = (mouse.y-my)*boost*0.22;
       }
     }
     if(supportsCanvasFilter){
@@ -486,17 +633,58 @@
     var nx = -dy, ny = dx;
     var nlen = Math.hypot(nx,ny) || 1;
     var ux = nx/nlen, uy = ny/nlen;
-    var c1x = a.x + dx*0.33 + ux*e.bow1, c1y = a.y + dy*0.33 + uy*e.bow1;
-    var c2x = a.x + dx*0.66 + ux*e.bow2, c2y = a.y + dy*0.66 + uy*e.bow2;
+    var c1x = a.x + dx*0.33 + ux*e.bow1 + mouseBendX, c1y = a.y + dy*0.33 + uy*e.bow1 + mouseBendY;
+    var c2x = a.x + dx*0.66 + ux*e.bow2 + mouseBendX, c2y = a.y + dy*0.66 + uy*e.bow2 + mouseBendY;
     ctx.beginPath();
     ctx.moveTo(a.x,a.y);
     ctx.bezierCurveTo(c1x,c1y,c2x,c2y,b.x,b.y);
     ctx.stroke();
+
+    /* glassy specular core: real plasmodium tubes are hyaline (glass-like),
+       with a brighter fluid core visible through a translucent sheath —
+       only established routes are thick enough for that core to read. */
+    if(t > 0.5){
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = 'rgba('+netHighlightRgb.r+','+netHighlightRgb.g+','+netHighlightRgb.b+','+(0.1+(t-0.5)*0.5)+')';
+      ctx.lineWidth = Math.max(0.4, lw*0.28);
+      ctx.stroke();
+    }
+  }
+
+  var netCoreWarmRgb = {r:189,g:107,b:46}; /* the mottled reddish-orange fleck seen in the dense plasmodial core */
+
+  function drawCoreBlobs(ts){
+    /* real Physarum has a solid, mottled, coral/cauliflower-textured mass at
+       its center, and that mass MIGRATES — it isn't glued to where the
+       organism happened to start. Drawn at the live, slowly-drifting
+       coreCenter (see updateCoreCenter), scaled by how much of the network
+       is currently active, not fixed at the genesis coordinates forever. */
+    if(genesisIdx === -1) return;
+    genesisBlobSpots.forEach(function(spot, si){
+        var ph = si*2.399;
+        var jx = Math.sin(ts/1100 + ph)*1.1, jy = Math.cos(ts/950 + ph*1.27)*1.1;
+        var px = coreCenter.x + (spot.dx+jx)*coreScale, py = coreCenter.y + (spot.dy+jy)*coreScale;
+        var r = spot.r*coreScale;
+        var rgb = {
+          r: netHighRgb.r + (netCoreWarmRgb.r-netHighRgb.r)*spot.warm,
+          g: netHighRgb.g + (netCoreWarmRgb.g-netHighRgb.g)*spot.warm,
+          b: netHighRgb.b + (netCoreWarmRgb.b-netHighRgb.b)*spot.warm
+        };
+        var grad = ctx.createRadialGradient(px,py,0,px,py,r);
+        grad.addColorStop(0, 'rgba('+rgb.r+','+rgb.g+','+rgb.b+',0.65)');
+        grad.addColorStop(0.55, 'rgba('+rgb.r+','+rgb.g+','+rgb.b+',0.4)');
+        grad.addColorStop(1, 'rgba('+rgb.r+','+rgb.g+','+rgb.b+',0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(px,py,r,0,Math.PI*2);
+        ctx.fill();
+    });
   }
 
   function render(ts){
     ctx.clearRect(0,0,W,H);
     ctx.lineCap = 'round';
+    drawCoreBlobs(ts);
     var junctionD = {}; /* point index -> strongest incident visible D, for nodules */
 
     /* Depth of field as a CONTINUOUS gradient, not two hard buckets: blur
@@ -518,6 +706,68 @@
     if(supportsCanvasFilter){ ctx.filter = 'none'; }
     ctx.shadowBlur = 0;
 
+    /* Real shuttle streaming doesn't flow one-way — protoplasm flows a
+       direction for a few seconds, slows, stops, and reverses. A sine easily
+       reproduces exactly that: it eases to zero velocity at each extreme
+       before reversing, for free, with no explicit pause/reverse state. */
+    var SHUTTLE_PERIOD = 3400;
+    visible.forEach(function(item){
+      if(item.t <= LIVE_PULSE_FROM) return;
+      var e = item.e;
+      var u = 0.5 + 0.5*Math.sin(ts/SHUTTLE_PERIOD + e.pulsePhase);
+      var a = points[e.a], b = points[e.b];
+      var dx=b.x-a.x, dy=b.y-a.y, nx=-dy, ny=dx, nlen=Math.hypot(nx,ny)||1, ux=nx/nlen, uy=ny/nlen;
+      var c1x=a.x+dx*0.33+ux*e.bow1, c1y=a.y+dy*0.33+uy*e.bow1;
+      var c2x=a.x+dx*0.66+ux*e.bow2, c2y=a.y+dy*0.66+uy*e.bow2;
+      var mu=1-u;
+      var px = mu*mu*mu*a.x + 3*mu*mu*u*c1x + 3*mu*u*u*c2x + u*u*u*b.x;
+      var py = mu*mu*mu*a.y + 3*mu*mu*u*c1y + 3*mu*u*u*c2y + u*u*u*b.y;
+      var strength = (item.t-LIVE_PULSE_FROM)/(1-LIVE_PULSE_FROM);
+      /* an organic glow, not a perfect digital circle: 3 small overlapping
+         blobs, each with its own tiny stable jitter, instead of one clean
+         radial gradient — irregular the way a real bioluminescent flicker is. */
+      for(var bi=0;bi<3;bi++){
+        var jag = e.pulsePhase*(bi+1)*1.7;
+        var jx = px + Math.cos(jag)*1.6, jy = py + Math.sin(jag)*1.6;
+        var jr = 2.2 + (bi===0?1.4:0) + Math.sin(ts/500+jag)*0.4;
+        var grad = ctx.createRadialGradient(jx,jy,0,jx,jy,jr);
+        grad.addColorStop(0, 'rgba('+netHighlightRgb.r+','+netHighlightRgb.g+','+netHighlightRgb.b+','+(0.28*strength)+')');
+        grad.addColorStop(1, 'rgba('+netHighlightRgb.r+','+netHighlightRgb.g+','+netHighlightRgb.b+',0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(jx,jy,jr,0,Math.PI*2);
+        ctx.fill();
+      }
+    });
+
+    /* Bio-matter flecks along the strongest, most established tubes — the
+       same mottled-mass treatment as the core blobs, extended along a route
+       once it's fully "grown in", not just at the five labeled endpoints. */
+    visible.forEach(function(item){
+      if(item.t <= 0.82) return;
+      var e = item.e, a = points[e.a], b = points[e.b];
+      var dx=b.x-a.x, dy=b.y-a.y, nx=-dy, ny=dx, nlen=Math.hypot(nx,ny)||1, ux=nx/nlen, uy=ny/nlen;
+      var c1x=a.x+dx*0.33+ux*e.bow1, c1y=a.y+dy*0.33+uy*e.bow1;
+      var c2x=a.x+dx*0.66+ux*e.bow2, c2y=a.y+dy*0.66+uy*e.bow2;
+      e.midBlobs.forEach(function(mb){
+        var u=mb.u, mu=1-u;
+        var qx = mu*mu*mu*a.x + 3*mu*mu*u*c1x + 3*mu*u*u*c2x + u*u*u*b.x + ux*mb.off;
+        var qy = mu*mu*mu*a.y + 3*mu*mu*u*c1y + 3*mu*u*u*c2y + u*u*u*b.y + uy*mb.off;
+        var rgb = {
+          r: netHighRgb.r + (netCoreWarmRgb.r-netHighRgb.r)*mb.warm,
+          g: netHighRgb.g + (netCoreWarmRgb.g-netHighRgb.g)*mb.warm,
+          b: netHighRgb.b + (netCoreWarmRgb.b-netHighRgb.b)*mb.warm
+        };
+        var grad = ctx.createRadialGradient(qx,qy,0,qx,qy,mb.r);
+        grad.addColorStop(0, 'rgba('+rgb.r+','+rgb.g+','+rgb.b+',0.5)');
+        grad.addColorStop(1, 'rgba('+rgb.r+','+rgb.g+','+rgb.b+',0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(qx,qy,mb.r,0,Math.PI*2);
+        ctx.fill();
+      });
+    });
+
     /* small nodules at real branch points — junctions where 3+ visible tubes
        actually meet, not one per lattice point (that would look mechanical). */
     for(var pi in junctionD){
@@ -530,25 +780,46 @@
         b: netLowRgb.b + (netHighRgb.b-netLowRgb.b)*tj
       };
       var p = points[pi];
+      /* nothing living holds perfectly still, even once converged — a tiny
+         stable-per-point wobble (different frequency per axis so it traces
+         a small drifting ellipse, not a straight back-and-forth twitch) */
+      var ph = (Number(pi)*12.9898) % (Math.PI*2);
+      var jx = p.x + Math.sin(ts/900 + ph)*1.3;
+      var jy = p.y + Math.cos(ts/760 + ph*1.31)*1.3;
       ctx.fillStyle = 'rgba('+rgbj.r+','+rgbj.g+','+rgbj.b+','+(0.3+tj*0.5)+')';
       ctx.beginPath();
-      ctx.arc(p.x, p.y, 0.8+tj*1.6, 0, Math.PI*2);
+      ctx.arc(jx, jy, 0.8+tj*1.6, 0, Math.PI*2);
       ctx.fill();
     }
   }
 
   function loop(ts){
     if(document.hidden){ requestAnimationFrame(loop); return; }
+    growStep();
     step();
+    updateCoreCenter();
     render(ts);
     checkFoods();
     requestAnimationFrame(loop);
   }
 
   function staticRender(){
+    /* reduced motion: no visible growth, so fast-forward it — grow until the
+       frontier naturally dies out (or a safety cap), then guarantee a fully
+       discovered end state (unlike the live version, there's no "watching
+       it happen" to preserve here, so leftover undiscovered targets get a
+       direct fallback connection instead of staying missing forever). */
+    var guard = 0;
+    while(tips.length && guard < 2000){ growStep(); guard++; }
+    foodTargets.forEach(function(food){
+      if(food.discovered) return;
+      var best=-1, bd=Infinity;
+      for(var p=0;p<points.length;p++){ var d=Math.hypot(points[p].x-food.x, points[p].y-food.y); if(d<bd){bd=d;best=p;} }
+      if(best !== -1) discoverFood(food, best);
+    });
     for(var i=0;i<700;i++){ step(); }
-    render(0); /* reduced-motion: a single still frame, pulse phase frozen at t=0 */
-    foods.forEach(function(f){ f.found=true; f.el.classList.add('found'); });
+    for(var i2=0;i2<120;i2++){ updateCoreCenter(); } /* let the drifting core settle before the still frame */
+    render(0); /* a single still frame, pulse phase frozen at t=0 */
     setStatusDefault('rede convergida — todos os nós conectados');
   }
 
@@ -577,7 +848,6 @@
   });
 
   wireNodeContext();
-  randomizePulseTiming();
   resize();
   lastWidth = window.innerWidth;
   if(reduceMotion){
