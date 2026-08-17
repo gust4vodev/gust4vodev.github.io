@@ -34,6 +34,16 @@
   }
   canvas{position:fixed; inset:0; width:100%; height:100%; display:block;}
 
+  /* subtle film grain over the flat dark ground — a perfectly smooth black
+     reads as "digital"; a faint texture reads as material, like the granulated
+     surface of unglazed ceramic under diffuse light. Static, zero per-frame cost. */
+  .grain{
+    position:fixed; inset:0; z-index:1; pointer-events:none;
+    filter:url(#grainFilter);
+    opacity:0.05;
+    mix-blend-mode:overlay;
+  }
+
   .ui{
     position:fixed; inset:0; z-index:2; pointer-events:none;
     display:flex; flex-direction:column; justify-content:space-between;
@@ -100,14 +110,21 @@
     background:rgba(12,9,6,0.55);
     backdrop-filter:blur(4px);
     -webkit-backdrop-filter:blur(4px);
+    /* inset shadow gives the pill a touch of physical volume instead of
+       reading as a flat vector shape pasted on top */
+    box-shadow:inset 0 1px 1px rgba(241,236,221,0.06), inset 0 -1px 2px rgba(0,0,0,0.35);
     transition:color .5s ease, border-color .5s ease, box-shadow .5s ease, transform .2s ease;
-    animation:nodeIdle 3.4s ease-in-out infinite;
+    animation-name:nodeIdle;
+    animation-timing-function:ease-in-out;
+    animation-iteration-count:infinite;
+    /* duration/delay are randomized per node via JS so they don't pulse in
+       lockstep — synchronized pulsing reads as "machine", not "organism" */
   }
   .nodes a:hover{ transform:translate(-50%,-50%) scale(1.06); border-color:var(--accent); color:var(--ink); }
   .nodes a.found{
     color:var(--ink);
     border-color:var(--accent);
-    box-shadow:0 0 24px rgba(232,163,61,0.35);
+    box-shadow:inset 0 1px 1px rgba(241,236,221,0.06), inset 0 -1px 2px rgba(0,0,0,0.35), 0 0 24px rgba(232,163,61,0.35);
     animation:none;
   }
   @keyframes nodeIdle{
@@ -130,7 +147,15 @@
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="grainFilter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" result="noise"/>
+    <feColorMatrix in="noise" type="saturate" values="0"/>
+  </filter>
+</svg>
+
 <canvas id="sim" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
 
 <div class="ui">
   <div class="top-row">
@@ -244,7 +269,11 @@
       /* a SMALL stable perpendicular bow per edge — just enough to avoid the
          dead-straight, angular "retro game map" look of the raw lattice.
          Too much bow (tried 0.5x len earlier) reads as hand-drawn wobble instead. */
-      edges.push({a:a, b:b, len:len, D: D_MIN + Math.random()*0.05, Q:0, bow:(Math.random()-0.5)*len*0.15});
+      /* two independent control offsets instead of one — a gentle S-curve
+         reads as organic; a single arc reads as "one hand-drawn stroke". */
+      edges.push({a:a, b:b, len:len, D: D_MIN + Math.random()*0.05, Q:0,
+        bow1:(Math.random()-0.5)*len*0.14, bow2:(Math.random()-0.5)*len*0.14,
+        pulsePhase: Math.random()*Math.PI*2});
     }
     /* deliberately sparse (no diagonals): fewer parallel redundant paths means
        current concentrates into clear, visible tubes much faster. */
@@ -396,51 +425,97 @@
     });
   }
 
-  function render(){
+  /* Each node pulses on its own clock instead of in lockstep — a synchronized
+     pulse across all five reads as a machine cycling; independent rhythms
+     read as separate living things sharing the same organism. */
+  function randomizePulseTiming(){
+    document.querySelectorAll('.nodes a').forEach(function(a){
+      a.style.animationDuration = (2.6 + Math.random()*1.6).toFixed(2)+'s';
+      a.style.animationDelay = (-Math.random()*4).toFixed(2)+'s';
+    });
+  }
+
+  var supportsCanvasFilter = (function(){
+    try{ var c=document.createElement('canvas').getContext('2d'); return 'filter' in c; } catch(e){ return false; }
+  })();
+
+  var MAX_TUBE_BLUR = 2.2; /* px — weakest visible tubes recede this blurred */
+  var LIVE_PULSE_FROM = 0.55; /* only well-established tubes carry the "energy flowing" pulse */
+
+  function drawEdgeTube(e, t, ts){
+    var rgb = {
+      r: netLowRgb.r + (netHighRgb.r-netLowRgb.r)*t,
+      g: netLowRgb.g + (netHighRgb.g-netLowRgb.g)*t,
+      b: netLowRgb.b + (netHighRgb.b-netLowRgb.b)*t
+    };
+    /* scientific-diagram restraint, not neon: modest alpha/glow ceilings */
+    var alpha = 0.06 + t*0.5;
+    var lw = 0.5 + t*2.6;
+    var glow = 0.4 + t*1.8;
+
+    /* organic pulse: only the tubes that have actually become main routes
+       breathe gently, as if carrying a continuous flow — weak/decaying
+       tubes stay still, they haven't "become" anything yet. */
+    if(t > LIVE_PULSE_FROM){
+      var pulseAmount = (t-LIVE_PULSE_FROM)/(1-LIVE_PULSE_FROM);
+      var wave = 0.85 + 0.15*Math.sin(ts/850 + e.pulsePhase);
+      glow *= (1 + (wave-1)*pulseAmount);
+      alpha = Math.min(1, alpha * (1 + (wave-1)*pulseAmount*0.6));
+    }
+
+    var a = points[e.a], b = points[e.b];
+    if(mouse){
+      var mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+      var d = Math.hypot(mx-mouse.x, my-mouse.y);
+      if(d < MOUSE_RADIUS){
+        var boost = 1 - d/MOUSE_RADIUS;
+        alpha = Math.min(1, alpha + boost*0.3);
+        lw += boost*1.0;
+        glow += boost*2.5;
+      }
+    }
+    if(supportsCanvasFilter){
+      var blurPx = (1-t)*MAX_TUBE_BLUR;
+      ctx.filter = blurPx > 0.05 ? 'blur('+blurPx.toFixed(2)+'px)' : 'none';
+    }
+    ctx.shadowColor = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+',0.4)';
+    ctx.shadowBlur = glow;
+    ctx.strokeStyle = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')';
+    ctx.lineWidth = lw;
+    var dx = b.x-a.x, dy = b.y-a.y;
+    var nx = -dy, ny = dx;
+    var nlen = Math.hypot(nx,ny) || 1;
+    var ux = nx/nlen, uy = ny/nlen;
+    var c1x = a.x + dx*0.33 + ux*e.bow1, c1y = a.y + dy*0.33 + uy*e.bow1;
+    var c2x = a.x + dx*0.66 + ux*e.bow2, c2y = a.y + dy*0.66 + uy*e.bow2;
+    ctx.beginPath();
+    ctx.moveTo(a.x,a.y);
+    ctx.bezierCurveTo(c1x,c1y,c2x,c2y,b.x,b.y);
+    ctx.stroke();
+  }
+
+  function render(ts){
     ctx.clearRect(0,0,W,H);
     ctx.lineCap = 'round';
     var junctionD = {}; /* point index -> strongest incident visible D, for nodules */
+
+    /* Depth of field as a CONTINUOUS gradient, not two hard buckets: blur
+       scales smoothly with how weak a tube is, so a tube strengthening past
+       any particular point never visibly "pops" from blurred to sharp —
+       it eases forward, the way a living thing settles into place rather
+       than snapping to it. Draw weakest-first so sharper tubes layer on top. */
+    var visible = [];
     for(var i=0;i<edges.length;i++){
       var e = edges[i];
       if(e.D < VISIBLE_D) continue;
       var t = Math.min(1, (e.D-VISIBLE_D)/(VISUAL_D_REF-VISIBLE_D));
-      var rgb = {
-        r: netLowRgb.r + (netHighRgb.r-netLowRgb.r)*t,
-        g: netLowRgb.g + (netHighRgb.g-netLowRgb.g)*t,
-        b: netLowRgb.b + (netHighRgb.b-netLowRgb.b)*t
-      };
-      /* scientific-diagram restraint, not neon: modest alpha/glow ceilings */
-      var alpha = 0.06 + t*0.5;
-      var lw = 0.5 + t*2.6;
-      var glow = 0.4 + t*1.8;
-      var a = points[e.a], b = points[e.b];
-      if(mouse){
-        var mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
-        var d = Math.hypot(mx-mouse.x, my-mouse.y);
-        if(d < MOUSE_RADIUS){
-          var boost = 1 - d/MOUSE_RADIUS;
-          alpha = Math.min(1, alpha + boost*0.3);
-          lw += boost*1.0;
-          glow += boost*2.5;
-        }
-      }
-      ctx.shadowColor = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+',0.4)';
-      ctx.shadowBlur = glow;
-      ctx.strokeStyle = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')';
-      ctx.lineWidth = lw;
-      var dx = b.x-a.x, dy = b.y-a.y;
-      var nx = -dy, ny = dx;
-      var nlen = Math.hypot(nx,ny) || 1;
-      var cx = (a.x+b.x)/2 + (nx/nlen)*e.bow;
-      var cy = (a.y+b.y)/2 + (ny/nlen)*e.bow;
-      ctx.beginPath();
-      ctx.moveTo(a.x,a.y);
-      ctx.quadraticCurveTo(cx,cy,b.x,b.y);
-      ctx.stroke();
-
+      visible.push({e:e, t:t});
       if(!junctionD[e.a] || e.D>junctionD[e.a]) junctionD[e.a]=e.D;
       if(!junctionD[e.b] || e.D>junctionD[e.b]) junctionD[e.b]=e.D;
     }
+    visible.sort(function(p,q){ return p.t-q.t; });
+    visible.forEach(function(item){ drawEdgeTube(item.e, item.t, ts); });
+    if(supportsCanvasFilter){ ctx.filter = 'none'; }
     ctx.shadowBlur = 0;
 
     /* small nodules at real branch points — junctions where 3+ visible tubes
@@ -465,14 +540,14 @@
   function loop(ts){
     if(document.hidden){ requestAnimationFrame(loop); return; }
     step();
-    render();
+    render(ts);
     checkFoods();
     requestAnimationFrame(loop);
   }
 
   function staticRender(){
     for(var i=0;i<700;i++){ step(); }
-    render();
+    render(0); /* reduced-motion: a single still frame, pulse phase frozen at t=0 */
     foods.forEach(function(f){ f.found=true; f.el.classList.add('found'); });
     setStatusDefault('rede convergida — todos os nós conectados');
   }
@@ -502,6 +577,7 @@
   });
 
   wireNodeContext();
+  randomizePulseTiming();
   resize();
   lastWidth = window.innerWidth;
   if(reduceMotion){
