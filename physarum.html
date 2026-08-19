@@ -251,6 +251,15 @@
   var INITIAL_TIP_COUNT = 16;      /* spread evenly across 360° from genesis — full coverage, no directional bias */
   var DISCOVERY_RADIUS = 30;       /* how close growth must get to a hidden button to reveal it */
 
+  /* The low fork rate that makes growth reliable (see above) also means the
+     path reaching each button is close to a single bare thread — real lace
+     density needs a much higher branching rate than growth can afford while
+     it's still searching. Fix: a one-time local burst exactly at the moment
+     each button is found — bounded, applied once, doesn't touch the active
+     growth-phase dynamics at all. */
+  var BURST_RADIUS = 85;
+  var BURST_COUNT = 14;
+
   var W, H;
   var points = [];            /* {x,y} — genesis + everything grown from it + discovered targets */
   var edges = [];             /* {a,b,len,D,Q} */
@@ -408,6 +417,36 @@
     if(foodTargets.every(function(f){ return f.discovered; })){ growthDone = true; tips = []; }
   }
 
+  /* A one-time recursive branch burst — same self-similar idea as the old
+     fractal sprout, but fired once at a specific spot rather than driving
+     the ongoing search. Safe to call after growth: it just adds fixed
+     structure, it never creates new tips or affects growthDone.
+
+     localPoints tracks ONLY this burst's own points. Searching nearest-
+     neighbour candidates against that (bounded, ~15-100 entries) instead of
+     the whole graph matters a lot once growth has already reached thousands
+     of points — the first version scanned the entire points[] array per
+     candidate and measured up to ~2 SECONDS for a single burst late in a run. */
+  function burstAt(cx, cy, radius, count, depth, localPoints){
+    for(var s=0; s<count; s++){
+      var ang = Math.random()*Math.PI*2, rad = radius*0.2 + Math.random()*radius;
+      var sxp = cx + Math.cos(ang)*rad, syp = cy + Math.sin(ang)*rad;
+      var si = addPoint(sxp, syp);
+      var cands = [];
+      for(var q=0;q<localPoints.length;q++){
+        var pi = localPoints[q];
+        cands.push({i:pi, d: Math.hypot(points[pi].x-sxp, points[pi].y-syp)});
+      }
+      cands.sort(function(a,b){ return a.d-b.d; });
+      var link = Math.min(2, cands.length);
+      for(var k=0;k<link;k++){ addEdge(si, cands[k].i); }
+      localPoints.push(si);
+      if(depth > 0 && Math.random() < 0.55){
+        burstAt(sxp, syp, radius*0.42, Math.max(1, Math.round(count*0.4)), depth-1, localPoints);
+      }
+    }
+  }
+
   function discoverFood(food, nearIdx){
     var fi = addPoint(food.x, food.y);
     addEdge(fi, nearIdx);
@@ -416,6 +455,7 @@
     foodIdx.push(fi);
     circuitNodes.push(fi);
     refillSinkQueue();
+    burstAt(food.x, food.y, BURST_RADIUS, BURST_COUNT, 2);
     food.el.classList.add('found');
     food.el.style.animationDuration = (3.2 + Math.random()*2.2).toFixed(2)+'s';
     food.el.style.animationDelay = (-Math.random()*5).toFixed(2)+'s';
