@@ -1,0 +1,914 @@
+?<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gustavo Djonatan Galhaci — Automação de Processos &amp; Dados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14100D; --ink:#F0EADD; --ink-soft:#B7AD98; --ink-faint:#A69C84;
+    --accent:#E8A33D; --line:#332A1D; --radius:4px; --maxw:1120px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif; font-size:16px; line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif; margin:0; font-weight:600;}
+
+  /* Legibilidade sobre a colônia: a sombra vai no TEXTO, não num escurecimento
+     do fundo. Assim o texto sempre lê e a animação continua inteira por trás. */
+  h1,h2,h3,p,.eyebrow,.btn,.stat .num,.stat .label{
+    text-shadow:0 1px 3px rgba(12,9,7,.95), 0 2px 16px rgba(12,9,7,.85), 0 0 34px rgba(12,9,7,.6);
+  }
+  .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:0.72rem; letter-spacing:0.14em; color:var(--accent); font-weight:600; text-transform:uppercase;}
+  .container{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+  section{padding:120px 0; position:relative; z-index:2;}
+
+  #c{position:fixed; inset:0; z-index:0; pointer-events:none;}
+
+  .hero{position:relative; padding-top:16vh; min-height:82vh; z-index:2;}
+  .hero h1{font-size:clamp(2.6rem,6vw,4.6rem); margin:16px 0 20px; line-height:1.08;}
+  .hero .thesis{font-size:clamp(1.02rem,1.5vw,1.22rem); color:var(--ink-soft); max-width:44ch;}
+  .btn{
+    font-family:'IBM Plex Mono',monospace; padding:13px 20px; border-radius:var(--radius);
+    display:inline-flex; border:1px solid var(--accent); color:var(--accent); text-decoration:none;
+    transition:all .2s; margin-top:30px;
+  }
+  .btn:hover{background:var(--accent); color:var(--bg);}
+
+  .section-head{margin-bottom:44px;}
+  .section-head h2{font-size:clamp(1.5rem,2.6vw,2.1rem); margin-top:10px;}
+
+  .stats-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--line);}
+  .stat{background:var(--bg); padding:34px 26px; position:relative;}
+  .stat .num{font-family:'Bricolage Grotesque',sans-serif; font-size:2.4rem; font-weight:700; color:var(--accent);}
+  .stat .label{color:var(--ink-soft); font-size:.92rem; margin-top:6px;}
+
+  .cases-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px;}
+  .case-card{padding:32px 26px; position:relative;}
+  .case-card h3{font-size:1.15rem; margin:10px 0 12px;}
+  .case-card p{color:var(--ink-soft); font-size:.94rem;}
+  .case-card .hl{color:var(--accent); font-weight:600;}
+
+  @media (max-width:860px){
+    .stats-grid, .cases-grid{grid-template-columns:1fr;}
+  }
+
+  .organic-content{
+    opacity:0; transform:translateY(14px);
+    transition:opacity 1.3s cubic-bezier(.2,.8,.2,1), transform 1.3s cubic-bezier(.2,.8,.2,1);
+  }
+  .organic-content.built{opacity:1; transform:translateY(0);}
+
+  footer{padding:60px 0; text-align:center; color:var(--ink-faint); font-family:'IBM Plex Mono',monospace; font-size:.8rem; position:relative; z-index:2;}
+
+  @media (prefers-reduced-motion: reduce){
+    .organic-content{opacity:1; transform:none; transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<header class="hero">
+  <div class="container node-target" data-type="hero">
+    <div class="organic-content eyebrow">AUTOMAÇÃO · DADOS · OPERAÇÕES COMERCIAIS</div>
+    <h1 class="organic-content">Gustavo Djonatan<br>Galhaci</h1>
+    <p class="organic-content thesis">Transformo <strong>processos manuais</strong> em <strong>sistemas que rodam sozinhos</strong> — e meço o resultado em horas, escala e prazo.</p>
+    <a class="organic-content btn" href="mailto:gust4dev@gmail.com">enviar e-mail →</a>
+  </div>
+</header>
+
+<section id="resultados">
+  <div class="container">
+    <div class="node-target section-head" data-type="title">
+      <div class="organic-content eyebrow">RESULTADOS-CHAVE</div>
+      <h2 class="organic-content">Números que sustentam a conversa</h2>
+    </div>
+    <div class="stats-grid">
+      <div class="node-target stat" data-type="box"><div class="organic-content num">176h/mês</div><div class="organic-content label">de trabalho manual eliminadas na automação de cadastro</div></div>
+      <div class="node-target stat" data-type="box"><div class="organic-content num">6x</div><div class="organic-content label">mais rápido que o prazo estabelecido pela gerência</div></div>
+      <div class="node-target stat" data-type="box"><div class="organic-content num">10.000+</div><div class="organic-content label">clientes em projetos de reestruturação comercial</div></div>
+      <div class="node-target stat" data-type="box"><div class="organic-content num">4.154</div><div class="organic-content label">clientes realocados com precisão (38,3% da carteira)</div></div>
+      <div class="node-target stat" data-type="box"><div class="organic-content num">268</div><div class="organic-content label">cadastros corrigidos em 104 grupos econômicos</div></div>
+      <div class="node-target stat" data-type="box"><div class="organic-content num">60+</div><div class="organic-content label">vendedores atendidos por automação de indicadores</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="container">
+    <div class="node-target section-head" data-type="title">
+      <div class="organic-content eyebrow">O QUE SEI RESOLVER</div>
+      <h2 class="organic-content">Três tipos de problema, com prova</h2>
+    </div>
+    <div class="cases-grid">
+      <div class="node-target case-card" data-type="box">
+        <div class="organic-content eyebrow">AUTOMAÇÃO DE PROCESSOS</div>
+        <h3 class="organic-content">Elimino trabalho manual repetitivo</h3>
+        <p class="organic-content">Cadastro de clientes: de <span class="hl">16 min</span> manual (3 sistemas, cada um com captcha) para <span class="hl">100% autônomo</span>, a cada 10 min — <span class="hl">~176h/mês</span> eliminadas.</p>
+      </div>
+      <div class="node-target case-card" data-type="box">
+        <div class="organic-content eyebrow">ALOCAÇÃO EM ESCALA</div>
+        <h3 class="organic-content">Redistribuo com múltiplos critérios simultâneos</h3>
+        <p class="organic-content">Segmentação de carteira: 60 vendedores, 25 hubs, 10.000+ clientes. Prazo de <span class="hl">3 meses</span> concluído em <span class="hl">14 dias</span>. 4.154 clientes realocados com precisão.</p>
+      </div>
+      <div class="node-target case-card" data-type="box">
+        <div class="organic-content eyebrow">AUDITORIA &amp; PADRONIZAÇÃO</div>
+        <h3 class="organic-content">Corrijo inconsistências e formalizo critérios</h3>
+        <p class="organic-content"><span class="hl">268 cadastros</span> corrigidos em <span class="hl">104 grupos econômicos</span>. Documento de critérios que hoje é referência única da equipe comercial.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>gust4vodev.github.io — a colônia acima cresce conforme você rola a página</footer>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W = 0, H = 0;
+
+const PALETTE_STOPS = [
+  { t: 0.0, r: 255, g: 196, b: 96 },
+  { t: 0.18, r: 232, g: 163, b: 61 },
+  { t: 0.45, r: 196, g: 166, b: 72 },
+  { t: 0.72, r: 138, g: 172, b: 118 },
+  { t: 1.0, r: 62, g: 92, b: 68 },
+];
+
+function paletteColor(t) {
+  const v = Math.max(0, Math.min(1, t));
+  let a = PALETTE_STOPS[0], b = PALETTE_STOPS[PALETTE_STOPS.length - 1];
+  for (let i = 0; i < PALETTE_STOPS.length - 1; i++) {
+    if (v >= PALETTE_STOPS[i].t && v <= PALETTE_STOPS[i + 1].t) { a = PALETTE_STOPS[i]; b = PALETTE_STOPS[i + 1]; break; }
+  }
+  const f = (v - a.t) / (b.t - a.t || 1);
+  return { r: a.r + (b.r - a.r) * f, g: a.g + (b.g - a.g) * f, b: a.b + (b.b - a.b) * f };
+}
+
+function easeOutBack(t, k) {
+  const m = t - 1;
+  return 1 + (k + 1) * m * m * m + k * m * m;
+}
+
+/* A colônia vive em COORDENADAS DA PÁGINA, não do viewport: ela persiste e
+   acumula massa conforme a página rola, em vez de sumir ao sair da tela. */
+let genesisX, genesisY, cells, tips, links, targets, occupancy, docHeight, lastTick;
+let liveCount, tickNo, mouse, freeSlots;
+
+/* Ondulação lenta do tecido: nada num organismo fica perfeitamente parado.
+   A fase vem da própria coordenada, então um ponto compartilhado entre pai e
+   filho recebe o MESMO deslocamento e a veia não se rompe. */
+function undX(x, y, ts) { return x + Math.sin(ts / 3100 + y * 0.011) * 1.7; }
+function undY(x, y, ts) { return y + Math.cos(ts / 3600 + x * 0.009) * 1.5; }
+
+const STEP = 13;
+const TICK_MS = 55;
+/* Com renovação contínua as pontas rebrotam sempre perto do viewport, então a
+   massa se concentra onde o visitante está — 4200 saturava a tela e o texto
+   passava a disputar espaço com o fundo. */
+const MAX_CELLS = 2400;
+const REVEAL_FALLBACK_MS = 5000;
+const MAX_TIPS = 80;
+const BRANCH_CHANCE = 0.17;
+const TIP_DIE_CHANCE = 0.015;
+const WANDER = 0.5;
+const SEEK_PULL = 0.38;
+const OCC_SIZE = 15;
+const POP_MS = 620;
+
+/* Fluxo: quando uma ponta alcança um alvo, todo o caminho de volta ao gênese
+   é reforçado. É isso que cria poucas veias-tronco grossas + franja fina,
+   em vez de uma teia de espessura uniforme. */
+/* 70 calibrado por simulação: mantém ~75% da rede em fio fino e deixa o
+   tronco grosso como minoria com gradação. Valores baixos (26) saturavam
+   quase tudo e a hierarquia sumia. */
+const FLOW_MAX = 70;
+const FLOW_WALK_CAP = 500;
+/* Anastomose: distância de linhagem mínima para dois ramos poderem se fundir.
+   Sem isso um ramo "fundiria" com o próprio pai a cada passo. */
+const FUSE_MIN_LINEAGE = 8;
+const FRESH_MS = 2600;
+const WAVE_LEN = 90;
+/* Shuttle streaming: no organismo real o sentido inverte a cada ~1-2 min.
+   Aqui ~7s, para o efeito ser percebido durante a visita. */
+const SHUTTLE_MS = 3400;
+const SHUTTLE_SWING = 8;
+
+/* Rearranjo contínuo: sem decaimento o fluxo só sobe e a rede congela.
+   Com ele, veia que deixa de ser usada afina e é reabsorvida enquanto outras
+   engrossam — a colônia nunca fica igual a si mesma. */
+const MAINTAIN_EVERY = 6;
+const FLOW_DECAY = 0.4;
+const FLOW_DEAD = 0.6;
+const REINFORCE_PER_TICK = 3;
+const RETRACT_MS = 900;
+const CELL_ARRAY_CAP = 11000;
+const MIN_AGE_TO_DIE = 4000;
+/* Reação ao cursor. */
+const MOUSE_R = 190;
+const MOUSE_PULL = 0.55;
+
+function makeSpots() {
+  const spots = [];
+  const n = 5 + Math.floor(Math.random() * 4);
+  for (let i = 0; i < n; i++) {
+    const ang = Math.random() * Math.PI * 2;
+    const rad = Math.random() * Math.random() * 10;
+    spots.push({
+      dx: Math.cos(ang) * rad,
+      dy: Math.sin(ang) * rad,
+      r: 1.4 + Math.random() * 3.0,
+      shade: 0.82 + Math.random() * 0.36,
+      jitter: Math.random() * 0.45,
+    });
+  }
+  return spots;
+}
+
+function occKey(x, y) {
+  return Math.round(x / OCC_SIZE) + '_' + Math.round(y / OCC_SIZE);
+}
+
+/* Sprites de mancha pré-renderizados (um por faixa de tom). Criar um
+   createRadialGradient por mancha/frame custava milhares de alocações por
+   quadro; aqui é só um drawImage. */
+const SPRITE_TONES = 14;
+const SPRITE_PX = 40;
+let sprites = null;
+
+function buildSprites() {
+  sprites = [];
+  for (let i = 0; i < SPRITE_TONES; i++) {
+    const col = paletteColor(i / (SPRITE_TONES - 1));
+    const cv = document.createElement('canvas');
+    cv.width = cv.height = SPRITE_PX;
+    const c2 = cv.getContext('2d');
+    const half = SPRITE_PX / 2;
+    const g = c2.createRadialGradient(half, half, 0, half, half, half);
+    g.addColorStop(0, `rgba(${col.r | 0},${col.g | 0},${col.b | 0},0.95)`);
+    g.addColorStop(0.5, `rgba(${col.r | 0},${col.g | 0},${col.b | 0},0.42)`);
+    g.addColorStop(1, `rgba(${col.r | 0},${col.g | 0},${col.b | 0},0)`);
+    c2.fillStyle = g;
+    c2.fillRect(0, 0, SPRITE_PX, SPRITE_PX);
+    sprites.push(cv);
+  }
+}
+
+function spriteFor(tone) {
+  const i = Math.max(0, Math.min(SPRITE_TONES - 1, Math.round(tone * (SPRITE_TONES - 1))));
+  return sprites[i];
+}
+
+function resize() {
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W * DPR;
+  canvas.height = H * DPR;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  docHeight = Math.max(document.body.scrollHeight, H);
+}
+
+/* Substrato: em vez de um preto chapado, um leve granulado quente (tipo ágar
+   / matéria orgânica). Gerado uma vez e aplicado como background do body —
+   custo ZERO por frame, e sem depender de imagem externa que pode falhar. */
+function buildSubstrate() {
+  const N = 160;
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = N;
+  const c2 = cv.getContext('2d');
+  const img = c2.createImageData(N, N);
+  const d = img.data;
+  for (let i = 0; i < N * N; i++) {
+    const n = Math.random();
+    const grain = (n * n * n) * 26;
+    const o = i * 4;
+    d[o] = 22 + grain * 1.15;
+    d[o + 1] = 17 + grain * 0.95;
+    d[o + 2] = 13 + grain * 0.6;
+    d[o + 3] = 255;
+  }
+  c2.putImageData(img, 0, 0);
+  document.body.style.backgroundImage =
+    'radial-gradient(120% 80% at 50% 0%, rgba(48,38,26,.55), rgba(0,0,0,0) 60%),' +
+    'radial-gradient(100% 60% at 50% 100%, rgba(30,42,30,.45), rgba(0,0,0,0) 65%),' +
+    'url(' + cv.toDataURL() + ')';
+  document.body.style.backgroundRepeat = 'no-repeat, no-repeat, repeat';
+  document.body.style.backgroundAttachment = 'fixed, fixed, fixed';
+}
+
+function init() {
+  resize();
+  if (!sprites) { buildSprites(); buildSubstrate(); }
+  genesisX = W * 0.5;
+  genesisY = H * 0.30;
+
+  targets = Array.from(document.querySelectorAll('.node-target')).map((el, i) => ({
+    el,
+    type: el.getAttribute('data-type'),
+    order: i,
+    built: false,
+    biomass: 0,
+    need: el.getAttribute('data-type') === 'box' ? 12 : 8,
+    feeders: [],
+  }));
+
+  /* A grade guarda o ÍNDICE da célula, não só "ocupado": é o que permite
+     saber COM QUEM um ramo colidiu e decidir se pode se fundir. */
+  occupancy = new Map();
+  occupancy.set(occKey(genesisX, genesisY), 0);
+  links = [];
+
+  cells = [{
+    x: genesisX, y: genesisY, px: genesisX, py: genesisY,
+    spots: makeSpots(), tone: 0, sprite: spriteFor(0),
+    born: 0, bow: 0, dist: 0, gran: 0.9, parentIdx: -1, flow: FLOW_MAX,
+    childCount: 0, dead: false, retreatAt: -1, gen: 0,
+  }];
+  liveCount = 1;
+  tickNo = 0;
+  freeSlots = [];
+  mouse = { x: -9999, y: -9999, on: false };
+
+  tips = [];
+  const n = 7;
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2 + Math.random() * 0.4;
+    tips.push({
+      x: genesisX, y: genesisY,
+      angle: a,
+      depth: 0,
+      cellIdx: 0,
+      target: null,
+    });
+  }
+  lastTick = 0;
+}
+
+/* Reforça o caminho inteiro de volta ao gênese. */
+function reinforcePath(idx) {
+  let i = idx, steps = 0;
+  while (i >= 0 && steps < FLOW_WALK_CAP) {
+    const c = cells[i];
+    if (c.flow < FLOW_MAX) c.flow++;
+    i = c.parentIdx;
+    steps++;
+  }
+}
+
+/* A fusão só vale entre ramos realmente distintos — senão um ramo se
+   "reconectaria" ao próprio pai a cada passo e não formaria laço nenhum. */
+function sharesRecentLineage(aIdx, bIdx) {
+  let i = aIdx, steps = 0;
+  while (i >= 0 && steps < FUSE_MIN_LINEAGE) {
+    if (i === bIdx) return true;
+    i = cells[i].parentIdx;
+    steps++;
+  }
+  i = bIdx; steps = 0;
+  while (i >= 0 && steps < FUSE_MIN_LINEAGE) {
+    if (i === aIdx) return true;
+    i = cells[i].parentIdx;
+    steps++;
+  }
+  return false;
+}
+
+/* Alvos em coordenadas da página (rect + scrollY), para casarem com a colônia. */
+function refreshTargets(ts) {
+  const sy = window.scrollY;
+  targets.forEach(t => {
+    const r = t.el.getBoundingClientRect();
+    t.x = r.left + r.width / 2;
+    t.y = r.top + sy + r.height / 2;
+    t.w = Math.max(60, r.width);
+    t.h = Math.max(40, r.height);
+    t.screenTop = r.top;
+
+    const onScreen = r.top < H && r.bottom > 0;
+    if (onScreen && t.seenAt === undefined) t.seenAt = ts;
+
+    /* Rede de segurança: conteúdo NUNCA pode ficar preso atrás da animação.
+       Se a colônia não chegar (teto de células, aba em segundo plano, etc.),
+       o bloco se revela sozinho depois de alguns segundos visível. */
+    const stalled = onScreen && t.seenAt !== undefined && (ts - t.seenAt) > REVEAL_FALLBACK_MS;
+    if (!t.built && (t.biomass >= t.need || stalled)) {
+      t.built = true;
+      t.el.querySelectorAll('.organic-content').forEach(c => c.classList.add('built'));
+    }
+  });
+}
+
+/* Cada ponta escolhe o SEU alvo (sorteio ponderado por proximidade) em vez de
+   todas perseguirem o mesmo. É isso que faz a colônia se abrir em leque pela
+   largura da página, em vez de descer como uma coluna única no centro.
+   Só entram alvos já perto do viewport — o resto ainda "não existe" para ela. */
+function pickTarget(x, y) {
+  const cands = [];
+  let sum = 0;
+  for (const t of targets) {
+    if (t.built) continue;
+    if (t.screenTop > H + 260) continue;
+    const d = Math.hypot(t.x - x, t.y - y) + 120;
+    const w = 1 / (d * d);
+    sum += w;
+    cands.push({ t, w });
+  }
+  if (!cands.length) return null;
+  let roll = Math.random() * sum;
+  for (const c of cands) {
+    roll -= c.w;
+    if (roll <= 0) return c.t;
+  }
+  return cands[cands.length - 1].t;
+}
+
+function feedTarget(x, y, idx) {
+  for (const t of targets) {
+    if (Math.abs(x - t.x) < t.w / 2 + 24 && Math.abs(y - t.y) < t.h / 2 + 24) {
+      if (!t.built) t.biomass += 1;
+      /* Guarda quem chegou nesse bloco: são essas rotas que a colônia continua
+         "usando" depois, mantendo os troncos vivos contra o decaimento. */
+      if (t.feeders.length < 40) t.feeders.push(idx);
+      else t.feeders[Math.floor(Math.random() * 40)] = idx;
+      return true;
+    }
+  }
+  return false;
+}
+
+/* Rearranjo contínuo da rede: o que continua sendo usado engrossa, o que parou
+   de ser usado afina, morre e é reabsorvido. Sem isso a colônia congela assim
+   que termina de crescer. */
+function maintainTick(ts) {
+  /* 1. As rotas ainda "em uso" (as que chegaram nos blocos) são reforçadas. */
+  for (let k = 0; k < REINFORCE_PER_TICK; k++) {
+    const t = targets[Math.floor(Math.random() * targets.length)];
+    if (!t || !t.feeders.length) continue;
+    const idx = t.feeders[Math.floor(Math.random() * t.feeders.length)];
+    if (cells[idx] && !cells[idx].dead) reinforcePath(idx);
+  }
+
+  /* 2. Todo o resto decai. */
+  for (let i = 0; i < cells.length; i++) {
+    const c = cells[i];
+    if (c.dead) continue;
+    if (c.flow > 0) c.flow -= FLOW_DECAY;
+
+    /* 3. Ponta sem filhos e sem fluxo começa a RECUAR — a massa é puxada de
+       volta, como o organismo reabsorvendo um ramo improdutivo. */
+    if (c.retreatAt < 0 && c.parentIdx >= 0 && c.childCount === 0 &&
+        c.flow <= FLOW_DEAD && (ts - c.born) > MIN_AGE_TO_DIE) {
+      c.retreatAt = ts;
+    }
+
+    /* 4. Terminou de recuar: some de vez e devolve o espaço para novo
+       crescimento. As células mortas ficam no array (índices precisam ser
+       estáveis para parentIdx/ocupação/laços), só deixam de contar e desenhar. */
+    if (c.retreatAt >= 0 && ts - c.retreatAt > RETRACT_MS) {
+      c.dead = true;
+      c.gen++;
+      liveCount--;
+      occupancy.delete(occKey(c.x, c.y));
+      if (c.parentIdx >= 0 && cells[c.parentIdx]) cells[c.parentIdx].childCount--;
+      /* A vaga volta para reuso. Sem isso o array enche, o crescimento para de
+         vez e a colônia morre lentamente — só o decaimento continua rodando. */
+      freeSlots.push(i);
+    }
+  }
+}
+
+function growTick(ts, sy) {
+  if (liveCount >= MAX_CELLS || cells.length >= CELL_ARRAY_CAP) return;
+
+  /* Rebrota: se a frente de crescimento se extinguir (pontas encurraladas por
+     vizinhos), a colônia volta a brotar de massa já existente perto do que o
+     usuário está vendo — sem isso ela morre no meio da página. */
+  if (tips.length < 6) {
+    const pool = [];
+    for (let i = 0; i < cells.length; i++) {
+      const c = cells[i];
+      if (c.dead) continue;
+      const dy = c.y - sy;
+      if (dy > -200 && dy < H + 200) pool.push(i);
+    }
+    if (pool.length) {
+      for (let i = tips.length; i < 8; i++) {
+        const idx = pool[Math.floor(Math.random() * pool.length)];
+        const c = cells[idx];
+        tips.push({
+          x: c.x, y: c.y, angle: Math.random() * Math.PI * 2, depth: 0,
+          cellIdx: idx, target: null,
+        });
+      }
+    }
+  }
+  if (!tips.length) return;
+
+  const next = [];
+  for (const tip of tips) {
+    if (liveCount + next.length >= MAX_CELLS) break;
+    if (Math.random() < TIP_DIE_CHANCE && tips.length > 3) continue;
+
+    /* Alvo "grudado" na ponta: se ela re-sorteasse todo ciclo, a média puxaria
+       tudo de volta para o centro e o leque desapareceria. */
+    if (!tip.target || tip.target.built) tip.target = pickTarget(tip.x, tip.y);
+    const target = tip.target;
+    let baseAngle = tip.angle;
+    if (target) {
+      const want = Math.atan2(target.y - tip.y, target.x - tip.x);
+      let diff = want - baseAngle;
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      baseAngle += diff * SEEK_PULL;
+    }
+
+    /* O cursor age como fonte de alimento: pontas por perto se curvam na
+       direção dele. Algo vivo responde a quem chega perto. */
+    if (mouse.on) {
+      const mdx = mouse.x - tip.x, mdy = mouse.y - tip.y;
+      const md = Math.hypot(mdx, mdy);
+      if (md < MOUSE_R * 2 && md > 1) {
+        const pull = MOUSE_PULL * (1 - md / (MOUSE_R * 2));
+        let diff = Math.atan2(mdy, mdx) - baseAngle;
+        while (diff > Math.PI) diff -= Math.PI * 2;
+        while (diff < -Math.PI) diff += Math.PI * 2;
+        baseAngle += diff * pull;
+      }
+    }
+
+    /* Se a vaga estiver ocupada, a ponta TENTA outros ângulos em vez de morrer.
+       Sem isso a colônia se autoextingue: pontas nascidas juntas disputam a
+       mesma célula do grid e somem todas nos primeiros ciclos. */
+    let angle = 0, nx = 0, ny = 0, placed = false, hitIdx = -1;
+    for (let attempt = 0; attempt < 7 && !placed; attempt++) {
+      const spread = WANDER * (1 + attempt * 0.9);
+      angle = baseAngle + (Math.random() - 0.5) * spread;
+      const len = STEP * (0.75 + Math.random() * 0.5);
+      nx = tip.x + Math.cos(angle) * len;
+      ny = tip.y + Math.sin(angle) * len;
+      if (nx < 10) { nx = 10; angle = Math.PI - angle; }
+      if (nx > W - 10) { nx = W - 10; angle = Math.PI - angle; }
+      if (ny < 4) { ny = 4; angle = -angle; }
+      if (ny > docHeight - 4) { ny = docHeight - 4; angle = -angle; }
+      const occ = occupancy.get(occKey(nx, ny));
+      if (occ === undefined) placed = true;
+      else if (hitIdx < 0) hitIdx = occ;
+    }
+
+    if (!placed) {
+      /* ANASTOMOSE: bateu num ramo de outra linhagem → os dois se FUNDEM,
+         fechando um laço. É o que transforma a árvore numa malha, como numa
+         colônia real, onde as veias se reencontram. */
+      if (hitIdx >= 0 && cells[hitIdx] && !cells[hitIdx].dead &&
+          !sharesRecentLineage(tip.cellIdx, hitIdx)) {
+        links.push({
+          a: tip.cellIdx, b: hitIdx, born: ts,
+          /* Geração de cada ponta: se a vaga for reaproveitada por outra
+             célula, o laço deixa de valer em vez de ligar pontos errados. */
+          genA: cells[tip.cellIdx].gen, genB: cells[hitIdx].gen,
+        });
+        reinforcePath(tip.cellIdx);
+        reinforcePath(hitIdx);
+        continue;
+      }
+      /* Sem vaga e sem fusão: a ponta sobrevive e tenta de novo no próximo ciclo. */
+      next.push({
+        x: tip.x, y: tip.y, angle: Math.random() * Math.PI * 2,
+        depth: tip.depth, cellIdx: tip.cellIdx, target: tip.target,
+      });
+      continue;
+    }
+
+    const dist = Math.hypot(nx - genesisX, ny - genesisY);
+    const tone = Math.min(1, dist / (docHeight * 0.62));
+    /* Reaproveita a vaga de uma célula reabsorvida; os índices continuam
+       estáveis (parentIdx/ocupação/laços dependem disso). */
+    const reuse = freeSlots.length ? freeSlots.pop() : -1;
+    const newIdx = reuse >= 0 ? reuse : cells.length;
+    const gen = reuse >= 0 ? cells[reuse].gen : 0;
+    occupancy.set(occKey(nx, ny), newIdx);
+    const nc = {
+      x: nx, y: ny, px: tip.x, py: tip.y,
+      spots: makeSpots(),
+      tone,
+      sprite: spriteFor(tone),
+      born: ts,
+      bow: (Math.random() - 0.5) * 0.7,
+      dist,
+      gran: Math.random(),
+      parentIdx: tip.cellIdx,
+      flow: 0,
+      childCount: 0,
+      dead: false,
+      retreatAt: -1,
+      gen,
+    };
+    if (reuse >= 0) cells[reuse] = nc; else cells.push(nc);
+    liveCount++;
+    if (cells[tip.cellIdx]) cells[tip.cellIdx].childCount++;
+    if (feedTarget(nx, ny, newIdx)) reinforcePath(newIdx);
+
+    next.push({ x: nx, y: ny, angle, depth: tip.depth + 1, cellIdx: newIdx, target: tip.target });
+    if (next.length < MAX_TIPS && Math.random() < BRANCH_CHANCE) {
+      /* O ramo lateral sorteia um alvo próprio: é assim que a colônia se
+         reparte entre os vários cards em vez de virar um fluxo único. */
+      next.push({
+        x: nx, y: ny,
+        angle: angle + (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.6),
+        depth: tip.depth + 1,
+        cellIdx: newIdx,
+        target: pickTarget(nx, ny),
+      });
+    }
+  }
+  tips = next.slice(0, MAX_TIPS);
+}
+
+function qpt(x0, y0, cx, cy, x1, y1, u) {
+  const iu = 1 - u;
+  return {
+    x: iu * iu * x0 + 2 * iu * u * cx + u * u * x1,
+    y: iu * iu * y0 + 2 * iu * u * cy + u * u * y1,
+  };
+}
+
+/* Fita afunilada: a veia vai da espessura DO PAI até a sua própria, em vez de
+   cada segmento ter largura constante. É o que tira o aspecto de "linguiça
+   segmentada" e faz o conjunto ler como um tubo contínuo que afina para fora. */
+function veinRibbon(x0, y0, cx, cy, x1, y1, w0, w1) {
+  const N = 4;
+  const L = [], R = [];
+  for (let i = 0; i <= N; i++) {
+    const u = i / N;
+    const p = qpt(x0, y0, cx, cy, x1, y1, u);
+    const q = qpt(x0, y0, cx, cy, x1, y1, Math.min(1, u + 0.01));
+    let tx = q.x - p.x, ty = q.y - p.y;
+    const tl = Math.hypot(tx, ty) || 1;
+    const nx = -ty / tl, ny = tx / tl;
+    const hw = (w0 + (w1 - w0) * u) / 2;
+    L.push({ x: p.x + nx * hw, y: p.y + ny * hw });
+    R.push({ x: p.x - nx * hw, y: p.y - ny * hw });
+  }
+  ctx.beginPath();
+  ctx.moveTo(L[0].x, L[0].y);
+  for (let i = 1; i <= N; i++) ctx.lineTo(L[i].x, L[i].y);
+  for (let i = N; i >= 0; i--) ctx.lineTo(R[i].x, R[i].y);
+  ctx.closePath();
+}
+
+/* CORRENTE CITOPLASMÁTICA (shuttle streaming): grânulos ESCUROS correndo
+   dentro da veia iluminada — é assim que se enxerga no organismo real, e a
+   única forma de ter contraste aqui, já que o tronco é claro.
+   Passe próprio com composição normal: em mistura aditiva, pintar escuro
+   não faz absolutamente nada.
+   A velocidade segue um cosseno, então o fluxo desacelera, PARA e INVERTE
+   o sentido — exatamente como no Physarum. */
+function drawStreaming(cell, ts, sy) {
+  if (cell.dead) return;
+  const ux = undX(cell.x, cell.y, ts);
+  const y = undY(cell.x, cell.y, ts) - sy;
+  if (y < -70 || y > H + 70) return;
+  const f = cell.flow / FLOW_MAX;
+  const fw = f * f;
+  /* Limiar baixo = MAIS veias carregam grânulo (inclusive as médias/finas).
+     A densidade ao longo de cada veia continua controlada pelo sorteio abaixo,
+     que é o que evita o aspecto de linha tracejada. */
+  if (fw < 0.04) return;
+  if (cell.gran > 0.5) return;
+  let t = Math.min(1, (ts - cell.born) / POP_MS);
+  if (cell.retreatAt >= 0) t *= Math.max(0, 1 - (ts - cell.retreatAt) / RETRACT_MS);
+  if (t <= 0) return;
+
+  const pxu = undX(cell.px, cell.py, ts);
+  const py = undY(cell.px, cell.py, ts) - sy;
+  const dx = ux - pxu, dy = y - py;
+  const seg = Math.hypot(dx, dy) || 1;
+  const nx = -dy / seg, ny = dx / seg;
+  const mx = (pxu + ux) / 2 + nx * cell.bow * seg * 0.35;
+  const my = (py + y) / 2 + ny * cell.bow * seg * 0.35;
+
+  const swing = Math.sin(ts / SHUTTLE_MS) * SHUTTLE_SWING;
+  /* Grânulo proporcional à veia: numa veia fina um ponto grande a apagaria. */
+  const gr = 0.5 + fw * 2.2;
+
+  /* A COR do grânulo segue o brilho da veia, senão ele some.
+     Veia grossa é clara → grânulo escuro contrasta (é o que se vê no
+     organismo real). Veia fina é escura sobre fundo escuro → ali o grânulo
+     precisa ser CLARO, ou vira escuro sobre escuro e não aparece.
+     Antes eram todos escuros: metade era desenhada e nunca vista. */
+  let k = (fw - 0.06) / 0.24;
+  k = k < 0 ? 0 : k > 1 ? 1 : k;
+  k = k * k * (3 - 2 * k);
+  const gR = 250 + (44 - 250) * k;
+  const gG = 234 + (24 - 234) * k;
+  const gB = 184 + (6 - 184) * k;
+  const a = (0.34 + fw * 0.5) * t;
+  ctx.fillStyle = `rgba(${gR | 0},${gG | 0},${gB | 0},${a > 0.62 ? 0.62 : a})`;
+  /* Um grânulo, e só em parte dos segmentos (sorteio fixo por célula): com um
+     ponto a cada poucos pixels a veia lê como linha tracejada, não como
+     partículas soltas sendo carregadas pelo fluxo. */
+  const phase = cell.gran + cell.dist * 0.02 - swing;
+  const u = phase - Math.floor(phase);
+  const g = qpt(pxu, py, mx, my, ux, y, u);
+  ctx.beginPath();
+  ctx.arc(g.x, g.y, gr, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawCell(cell, ts, sy) {
+  if (cell.dead) return;
+  const ux = undX(cell.x, cell.y, ts), uy = undY(cell.x, cell.y, ts);
+  const y = uy - sy;
+  if (y < -70 || y > H + 70) return;
+  const pxu = undX(cell.px, cell.py, ts);
+  const py = undY(cell.px, cell.py, ts) - sy;
+
+  const age = ts - cell.born;
+  let t = Math.min(1, age / POP_MS);
+  /* Retração: o ramo abandonado ENCOLHE de volta em vez de simplesmente
+     apagar — a massa está sendo puxada para o tronco. */
+  if (cell.retreatAt >= 0) {
+    t *= Math.max(0, 1 - (ts - cell.retreatAt) / RETRACT_MS);
+  }
+  if (t <= 0) return;
+  const col = paletteColor(cell.tone);
+
+  /* Onda peristáltica: a fase vem da DISTÂNCIA até o gênese, então o pulso
+     viaja pela veia para fora, em vez de cada célula piscar por conta própria. */
+  const wave = Math.sin(ts / 1050 - cell.dist / WAVE_LEN);
+  const pulse = 1 + wave * 0.14;
+
+  /* Fluxo → veia-tronco grossa e clara; sem fluxo → franja fina e discreta. */
+  const f = cell.flow / FLOW_MAX;
+  const fw = f * f;
+  /* Frente de avanço: o que acabou de nascer lê mais vivo que o interior. */
+  const fresh = Math.max(0, 1 - age / FRESH_MS);
+
+  /* Reação ao cursor: as veias por perto acendem — o organismo "percebe". */
+  let near = 0;
+  if (mouse.on) {
+    const md = Math.hypot(ux - mouse.x, uy - mouse.y);
+    if (md < MOUSE_R) {
+      near = 1 - md / MOUSE_R;
+      near = near * near;
+    }
+  }
+
+  const dx = ux - pxu, dy = y - py;
+  const seg = Math.hypot(dx, dy) || 1;
+  const nx = -dy / seg, ny = dx / seg;
+  const mx = (pxu + ux) / 2 + nx * cell.bow * seg * 0.35;
+  const my = (py + y) / 2 + ny * cell.bow * seg * 0.35;
+
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+
+  /* Alfa CAI conforme a veia engrossa: ao longo de um tronco dezenas de tubos
+     se sobrepõem e, com mistura aditiva, o acúmulo estoura em branco — vira
+     raio elétrico em vez de veia. Largura sobe, opacidade por traço desce. */
+  const tubeW = (0.8 + fw * 4.4) * pulse;
+  const tubeA = (0.10 + fw * 0.13) * t;
+  ctx.lineCap = 'round';
+
+  /* Largura do PAI → largura própria, para a veia afunilar de forma contínua. */
+  const pf = cell.parentIdx >= 0 ? cells[cell.parentIdx].flow / FLOW_MAX : f;
+  const pfw = pf * pf;
+  const parentW = (0.8 + pfw * 4.4) * pulse;
+
+  /* Bainha: larga e quase transparente, preenche o vão entre os aglomerados
+     de manchas — sem ela a veia lê como "pérolas num cordão". */
+  ctx.strokeStyle = `rgba(${col.r | 0},${col.g | 0},${col.b | 0},${(0.035 + fw * 0.05) * t})`;
+  ctx.lineWidth = tubeW * 2.8 + 3;
+  ctx.beginPath();
+  ctx.moveTo(pxu, py);
+  ctx.quadraticCurveTo(mx, my, ux, y);
+  ctx.stroke();
+
+  /* A fita afunilada só vale a pena onde a espessura é perceptível; nos ~75%
+     de veia fina um traço simples fica idêntico e custa muito menos. */
+  if (fw > 0.06) {
+    ctx.fillStyle = `rgba(${col.r | 0},${col.g | 0},${col.b | 0},${tubeA})`;
+    veinRibbon(pxu, py, mx, my, ux, y, parentW, tubeW);
+    ctx.fill();
+  } else {
+    ctx.strokeStyle = `rgba(${col.r | 0},${col.g | 0},${col.b | 0},${tubeA})`;
+    ctx.lineWidth = tubeW;
+    ctx.beginPath();
+    ctx.moveTo(pxu, py);
+    ctx.quadraticCurveTo(mx, my, ux, y);
+    ctx.stroke();
+  }
+
+  /* Núcleo claro: veia real é um cilindro — borda mais escura, centro mais
+     claro. Só nas grossas, onde o volume é perceptível. */
+  if (fw > 0.25) {
+    ctx.fillStyle = `rgba(255,240,200,${(fw - 0.25) * 0.16 * t})`;
+    veinRibbon(pxu, py, mx, my, ux, y, parentW * 0.34, tubeW * 0.34);
+    ctx.fill();
+  }
+
+
+  const spotBoost = 1 + fw * 0.75 + near * 0.35;
+  const alphaBoost = 0.23 + fw * 0.09 + fresh * 0.13 + near * 0.3;
+  for (const s of cell.spots) {
+    const st = Math.min(1, Math.max(0, (t - s.jitter) / (1 - s.jitter || 1)));
+    if (st <= 0) continue;
+    const e = easeOutBack(st, 0.5);
+    const sx = ux + s.dx * e, sy2 = y + s.dy * e;
+    const r = Math.max(0.5, s.r * e * pulse * spotBoost) * 2.1;
+    ctx.globalAlpha = alphaBoost * st * s.shade;
+    ctx.drawImage(cell.sprite, sx - r, sy2 - r, r * 2, r * 2);
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+/* Laços fechados pela anastomose. */
+function drawLinks(ts, sy) {
+  if (!links.length) return;
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.lineCap = 'round';
+  let alive = 0;
+  for (let i = 0; i < links.length; i++) {
+    const l = links[i];
+    const a = cells[l.a], b = cells[l.b];
+    /* Descarta o laço se qualquer ponta morreu OU se a vaga foi reaproveitada
+       por outra célula (geração diferente). */
+    if (!a || !b || a.dead || b.dead || a.gen !== l.genA || b.gen !== l.genB) continue;
+    links[alive++] = l;
+    const aux = undX(a.x, a.y, ts), auy = undY(a.x, a.y, ts);
+    const bux = undX(b.x, b.y, ts), buy = undY(b.x, b.y, ts);
+    const ay = auy - sy, by = buy - sy;
+    if ((ay < -60 && by < -60) || (ay > H + 60 && by > H + 60)) continue;
+    const t = Math.min(1, (ts - l.born) / POP_MS);
+    const f = Math.min(a.flow, b.flow) / FLOW_MAX;
+    const fw = f * f;
+    const wave = Math.sin(ts / 1050 - a.dist / WAVE_LEN);
+    const col = paletteColor((a.tone + b.tone) / 2);
+    ctx.strokeStyle = `rgba(${col.r | 0},${col.g | 0},${col.b | 0},${(0.10 + fw * 0.13) * t})`;
+    ctx.lineWidth = (0.8 + fw * 4.0) * (1 + wave * 0.14);
+    ctx.beginPath();
+    ctx.moveTo(aux, ay);
+    ctx.lineTo(bux, by);
+    ctx.stroke();
+  }
+  links.length = alive;
+  ctx.restore();
+}
+
+function frame(ts) {
+  const sy = window.scrollY;
+  refreshTargets(ts);
+
+  if (ts - lastTick > TICK_MS) {
+    lastTick = ts;
+    tickNo++;
+    growTick(ts, sy);
+    if (tickNo % MAINTAIN_EVERY === 0) maintainTick(ts);
+  }
+
+  ctx.clearRect(0, 0, W, H);
+  for (let i = 0; i < cells.length; i++) drawCell(cells[i], ts, sy);
+  drawLinks(ts, sy);
+  /* Grânulos por último e com composição normal, para poderem ser escuros
+     sobre a veia já iluminada. */
+  for (let i = 0; i < cells.length; i++) drawStreaming(cells[i], ts, sy);
+
+  requestAnimationFrame(frame);
+}
+
+/* O cursor em coordenadas da PÁGINA, para casar com a colônia. */
+window.addEventListener('pointermove', e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY + window.scrollY;
+  mouse.on = true;
+}, { passive: true });
+window.addEventListener('pointerleave', () => { mouse.on = false; }, { passive: true });
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { init(); }, 200);
+});
+
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.organic-content').forEach(c => c.classList.add('built'));
+} else {
+  init();
+  requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>
