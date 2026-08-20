@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gustavo Djonatan Galhaci — Automação de Processos & Dados</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #090c08; 
+    --ink: #F0EADD;
+    --ink-soft: #B7AD98; 
+    --ink-faint: #7C7460; 
+    --accent: #E8A33D; 
+    --maxw: 1120px;
+  }
+
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif; font-size: 16px; line-height: 1.55;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3 { font-family: 'Bricolage Grotesque', sans-serif; margin: 0; font-weight: 600; }
+  .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.14em; color: var(--accent); font-weight: 600; text-transform: uppercase; }
+  .container { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+  section { padding: 96px 0; position: relative; z-index: 2;}
+
+  /* O CANVAS AGORA É A ESTRUTURA FÍSICA DO SITE */
+  #c { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+  /* CABEÇALHO */
+  .hero { position: relative; padding-top: 15vh; min-height: 80vh; z-index: 2;}
+  .hero h1 { font-size: clamp(2.8rem, 6.4vw, 5rem); margin: 14px 0 20px; line-height: 1.1; }
+  .hero .thesis { font-size: clamp(1.05rem, 1.6vw, 1.3rem); color: var(--ink-soft); max-width: 46ch; }
+  
+  .btn { 
+    font-family: 'IBM Plex Mono', monospace; padding: 13px 20px; border-radius: 3px; 
+    display: inline-flex; border: 1px solid var(--accent); color: var(--accent); text-decoration: none;
+    transition: all 0.2s; cursor: pointer; pointer-events: auto; background: transparent;
+  }
+  .btn:hover { background: var(--accent); color: var(--bg); }
+
+  /* GRIDS (SEM BORDAS OU FUNDOS CSS - A COLÔNIA VAI DESENHAR) */
+  .cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .stat, .case-card { padding: 30px; position: relative; }
+  
+  /* TEXTOS COMEÇAM INVISÍVEIS */
+  .organic-content {
+    opacity: 0; 
+    transform: translateY(10px);
+    transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+  }
+  .organic-content.built {
+    opacity: 1; 
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- O SUBSTRATO ONDE A COLÔNIA CRESCE -->
+<canvas id="c"></canvas>
+
+<!-- O CONTEÚDO QUE SERÁ "ENCONTRADO" E CONSTRUÍDO -->
+<header class="hero">
+  <div class="container node-target" data-type="hero">
+    <div class="organic-content eyebrow">AUTOMAÇÃO · DADOS · OPERAÇÕES COMERCIAIS</div>
+    <h1 class="organic-content">Gustavo Djonatan<br>Galhaci</h1>
+    <p class="organic-content thesis">Transformo processos manuais em sistemas que rodam sozinhos.</p>
+    <p class="organic-content eyebrow" style="margin-top:14px; opacity: 0.6;">"I don't design the path. I design the system that finds it."</p>
+  </div>
+</header>
+
+<section id="resultados">
+  <div class="container">
+    <div class="node-target" data-type="title" style="margin-bottom:36px; padding: 20px;">
+      <div class="organic-content eyebrow">RESULTADOS-CHAVE</div>
+      <h2 class="organic-content">Números que sustentam a conversa</h2>
+    </div>
+    <div class="cases-grid">
+      <div class="node-target stat" data-type="box">
+        <h3 class="organic-content" style="font-size:3rem; color:var(--accent);">176h</h3>
+        <p class="organic-content">de trabalho manual eliminadas por mês</p>
+      </div>
+      <div class="node-target stat" data-type="box">
+        <h3 class="organic-content" style="font-size:3rem; color:var(--accent);">10k+</h3>
+        <p class="organic-content">clientes em reestruturação comercial</p>
+      </div>
+      <div class="node-target stat" data-type="box">
+        <h3 class="organic-content" style="font-size:3rem; color:var(--accent);">6x</h3>
+        <p class="organic-content">mais rápido que o prazo estabelecido</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="container">
+    <div class="node-target" data-type="title" style="margin-bottom:36px; padding: 20px;">
+      <div class="organic-content eyebrow">O QUE SEI RESOLVER</div>
+      <h2 class="organic-content">Três tipos de problema, com prova</h2>
+    </div>
+    <div class="cases-grid">
+      <div class="node-target case-card" data-type="box">
+        <h3 class="organic-content">Automação de Processos</h3>
+        <p class="organic-content" style="margin-top: 10px;">De 16 min manual para 100% autônomo, a cada 10 min. 176h/mês eliminadas.</p>
+      </div>
+      <div class="node-target case-card" data-type="box">
+        <h3 class="organic-content">Alocação em Escala</h3>
+        <p class="organic-content" style="margin-top: 10px;">Segmentação de carteira revisada em 14 dias (prazo original 3 meses).</p>
+      </div>
+      <div class="node-target case-card" data-type="box">
+        <h3 class="organic-content">Auditoria & Padronização</h3>
+        <p class="organic-content" style="margin-top: 10px;">268 cadastros corrigidos e formalização de critérios de negócio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+/**
+ * PHYSARUM BUILDER ENGINE
+ * A colônia fareja as divs invisíveis (node-targets) e constrói a UI fisicamente no canvas.
+ */
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W, H;
+let particles = [];
+let targets = [];
+
+// Paleta Orgânica
+const colors = [
+  {r: 232, g: 163, b: 61},  // Accent
+  {r: 181, g: 112, b: 31},  // Orange
+  {r: 123, g: 174, b: 143}, // Moss
+  {r: 255, g: 240, b: 200}  // Spore White
+];
+
+function init() {
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W * DPR;
+  canvas.height = H * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+  // Mapeia os alvos (blocos HTML)
+  const domNodes = document.querySelectorAll('.node-target');
+  targets = Array.from(domNodes).map(el => {
+    return {
+      el: el,
+      type: el.getAttribute('data-type'),
+      built: false,
+      biomass: 0,
+      biomassTarget: el.getAttribute('data-type') === 'box' ? 150 : 60 // Caixas exigem mais massa
+    };
+  });
+
+  // Gera o enxame inicial
+  particles = [];
+  for(let i = 0; i < 400; i++) {
+    particles.push({
+      x: W / 2 + (Math.random() - 0.5) * 100,
+      y: -50, // Nasce fora da tela no topo
+      vx: 0, vy: 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: Math.random() * 100,
+      activeTargetIndex: -1
+    });
+  }
+}
+
+function updateTargets() {
+  const scrollY = window.scrollY;
+  targets.forEach((t, i) => {
+    const rect = t.el.getBoundingClientRect();
+    t.x = rect.left + rect.width / 2;
+    t.y = rect.top + rect.height / 2;
+    t.w = rect.width;
+    t.h = rect.height;
+    t.topEdge = rect.top;
+    
+    // Revela o texto HTML quando a biomassa atinge o limite
+    if(t.biomass >= t.biomassTarget && !t.built) {
+      t.built = true;
+      const contents = t.el.querySelectorAll('.organic-content');
+      contents.forEach(c => c.classList.add('built'));
+    }
+  });
+}
+
+function draw() {
+  // Efeito de rastro/fading (Substrato)
+  ctx.fillStyle = 'rgba(9, 12, 8, 0.08)';
+  ctx.fillRect(0, 0, W, H);
+  
+  ctx.globalCompositeOperation = 'screen';
+  updateTargets();
+
+  particles.forEach(p => {
+    // Acha o alvo mais próximo que AINDA NÃO FOI totalmente construído E está visível na tela
+    let nearestDist = Infinity;
+    let target = null;
+    let tIndex = -1;
+
+    targets.forEach((t, i) => {
+      if (!t.built && t.topEdge < H + 200) { // Só fareja o que está próximo da viewport
+        const dist = Math.hypot(t.x - p.x, t.y - p.y);
+        if (dist < nearestDist) { nearestDist = dist; target = t; tIndex = i; }
+      }
+    });
+
+    if (target) {
+      // 1. Fase de Busca: Partícula viaja até o elemento
+      if (nearestDist > target.w / 2) {
+        const angle = Math.atan2(target.y - p.y, target.x - p.x);
+        p.vx += Math.cos(angle) * 0.15;
+        p.vy += Math.sin(angle) * 0.15;
+        
+        // Atrito / Fluidez orgânica
+        p.vx *= 0.92; p.vy *= 0.92;
+        
+        // Adiciona ruído (wobble do Physarum)
+        p.vx += (Math.random() - 0.5) * 1.5;
+        p.vy += (Math.random() - 0.5) * 1.5;
+        
+        p.x += p.vx; p.y += p.vy;
+
+        // Desenha a "veia" de busca
+        ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, 0.5)`;
+        ctx.beginPath(); ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2); ctx.fill();
+
+      } else {
+        // 2. Fase de Construção: Partícula chegou no elemento e começa a desenhar sua forma
+        target.biomass += 0.1; // Aumenta a massa da estrutura
+
+        // Comportamento de órbita/preenchimento baseado no tipo
+        if (target.type === 'box') {
+          // Gira ao redor das bordas para "desenhar" o card
+          const ang = Date.now() * 0.002 + p.life;
+          const rx = target.x + Math.cos(ang) * (target.w / 2) * Math.random();
+          const ry = target.y + Math.sin(ang) * (target.h / 2) * Math.random();
+          
+          p.x += (rx - p.x) * 0.1;
+          p.y += (ry - p.y) * 0.1;
+
+          // Desenha a placa de petri/fungo do card
+          ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, 0.15)`;
+          ctx.beginPath(); ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2); ctx.fill();
+        } else {
+          // Comportamento de texto/título: Cria uma mancha brilhante por baixo do texto
+          p.x += (target.x - p.x + (Math.random()-0.5)*target.w) * 0.05;
+          p.y += (target.y - p.y + (Math.random()-0.5)*target.h) * 0.05;
+          
+          ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, 0.2)`;
+          ctx.beginPath(); ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+    } else {
+      // Se não há alvos (Tudo construído), a colônia se espalha livremente como raízes
+      p.vx += (Math.random() - 0.5) * 0.5;
+      p.vy += (Math.random() - 0.5) * 0.5 + 0.1; // Gravidade leve
+      p.vx *= 0.95; p.vy *= 0.95;
+      p.x += p.vx; p.y += p.vy;
+      
+      ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, 0.3)`;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 1, 0, Math.PI * 2); ctx.fill();
+    }
+    
+    // Reposiciona partículas perdidas na tela
+    if(p.y > H + 50 || p.x < -50 || p.x > W + 50) {
+       p.y = -10; p.x = W/2 + (Math.random()-0.5)*W; p.vy = 2;
+    }
+  });
+
+  ctx.globalCompositeOperation = 'source-over';
+  requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', init);
+init();
+requestAnimationFrame(draw);
+</script>
+</body>
+</html>
