@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gustavo Djonatan Galhaci — Automação de Processos & Dados</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#090c08; --surface:rgba(29,23,18,0.4); --ink:#F0EADD;
+    --ink-soft:#B7AD98; --ink-faint:#7C7460; --accent:#E8A33D; 
+    --line-strong: rgba(232,163,61,0.2); --radius:3px; --maxw:1120px;
+  }
+
+  body {
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif; font-size:16px; line-height:1.55;
+    overflow-x: hidden;
+  }
+  
+  h1,h2,h3 { font-family:'Bricolage Grotesque',sans-serif; margin:0; color:var(--ink); }
+  .eyebrow { font-family:'IBM Plex Mono',monospace; font-size:0.72rem; letter-spacing:0.14em; color:var(--accent); font-weight:600; }
+  .container { max-width:var(--maxw); margin:0 auto; padding:0 28px; }
+  section { padding:96px 0; position:relative; z-index: 2;}
+
+  /* O PHYSARUM AGORA É O FUNDO ABSOLUTO */
+  #c { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+  /* CABEÇALHO E BOTÕES */
+  .hero { position:relative; padding-top:12vh; min-height:80vh; z-index: 2;}
+  .hero h1 { font-size:clamp(2.8rem, 6.4vw, 5rem); margin:14px 0 20px; }
+  .hero .thesis { font-size:clamp(1.05rem,1.6vw,1.3rem); color:var(--ink-soft); max-width:46ch; }
+  .btn { 
+    font-family:'IBM Plex Mono',monospace; padding:13px 20px; border-radius:var(--radius); 
+    display:inline-flex; border:1px solid var(--accent); color:var(--accent); text-decoration:none;
+    backdrop-filter: blur(4px); transition: all 0.2s;
+  }
+  .btn:hover { background:var(--accent); color:var(--bg); }
+
+  /* CARDS E UI (VIDRO/TRANSLÚCIDO PARA VER A COLÔNIA) */
+  .cases-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  .case-card, .readout, .stat { 
+    background: var(--surface); backdrop-filter: blur(8px);
+    border: 1px solid var(--line-strong); border-radius: 8px; padding: 30px; 
+  }
+  
+  /* ========================================================
+     MÁGICA: OS ELEMENTOS COMEÇAM INVISÍVEIS (OPACITY 0).
+     ELES SÃO REVELADOS QUANDO A COLÔNIA "TOCA" NELES.
+     ======================================================== */
+  .organic-node {
+    opacity: 0; 
+    transform: translateY(20px) scale(0.95);
+    transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .organic-node.colonized {
+    opacity: 1; 
+    transform: translateY(0) scale(1);
+  }
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<header class="hero">
+  <div class="container">
+    <div class="organic-node eyebrow">AUTOMAÇÃO · DADOS · OPERAÇÕES COMERCIAIS</div>
+    <h1 class="organic-node">Gustavo Djonatan<br>Galhaci</h1>
+    <p class="organic-node thesis">Transformo <strong>processos manuais</strong> em <strong>sistemas que rodam sozinhos</strong>.</p>
+    <p class="organic-node eyebrow" style="margin-top:14px;">"I don't design the path. I design the system that finds it."</p>
+    <div class="organic-node" style="margin-top:32px; display:flex; gap:14px;">
+      <a class="btn" href="mailto:gust4dev@gmail.com">enviar e-mail →</a>
+    </div>
+  </div>
+</header>
+
+<section id="resultados">
+  <div class="container">
+    <div class="organic-node" style="margin-bottom:36px;">
+      <div class="eyebrow">RESULTADOS-CHAVE</div><h2>Números que sustentam a conversa</h2>
+    </div>
+    <div class="cases-grid">
+      <div class="organic-node stat"><h3 style="font-size:3rem; color:var(--accent);">176h</h3><p>de trabalho manual eliminadas (mês)</p></div>
+      <div class="organic-node stat"><h3 style="font-size:3rem; color:var(--accent);">10k+</h3><p>clientes em projetos de reestruturação</p></div>
+      <div class="organic-node stat"><h3 style="font-size:3rem; color:var(--accent);">6x</h3><p>mais rápido que o prazo estabelecido</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="container">
+    <div class="organic-node" style="margin-bottom:36px;">
+      <div class="eyebrow">O QUE SEI RESOLVER</div><h2>Três tipos de problema, com prova</h2>
+    </div>
+    <div class="cases-grid">
+      <div class="organic-node case-card">
+        <h3>Automação de Processos</h3>
+        <p>Cadastro de clientes: de 16 min manual para 100% autônomo, eliminando ~176h/mês.</p>
+      </div>
+      <div class="organic-node case-card">
+        <h3>Alocação em Escala</h3>
+        <p>Segmentação de 10.000+ clientes revisada em 14 dias (prazo original 3 meses).</p>
+      </div>
+      <div class="organic-node case-card">
+        <h3>Auditoria & Padronização</h3>
+        <p>268 cadastros corrigidos e formalização de critérios.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// =======================================================
+// A INTELIGÊNCIA DA COLÔNIA (ADAPTADA PARA PORTFÓLIO)
+// =======================================================
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W = 0, H = 0;
+
+// Configurações do Physarum
+const N_LOBES = 9; 
+const LOBE_VALLEY_MIN = 0.1; 
+const LACE_RING_SPACING = 15; 
+const LACE_ARC_SPACING = 15; 
+const MAX_CELLS = 20000; // Aumentado para cobrir a tela inteira
+
+// Ajustamos as cores para mesclar o Amarelo/Laranja do seu portfólio original
+const PALETTE_STOPS = [
+  { t: 0.0, r: 232, g: 163, b: 61 }, // --accent
+  { t: 0.3, r: 181, g: 112, b: 31 }, // tons de laranja
+  { t: 0.7, r: 123, g: 174, b: 143 }, // --moss (verde fungo)
+  { t: 1.0, r: 20, g: 25, b: 20 },
+];
+
+function paletteColor(t) {
+  const v = Math.max(0, Math.min(1, t));
+  let a = PALETTE_STOPS[0], b = PALETTE_STOPS[PALETTE_STOPS.length - 1];
+  for (let i = 0; i < PALETTE_STOPS.length - 1; i++) {
+    if (v >= PALETTE_STOPS[i].t && v <= PALETTE_STOPS[i + 1].t) { a = PALETTE_STOPS[i]; b = PALETTE_STOPS[i + 1]; break; }
+  }
+  const f = (v - a.t) / (b.t - a.t || 1);
+  return { r: a.r + (b.r - a.r) * f, g: a.g + (b.g - a.g) * f, b: a.b + (b.b - a.b) * f };
+}
+
+let lobes, genesisX, genesisY, maxRadius, cells, startTime;
+
+function build() {
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth; 
+  H = window.innerHeight; // O canvas preenche a tela, a colônia reage ao scroll
+  canvas.width = W * DPR; 
+  canvas.height = H * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+  // A Gênese começa no topo esquerdo (onde seu nome está)
+  genesisX = W * 0.2; 
+  genesisY = H * 0.2; 
+  maxRadius = Math.max(W, H) * 1.5; // Cresce o suficiente para cobrir tudo
+
+  lobes = [];
+  for (let i = 0; i < N_LOBES; i++) {
+    lobes.push({ angle: (i / N_LOBES) * Math.PI * 2 + (Math.random() - 0.5) * 0.3 });
+  }
+
+  cells = [];
+  for (let radius = LACE_RING_SPACING; radius < maxRadius && cells.length < MAX_CELLS; radius += LACE_RING_SPACING) {
+    const rr = radius / maxRadius;
+    const slotCount = Math.max(4, Math.round(2 * Math.PI * radius / LACE_ARC_SPACING));
+    for (let i = 0; i < slotCount; i++) {
+      const angle = (i / slotCount) * Math.PI * 2;
+      const x = genesisX + Math.cos(angle) * radius;
+      const y = genesisY + Math.sin(angle) * radius;
+      
+      // Filtra crescimento baseado em densidade aleatória
+      if (Math.random() > (1 - rr*0.5)) continue;
+
+      cells.push({
+        x: x, y: y,
+        parentX: genesisX + Math.cos(angle + 0.1) * (radius - 20),
+        parentY: genesisY + Math.sin(angle + 0.1) * (radius - 20),
+        color: paletteColor(rr),
+        revealTime: (radius / maxRadius) * 5 + Math.random() * 1.5, // Crescimento atrelado à distância
+        poppedAt: -1,
+        active: false
+      });
+    }
+  }
+  startTime = null;
+}
+
+// Nós HTML que a colônia deve "descobrir"
+const domNodes = Array.from(document.querySelectorAll('.organic-node')).map(el => {
+  return { el: el, rect: el.getBoundingClientRect(), colonized: false };
+});
+
+function step(ts) {
+  if (startTime === null) startTime = ts;
+  const elapsed = (ts - startTime) / 1000;
+  
+  // Limpa o frame
+  ctx.clearRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'screen';
+
+  // Deslocamento do scroll (Para a colônia "descer" com a tela)
+  const scrollY = window.scrollY;
+
+  // Atualiza nós HTML
+  domNodes.forEach(node => {
+    if(!node.colonized) node.rect = node.el.getBoundingClientRect();
+  });
+
+  for (let i = 0; i < cells.length; i++) {
+    const cell = cells[i];
+    
+    // A célula só nasce se o tempo passou
+    if (cell.poppedAt < 0 && elapsed >= cell.revealTime) {
+      cell.poppedAt = ts;
+      cell.active = true;
+    }
+
+    if (cell.active) {
+      const age = (ts - cell.poppedAt) / 1000;
+      const drawY = cell.y - (scrollY * 0.5); // Efeito Parallax no crescimento
+      
+      // Desenha as ramificações
+      if (drawY > -50 && drawY < H + 50) { // Otimização de render
+        ctx.strokeStyle = `rgba(${cell.color.r|0}, ${cell.color.g|0}, ${cell.color.b|0}, ${Math.min(0.4, age * 0.2)})`;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(cell.parentX, cell.parentY - (scrollY * 0.5));
+        ctx.lineTo(cell.x, drawY);
+        ctx.stroke();
+
+        ctx.fillStyle = `rgba(${cell.color.r|0}, ${cell.color.g|0}, ${cell.color.b|0}, ${Math.min(0.8, age)})`;
+        ctx.beginPath();
+        ctx.arc(cell.x, drawY, 1.5, 0, Math.PI*2);
+        ctx.fill();
+
+        // COLISÃO: A colônia tocou num elemento HTML?
+        domNodes.forEach(node => {
+          if (!node.colonized) {
+            // Checa se a coordenada Y e X da célula bate com a bounding box do elemento
+            if (drawY >= node.rect.top && drawY <= node.rect.bottom &&
+                cell.x >= node.rect.left && cell.x <= node.rect.right) {
+                  node.colonized = true;
+                  node.el.classList.add('colonized'); // CSS CSS revela o texto!
+            }
+          }
+        });
+      }
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+window.addEventListener('resize', () => { build(); });
+build();
+requestAnimationFrame(step);
+</script>
+</body>
+</html>
