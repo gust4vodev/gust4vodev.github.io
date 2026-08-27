@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gustavo Djonatan Galhaci — Automação de Processos & Dados</title>
-<meta name="description" content="Portfólio de resultados em automação de processos, dados e inteligência comercial.">
+<title>Gustavo Djonatan Galhaci — Automação, Dados e Operações de Negócio</title>
+<meta name="description" content="Portfólio de atuação em automação de processos, dados e operações de negócio.">
 <link rel="canonical" href="https://gust4vodev.github.io/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://gust4vodev.github.io/">
-<meta property="og:title" content="Gustavo Djonatan Galhaci — Automação de Processos & Dados">
-<meta property="og:description" content="Portfólio de resultados em automação de processos, dados e inteligência comercial.">
+<meta property="og:title" content="Gustavo Djonatan Galhaci — Automação, Dados e Operações de Negócio">
+<meta property="og:description" content="Portfólio de atuação em automação de processos, dados e operações de negócio.">
 <meta property="og:locale" content="pt_BR">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Gustavo Djonatan Galhaci — Automação de Processos & Dados">
-<meta name="twitter:description" content="Portfólio de resultados em automação de processos, dados e inteligência comercial.">
+<meta name="twitter:title" content="Gustavo Djonatan Galhaci — Automação, Dados e Operações de Negócio">
+<meta name="twitter:description" content="Portfólio de atuação em automação de processos, dados e operações de negócio.">
 <meta name="theme-color" content="#14100D">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23140F0A'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='36' font-weight='700' fill='%23E8A33D' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,881 +21,1094 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F1EEE3;
-    --surface:#FCFBF6;
-    --surface-2:#E9E4D4;
-    --ink:#1E1810;
-    --ink-soft:#6B6252;
-    --ink-faint:#554C3C;
-    --accent:#B5701F;
-    --accent-ink:#FFFFFF;
-    --accent-soft:rgba(181,112,31,0.14);
-    --moss:#4F7A62;
-    --line:#DED7C3;
-    --line-strong:#C7BEA3;
-    --footer-bg:#140F0A;
-    --footer-ink:#F1ECDD;
-    --footer-line:rgba(241,236,221,0.16);
-    --radius:3px;
-    --maxw:1120px;
+    --bg:#14100D; --ink:#F0EADD; --ink-soft:#B7AD98; --ink-faint:#A69C84;
+    --accent:#E8A33D; --line:#332A1D; --radius:4px; --maxw:1120px;
   }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#14100D;
-      --surface:#1D1712;
-      --surface-2:#241D15;
-      --ink:#F0EADD;
-      --ink-soft:#B7AD98;
-      --ink-faint:#A69C84;
-      --accent:#E8A33D;
-      --accent-ink:#1E1810;
-      --accent-soft:rgba(232,163,61,0.16);
-      --moss:#7BAE8F;
-      --line:#332A1D;
-      --line-strong:#443823;
-      --footer-bg:#0C0906;
-      --footer-ink:#F1ECDD;
-      --footer-line:rgba(241,236,221,0.12);
-    }
-  }
-  :root[data-theme="dark"]{
-    --bg:#14100D;
-    --surface:#1D1712;
-    --surface-2:#241D15;
-    --ink:#F0EADD;
-    --ink-soft:#B7AD98;
-    --ink-faint:#7C7460;
-    --accent:#E8A33D;
-    --accent-ink:#1E1810;
-    --accent-soft:rgba(232,163,61,0.16);
-    --moss:#7BAE8F;
-    --line:#332A1D;
-    --line-strong:#443823;
-    --footer-bg:#0C0906;
-    --footer-ink:#F1ECDD;
-    --footer-line:rgba(241,236,221,0.12);
-  }
-
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto;}
-    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
-  }
   body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'IBM Plex Sans',system-ui,sans-serif;
-    font-size:16px;
-    line-height:1.55;
-    -webkit-font-smoothing:antialiased;
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif; font-size:16px; line-height:1.6;
+    overflow-x:hidden;
   }
-  h1,h2,h3{
-    font-family:'Bricolage Grotesque',sans-serif;
-    text-wrap:balance;
-    margin:0;
-    color:var(--ink);
-    letter-spacing:-0.01em;
-  }
-  a{color:var(--accent); text-decoration:none;}
-  a:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
-  .eyebrow{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.72rem;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:var(--accent);
-    font-weight:600;
-  }
-  .container{
-    max-width:var(--maxw);
-    margin:0 auto;
-    padding:0 28px;
-  }
-  section{padding:96px 0; position:relative;}
-  @media (max-width:720px){ section{padding:64px 0;} }
+  h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif; margin:0; font-weight:600;}
 
-  /* ambient background network, fixed behind everything */
-  #bgCanvas{
-    position:fixed; inset:0; width:100%; height:100%;
-    z-index:-1; pointer-events:none;
-    opacity:0.5;
-  }
-  :root[data-theme="dark"] #bgCanvas{ opacity:0.7; }
-  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) #bgCanvas{ opacity:0.7; } }
-
-  /* theme toggle */
-  .theme-toggle{
-    position:fixed; top:20px; right:20px; z-index:50;
-    width:38px; height:38px; border-radius:50%;
-    border:1px solid var(--line-strong);
-    background:var(--surface);
-    color:var(--ink);
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer;
-  }
-  .theme-toggle svg{width:16px; height:16px;}
-  .theme-toggle .moon{display:none;}
-  :root[data-theme="dark"] .theme-toggle .sun{display:none;}
-  :root[data-theme="dark"] .theme-toggle .moon{display:block;}
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]) .theme-toggle .sun{display:none;}
-    :root:not([data-theme="light"]) .theme-toggle .moon{display:block;}
+  /* Legibilidade sobre a colônia, em DUAS camadas:
+     1) película translúcida atrás dos blocos, e gradiente radial atrás do
+        texto solto (as duas regras logo abaixo);
+     2) sombra no próprio texto, como garantia — se uma veia clara passar
+        exatamente sob uma linha, a película sozinha pode não dar contraste. */
+  h1,h2,h3,p,.eyebrow,.btn,.chip,.tl-body,.contact-link{
+    text-shadow:0 1px 3px rgba(12,9,7,.95), 0 2px 16px rgba(12,9,7,.85), 0 0 34px rgba(12,9,7,.6);
   }
 
-  /* HERO */
-  .hero{position:relative; overflow:hidden; padding-top:64px;}
-  #heroCanvas{position:absolute; inset:0; width:100%; height:100%; z-index:0;}
-  .hero-inner{
-    position:relative; z-index:1;
-    display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:center;
-    min-height:78vh;
+  /* Película: escurece o suficiente para o texto ganhar contraste, mas a
+     colônia continua visível através dela — desfocada, não escondida. */
+  .case-card, .timeline, .perfil .node-target:not(.section-head){
+    background:rgba(16,12,9,.40);
+    border:1px solid rgba(232,163,61,.08);
+    border-radius:16px;
+    backdrop-filter:blur(10px) saturate(120%);
+    -webkit-backdrop-filter:blur(10px) saturate(120%);
+    /* Elevação (mesma ideia do painel .readout do portfólio anterior, ver
+       histórico do git): a sombra projetada
+       descola o painel da colônia e escurece o entorno, o que reforça o
+       contraste na borda — onde a película é mais fraca. O fio âmbar interno
+       define a aresta sem precisar de borda mais forte. */
+    box-shadow:0 18px 50px -22px rgba(6,4,3,.58), 0 0 0 1px rgba(232,163,61,.05) inset;
   }
-  @media (max-width:900px){ .hero-inner{grid-template-columns:1fr; min-height:auto;} }
-  .hero h1{
-    font-size:clamp(2.8rem, 6.4vw, 5rem);
-    font-weight:700;
-    line-height:0.98;
-    margin:14px 0 20px;
+  /* Sem backdrop-filter o desfoque não acontece, então a película precisa ser
+     mais densa para entregar o mesmo contraste. */
+  @supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+    .case-card, .timeline, .perfil .node-target:not(.section-head){background:rgba(16,12,9,.66);}
   }
-  .hero .thesis{
-    font-family:'IBM Plex Sans',sans-serif;
-    font-size:clamp(1.05rem,1.6vw,1.3rem);
-    color:var(--ink-soft);
-    max-width:46ch;
-    font-weight:500;
+  .perfil .node-target:not(.section-head){padding:23px 22px; max-width:72ch;}
+  /* Blocos soltos (hero, títulos de seção) não levam retângulo: um gradiente
+     radial sem borda dá o contraste sem enquadrar o texto numa caixa. */
+  .hero .container{
+    background:radial-gradient(58% 66% at 26% 46%, rgba(12,9,7,.72), rgba(12,9,7,0) 72%);
   }
-  .hero .thesis strong{color:var(--ink); font-weight:700;}
-  .hero .motto{
-    font-family:'IBM Plex Mono',monospace;
-    font-style:italic;
-    font-size:0.88rem;
-    color:var(--ink-faint);
-    margin-top:14px;
-    max-width:44ch;
+  .section-head{
+    background:radial-gradient(52% 140% at 2% 50%, rgba(12,9,7,.66), rgba(12,9,7,0) 76%);
   }
-  .cta-row{display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:0.72rem; letter-spacing:0.14em; color:var(--accent); font-weight:600; text-transform:uppercase;}
+  .container{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+  section{padding:120px 0; position:relative; z-index:2;}
+
+  #c{position:fixed; inset:0; z-index:0; pointer-events:none;}
+
+  .hero{position:relative; padding-top:16vh; min-height:82vh; z-index:2;}
+  /* Epígrafe: linha temática acima do rótulo. Itálico em mono para ler como
+     citação, não como mais um label — senão disputa atenção com o eyebrow. */
+  .hero-epigraph{
+    font-family:'IBM Plex Mono',monospace; font-style:italic;
+    font-size:clamp(.88rem,1.15vw,1.02rem);
+    color:var(--ink-faint); margin:0 0 15px; max-width:42ch;
+  }
+  .hero h1{font-size:clamp(2.6rem,6vw,4.6rem); margin:16px 0 20px; line-height:1.08;}
+  .hero .thesis{font-size:clamp(1.02rem,1.5vw,1.22rem); color:var(--ink-soft); max-width:44ch;}
   .btn{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.82rem;
-    letter-spacing:0.04em;
-    padding:13px 20px;
-    border-radius:var(--radius);
-    display:inline-flex; align-items:center; gap:8px;
-    border:1px solid var(--line-strong);
-    transition:transform 0.15s ease, background 0.15s ease, border-color .15s ease, box-shadow .2s ease;
+    font-family:'IBM Plex Mono',monospace; padding:13px 20px; border-radius:var(--radius);
+    display:inline-flex; border:1px solid var(--accent); color:var(--accent); text-decoration:none;
+    transition:all .2s; margin-top:30px;
   }
-  .btn-primary{background:var(--ink); color:var(--bg); border-color:var(--ink);}
-  .btn-primary:hover{transform:translateY(-2px); background:var(--accent); border-color:var(--accent); color:var(--accent-ink); box-shadow:0 0 22px var(--accent-soft);}
-  .btn-ghost{background:var(--surface); color:var(--ink);}
-  .btn-ghost:hover{transform:translateY(-2px); border-color:var(--accent); color:var(--accent);}
+  .btn:hover{background:var(--accent); color:var(--bg);}
 
-  /* glass readout panel */
-  .readout{
-    background:var(--surface);
-    background:color-mix(in srgb, var(--surface) 78%, transparent);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    border:1px solid var(--line-strong);
-    border-radius:8px;
-    box-shadow:0 20px 60px -20px rgba(20,16,10,0.35), 0 0 0 1px rgba(232,163,61,0.04) inset;
-    overflow:hidden;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.86rem;
-  }
-  .readout-bar{
-    display:flex; align-items:center; gap:8px;
-    padding:10px 14px;
-    border-bottom:1px solid var(--line-strong);
-    color:var(--ink-faint);
-    font-size:0.72rem;
-    letter-spacing:0.06em;
-  }
-  .readout-bar span.dot{width:7px; height:7px; border-radius:50%; background:var(--moss); display:inline-block; box-shadow:0 0 6px var(--moss);}
-  .readout-body{padding:20px 18px; color:var(--ink-soft);}
-  .readout-body .l{margin:0 0 9px; white-space:pre-wrap;}
-  .readout-body .prompt{color:var(--accent);}
-  .readout-body .ok{color:var(--ink);}
-  .status-dot{
-    display:inline-block; width:8px; height:8px; border-radius:50%;
-    background:var(--accent); margin-right:8px;
-    box-shadow:0 0 0 0 var(--accent-soft);
-    animation:pulse 2s infinite;
-  }
-  @keyframes pulse{
-    0%{box-shadow:0 0 0 0 var(--accent-soft);}
-    70%{box-shadow:0 0 0 8px transparent;}
-    100%{box-shadow:0 0 0 0 transparent;}
-  }
-  .cursor{display:inline-block; width:7px; height:14px; background:var(--accent); vertical-align:-2px; animation:blink 1s steps(1) infinite;}
-  @keyframes blink{50%{opacity:0;}}
+  .section-head{margin-bottom:44px;}
+  .section-head h2{font-size:clamp(1.5rem,2.6vw,2.1rem); margin-top:10px;}
 
-  /* reveal */
-  .reveal{opacity:0; transform:translateY(18px); transition:opacity 0.6s ease, transform 0.6s ease;}
-  .reveal.is-visible{opacity:1; transform:translateY(0);}
+  .case-card .impact{margin-top:10px; padding-top:10px; border-top:1px dashed var(--line); font-size:.9rem;}
 
-  /* PERFIL */
-  .perfil p{
-    font-size:1.15rem;
-    max-width:62ch;
-    color:var(--ink-soft);
-  }
-  .perfil p strong{color:var(--ink); font-weight:600;}
-  .section-head{margin-bottom:36px;}
-  .section-head h2{font-size:clamp(1.9rem,3.4vw,2.6rem); margin-top:8px; font-weight:600;}
-
-  /* STATS */
-  .stats-grid{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
-    background:var(--line);
-    border:1px solid var(--line);
-    border-radius:8px;
-    overflow:hidden;
-  }
-  @media (max-width:760px){ .stats-grid{grid-template-columns:repeat(2,1fr);} }
-  .stat{
-    background:var(--surface);
-    padding:32px 24px;
-    display:flex; flex-direction:column; gap:6px;
-    transition:background .2s ease;
-  }
-  .stat:hover{background:var(--surface-2);}
-  .stat .num{
-    font-family:'Bricolage Grotesque',sans-serif;
-    font-weight:700;
-    font-size:clamp(2.2rem,4vw,3.1rem);
-    color:var(--ink);
-    font-variant-numeric:tabular-nums;
-    line-height:1;
-    text-shadow:0 0 24px var(--accent-soft);
-  }
-  .stat .label{color:var(--ink-soft); font-size:0.92rem; max-width:22ch;}
-
-  /* CASES / CAPACIDADES */
-  .cases-wrap{position:relative;}
-  .cases-thread{position:absolute; left:0; right:0; top:-8px; height:70px; z-index:0; overflow:visible;}
-  .cases-thread path{
-    fill:none; stroke:var(--line-strong); stroke-width:2; stroke-linecap:round;
-    stroke-dasharray:1400; stroke-dashoffset:1400;
-    transition:stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1);
-  }
-  .cases-thread.is-visible path{stroke-dashoffset:0;}
-  .cases-thread circle{fill:var(--accent); opacity:0; transition:opacity .4s ease .9s;}
-  .cases-thread.is-visible circle{opacity:1;}
-  @media (max-width:860px){ .cases-thread{display:none;} }
-  .cases-grid{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:28px;
-    position:relative; z-index:1;
-  }
-  @media (max-width:860px){ .cases-grid{grid-template-columns:1fr;} }
-  .case-card{
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:8px;
-    padding:30px 26px 28px;
-    display:flex; flex-direction:column; gap:14px;
-    transition:transform 0.25s ease, border-color 0.25s ease, box-shadow .25s ease;
-  }
-  .case-card:hover{transform:translateY(-4px); border-color:var(--accent); box-shadow:0 16px 40px -20px var(--accent-soft);}
-  .case-node{
-    width:14px; height:14px; border-radius:50%;
-    background:var(--surface); border:2px solid var(--accent);
-    margin-top:-58px; margin-bottom:12px;
-  }
-  @media (max-width:860px){ .case-node{display:none;} }
-  .case-card h3{
-    font-size:1.5rem; font-weight:600;
-    letter-spacing:-0.01em; line-height:1.15;
-  }
-  .case-card p{color:var(--ink-soft); font-size:0.98rem; margin:0;}
-  .case-evidence{
-    margin-top:auto;
-    padding-top:14px;
-    border-top:1px dashed var(--line-strong);
-  }
-  .case-evidence .ev-label{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.68rem; letter-spacing:0.12em;
-    color:var(--ink-faint); text-transform:uppercase;
-    display:block; margin-bottom:8px;
-  }
-  .case-evidence p{font-size:0.92rem; color:var(--ink);}
-  .case-evidence .hl{color:var(--accent); font-weight:600;}
-
-  /* STACK */
   .stack-row{display:flex; flex-wrap:wrap; gap:10px;}
-  .chip{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.82rem;
-    padding:9px 16px;
-    border:1px solid var(--line-strong);
-    border-radius:20px;
-    color:var(--ink-soft);
-    background:var(--surface);
-    transition:border-color .2s ease, color .2s ease;
-  }
-  .chip:hover{border-color:var(--accent); color:var(--accent);}
+  /* Chips e links de contato levam a mesma película, mas sem blur: são muitos
+     elementos pequenos e o desfoque neles não é perceptível — só custaria. */
+  .chip{font-family:'IBM Plex Mono',monospace; font-size:.82rem; padding:9px 16px; border:1px solid var(--line); border-radius:20px; color:var(--ink-soft); background:rgba(16,12,9,.46);}
 
-  /* TRAJETORIA */
-  .timeline{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:0;
-    position:relative;
-  }
-  @media (max-width:760px){ .timeline{grid-template-columns:1fr; gap:28px;} }
+  /* Trajetória: linha horizontal com marcadores, um marco por cargo. */
+  .timeline{display:grid; grid-template-columns:repeat(4,1fr); position:relative; padding:28px 22px 24px;}
+  /* top = padding-top + 9 (metade do marcador), senão a linha desalinha dos pontos. */
   .timeline::before{
-    content:"";
-    position:absolute; left:0; right:0; top:9px; height:2px;
-    background:linear-gradient(90deg, var(--line-strong), var(--accent), var(--line-strong));
-    opacity:0.5;
+    content:""; position:absolute; left:22px; right:22px; top:37px; height:1px;
+    background:linear-gradient(90deg, var(--line), var(--accent), var(--line));
+    opacity:.6;
   }
+  .tl-item{position:relative; padding:40px 26px 0 0;}
+  .tl-body{position:relative;}
+  .tl-dot{
+    position:absolute; top:-40px; left:0; width:18px; height:18px;
+    border-radius:50%; box-sizing:border-box;
+    background:var(--bg); border:2px solid var(--accent);
+  }
+  .tl-year{font-family:'IBM Plex Mono',monospace; color:var(--accent); font-weight:600; font-size:.9rem;}
+  .tl-role{font-family:'Bricolage Grotesque',sans-serif; font-weight:600; font-size:1.06rem; margin-top:7px; line-height:1.25;}
+  .tl-scope{color:var(--ink-soft); font-size:.86rem; margin-top:3px;}
+  .tl-list{list-style:none; margin:13px 0 0; padding:0;}
+  .tl-list li{color:var(--ink-soft); font-size:.85rem; line-height:1.5; margin-bottom:6px; padding-left:13px; position:relative;}
+  .tl-list li::before{content:"·"; position:absolute; left:2px; color:var(--accent); font-weight:700;}
   @media (max-width:760px){
-    .timeline::before{left:9px; top:0; bottom:0; right:auto; width:2px; height:auto; background:linear-gradient(180deg, var(--line-strong), var(--accent), var(--line-strong));}
+    .timeline{grid-template-columns:1fr; gap:32px; padding:24px 20px;}
+    .timeline::before{
+      left:29px; top:24px; bottom:24px; right:auto; width:1px; height:auto;
+      background:linear-gradient(180deg, var(--line), var(--accent), var(--line));
+    }
+    .tl-item{padding:0 0 0 32px;}
+    .tl-dot{top:1px; left:-32px;}
   }
-  .tl-item{position:relative; padding-top:36px;}
-  @media (max-width:760px){ .tl-item{padding-top:0; padding-left:32px;} }
-  .tl-item::before{
-    content:""; position:absolute; top:2px; left:0; width:18px; height:18px;
-    border-radius:50%; background:var(--bg); border:2px solid var(--accent);
-    box-shadow:0 0 10px var(--accent-soft);
-  }
-  @media (max-width:760px){ .tl-item::before{top:0; left:0;} }
-  .tl-year{font-family:'IBM Plex Mono',monospace; color:var(--accent); font-weight:600; font-size:0.95rem;}
-  .tl-label{margin-top:6px; font-weight:600; font-size:1.05rem;}
 
-  /* CONTATO */
-  .contato{background:var(--footer-bg); color:var(--footer-ink);}
-  .contato h2{color:inherit;}
-  .contato .eyebrow{color:var(--accent);}
-  .contato .lead{color:inherit; opacity:0.75; max-width:50ch; font-size:1.1rem;}
-  .contact-links{
-    display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:36px;
+  .contact-links{display:flex; flex-wrap:wrap; gap:14px; margin-top:8px;}
+  .contact-link{font-family:'IBM Plex Mono',monospace; font-size:.9rem; padding:12px 18px; border:1px solid var(--line); border-radius:4px; color:var(--ink); text-decoration:none; background:rgba(16,12,9,.46);}
+  .contact-link:hover{border-color:var(--accent); color:var(--accent);}
+
+  .perfil p{color:var(--ink-soft); font-size:1.02rem; max-width:64ch;}
+  .perfil p strong{color:var(--ink); font-weight:600;}
+
+  .cases-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:28px;}
+  .case-card{padding:26px 22px; position:relative;}
+  .case-card h3{font-size:1.15rem; margin:10px 0 12px;}
+  .case-card p{color:var(--ink-soft); font-size:.94rem; margin:0 0 11px;}
+  .case-card p:last-child{margin-bottom:0;}
+  .case-card .hl{color:var(--accent); font-weight:600;}
+
+  @media (max-width:860px){
+    .cases-grid{grid-template-columns:1fr;}
   }
-  @media (max-width:640px){ .contact-links{grid-template-columns:1fr;} }
-  .contact-link{
-    display:flex; align-items:center; gap:12px;
-    padding:16px 18px;
-    border:1px solid var(--footer-line);
-    border-radius:6px;
-    color:inherit;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.9rem;
-    transition:border-color 0.15s ease, background 0.15s ease;
+
+  .organic-content{
+    opacity:0; transform:translateY(14px);
+    transition:opacity 1.3s cubic-bezier(.2,.8,.2,1), transform 1.3s cubic-bezier(.2,.8,.2,1);
   }
-  .contact-link:hover{border-color:var(--accent); background:rgba(241,236,221,0.04);}
-  .contact-link svg{width:18px; height:18px; flex:none; color:var(--accent);}
-  footer.foot{padding:26px 0; text-align:center; color:var(--ink-faint); font-size:0.78rem; font-family:'IBM Plex Mono',monospace;}
+  .organic-content.built{opacity:1; transform:translateY(0);}
+
+  footer{padding:60px 0; text-align:center; color:var(--ink-faint); font-family:'IBM Plex Mono',monospace; font-size:.8rem; position:relative; z-index:2;}
+
+  @media (prefers-reduced-motion: reduce){
+    .organic-content{opacity:1; transform:none; transition:none;}
+  }
 </style>
 </head>
 <body>
 
-<canvas id="bgCanvas" aria-hidden="true"></canvas>
-
-<button class="theme-toggle" id="themeToggle" aria-label="Alternar tema claro/escuro">
-  <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-  <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-</button>
+<canvas id="c"></canvas>
 
 <header class="hero">
-  <canvas id="heroCanvas" aria-hidden="true"></canvas>
-  <div class="container hero-inner">
-    <div>
-      <div class="eyebrow reveal is-visible">AUTOMAÇÃO · DADOS · OPERAÇÕES COMERCIAIS</div>
-      <h1 class="reveal is-visible">Gustavo Djonatan<br>Galhaci</h1>
-      <p class="thesis reveal is-visible">Transformo <strong>processos manuais</strong> em <strong>sistemas que rodam sozinhos</strong> — e meço o resultado em horas, escala e prazo.</p>
-      <p class="motto reveal is-visible">"I don't design the path. I design the system that finds it."</p>
-      <div class="cta-row reveal is-visible">
-        <a class="btn btn-primary" href="mailto:gust4dev@gmail.com">enviar e-mail →</a>
-        <a class="btn btn-ghost" href="https://www.linkedin.com/in/gustavo-galhaci" target="_blank" rel="noopener">ver linkedin</a>
-      </div>
-    </div>
-    <div class="readout reveal is-visible" role="group" aria-label="Resumo da automação de cadastro de clientes">
-      <div class="readout-bar" aria-hidden="true"><span class="dot"></span>&nbsp;cadastro_clientes.py</div>
-      <div class="readout-body">
-        <p class="l"><span class="prompt" aria-hidden="true">&gt;</span> processo: cadastro de clientes (SAP)</p>
-        <p class="l"><span class="prompt" aria-hidden="true">&gt;</span> antes: manual · 3 sistemas externos · 16 min/cadastro</p>
-        <p class="l"><span class="prompt" aria-hidden="true">&gt;</span> agora: <span class="ok">automático · 1 min/lote · a cada 10 min</span></p>
-        <p class="l"><span class="status-dot" aria-hidden="true"></span>status: autônomo, sem intervenção humana<span class="cursor" aria-hidden="true"></span></p>
-      </div>
-    </div>
+  <div class="container node-target" data-type="hero">
+    <p class="organic-content hero-epigraph">Onde existem caminhos, existem possibilidades de conexão.</p>
+    <div class="organic-content eyebrow">AUTOMAÇÃO · DADOS · OPERAÇÕES DE NEGÓCIO</div>
+    <h1 class="organic-content">Gustavo Djonatan<br>Galhaci</h1>
+    <p class="organic-content thesis">Transformo <strong>necessidades de negócio</strong> em <strong>processos estruturados, automações e soluções tecnológicas</strong> aplicáveis à operação.</p>
+    <a class="organic-content btn" href="mailto:gust4dev@gmail.com">Enviar e-mail →</a>
   </div>
 </header>
 
 <section class="perfil" id="perfil">
   <div class="container">
-    <div class="section-head reveal">
-      <div class="eyebrow">PERFIL</div>
-      <h2>Quem constrói o que está abaixo</h2>
+    <div class="node-target section-head" data-type="title">
+      <div class="organic-content eyebrow">PERFIL</div>
+      <h2 class="organic-content">Quem constrói o que está abaixo</h2>
     </div>
-    <p class="reveal">Profissional de operações comerciais com histórico consolidado em <strong>automação de processos e dados</strong>. Atua desde 2017 em uma distribuidora nacional de grande porte, parte de um grupo empresarial com múltiplas unidades regionais — operação comercial com <strong>60+ vendedores</strong> distribuídos em <strong>25 hubs</strong> e uma carteira de mais de <strong>10.000 clientes</strong>. Construiu, de forma autodidata, soluções em Python, RPA, APIs e SQL que substituíram processos manuais e hoje sustentam decisões de gestão e diretoria.</p>
-  </div>
-</section>
-
-<section class="resultados" id="resultados">
-  <div class="container">
-    <div class="section-head reveal">
-      <div class="eyebrow">RESULTADOS-CHAVE</div>
-      <h2>Números que sustentam a conversa</h2>
-    </div>
-    <div class="stats-grid reveal" id="statsGrid">
-      <div class="stat"><div class="num" data-target="176" data-suffix="h/mês">176h/mês</div><div class="label">de trabalho manual eliminadas na automação de cadastro</div></div>
-      <div class="stat"><div class="num" data-target="6" data-suffix="x">6x</div><div class="label">mais rápido que o prazo estabelecido pela gerência</div></div>
-      <div class="stat"><div class="num" data-target="10000" data-suffix="+" data-format="dot">10.000+</div><div class="label">clientes em projetos de reestruturação comercial</div></div>
-      <div class="stat"><div class="num" data-target="4154" data-format="dot">4.154</div><div class="label">clientes realocados com precisão (38,3% da carteira)</div></div>
-      <div class="stat"><div class="num" data-target="268">268</div><div class="label">cadastros corrigidos em 104 grupos econômicos</div></div>
-      <div class="stat"><div class="num" data-target="60" data-suffix="+">60+</div><div class="label">vendedores atendidos por automação de indicadores</div></div>
+    <div class="node-target" data-type="box">
+      <p class="organic-content">Profissional de operações de negócio com atuação em <strong>processos, dados e automação</strong>. Desde 2017, trabalho em uma operação de grande porte e, a partir de 2023, passei a atuar mais diretamente com dados, automação e desenvolvimento de soluções. Ao longo dessa trajetória, desenvolvi projetos para estruturar processos, automatizar atividades e transformar regras de negócio em soluções aplicáveis à operação. Possuo conhecimentos em desenvolvimento de software, <strong>Python, SQL, APIs, RPA</strong> e integração de sistemas, conectando necessidades de negócio à execução tecnológica.</p>
     </div>
   </div>
 </section>
 
-<section class="cases" id="cases">
+<section id="cases">
   <div class="container">
-    <div class="section-head reveal">
-      <div class="eyebrow">O QUE SEI RESOLVER</div>
-      <h2>Três tipos de problema, com prova</h2>
+    <div class="node-target section-head" data-type="title">
+      <div class="organic-content eyebrow">O QUE SEI RESOLVER</div>
+      <h2 class="organic-content">Alguns exemplos de atuação</h2>
     </div>
-    <div class="cases-wrap">
-      <svg class="cases-thread reveal" id="casesThread" viewBox="0 0 1064 70" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0,14 C120,60 260,-10 355,30 C430,60 480,4 532,20 C584,4 634,60 709,30 C804,-10 944,60 1064,14" />
-        <circle cx="177" cy="30" r="4"/>
-        <circle cx="532" cy="20" r="4"/>
-        <circle cx="887" cy="30" r="4"/>
-      </svg>
-      <div class="cases-grid">
-        <div class="case-card reveal" id="case-automacao">
-          <div class="case-node"></div>
-          <div class="eyebrow">AUTOMAÇÃO DE PROCESSOS</div>
-          <h3>Elimino trabalho manual repetitivo</h3>
-          <p>Identifico processos manuais executados por pessoas, mapeio a lógica de decisão envolvida e construo automações — RPA, scripts, integração via API — que executam a tarefa de forma autônoma.</p>
-          <div class="case-evidence">
-            <span class="ev-label">Evidência</span>
-            <p>Cadastro de clientes: de <span class="hl">16 min/cadastro</span> manual (3 sistemas externos, cada um com captcha) para um processo <span class="hl">100% autônomo</span>, a cada 10 minutos — <span class="hl">~176h/mês</span> eliminadas.</p>
-          </div>
+    <div class="cases-grid">
+      <div class="node-target case-card" id="case-segmentacao" data-type="box">
+        <div class="organic-content eyebrow">01 · ESTRUTURAÇÃO DE REGRAS DE NEGÓCIO</div>
+        <h3 class="organic-content">Automação da Segmentação de Carteiras Comerciais</h3>
+        <p class="organic-content"><span class="hl">Desafio:</span> Conciliar múltiplos critérios de negócio para estruturar carteiras comerciais em uma operação com múltiplas filiais e grande volume de clientes.</p>
+        <p class="organic-content"><span class="hl">Entrega:</span> Solução automatizada para consolidação e aplicação integrada das regras de segmentação.</p>
+        <p class="organic-content impact"><span class="hl">Impacto:</span> Transformação de critérios complexos de negócio em uma estrutura operacional padronizada, escalável e consistente. 4.154 clientes realocados, 60+ vendedores, 25 hubs.</p>
+      </div>
+      <div class="node-target case-card" id="case-cadastro" data-type="box">
+        <div class="organic-content eyebrow">02 · AUTOMAÇÃO DE PROCESSOS</div>
+        <h3 class="organic-content">Automação do Cadastro de Clientes</h3>
+        <p class="organic-content"><span class="hl">Desafio:</span> Processo manual de consulta, validação e cadastro de informações de clientes.</p>
+        <p class="organic-content"><span class="hl">Entrega:</span> Protótipo funcional com integração a APIs e lógica do processo estruturada para implementação em produção.</p>
+        <p class="organic-content impact"><span class="hl">Impacto:</span> Redução do tempo por ocorrência de 16 min para 1 min.</p>
+        <p class="organic-content"><span class="hl">Ganho estimado:</span> 176 h/mês, com redução de 93,8% no tempo operacional.</p>
+      </div>
+      <div class="node-target case-card" id="case-validacao" data-type="box">
+        <div class="organic-content eyebrow">03 · VALIDAÇÃO DE PROCESSOS E SISTEMAS</div>
+        <h3 class="organic-content">Validação de Processos e Soluções de Negócio</h3>
+        <p class="organic-content"><span class="hl">Desafio:</span> Garantir que processos e soluções tecnológicas estivessem alinhados às necessidades do processo e regras do negócio.</p>
+        <p class="organic-content"><span class="hl">Atuação:</span> Análise e validação das regras de negócio, auditoria de indicadores, processos e comportamento das soluções implementadas nos sistemas.</p>
+        <p class="organic-content"><span class="hl">Entrega:</span> Identificação de divergências entre o processo esperado e o implementado, correção e desenvolvimento de indicadores.</p>
+        <p class="organic-content impact"><span class="hl">Impacto:</span> Maior aderência entre processos, soluções tecnológicas e necessidades reais da operação.</p>
+      </div>
+      <div class="node-target case-card" id="case-dados" data-type="box">
+        <div class="organic-content eyebrow">04 · DADOS E INDICADORES</div>
+        <h3 class="organic-content">Inteligência Operacional</h3>
+        <p class="organic-content"><span class="hl">Desafio:</span> Transformar grandes volumes de dados operacionais em informações estruturadas para acompanhamento e identificação de pontos de atuação.</p>
+        <p class="organic-content"><span class="hl">Entrega:</span> Desenvolvimento de dashboards e indicadores, com consolidação e tratamento de dados de diferentes fontes e aplicação de regras de negócio para identificação de desvios e oportunidades.</p>
+        <p class="organic-content impact"><span class="hl">Impacto:</span> Transformação de dados operacionais em informações direcionadas para análise, tomada de decisão e atuação.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="container">
+    <div class="node-target section-head" data-type="title">
+      <div class="organic-content eyebrow">STACK</div>
+      <h2 class="organic-content">Tecnologias e métodos</h2>
+    </div>
+    <div class="node-target stack-row" data-type="box">
+      <span class="organic-content chip">Python</span>
+      <span class="organic-content chip">SQL</span>
+      <span class="organic-content chip">APIs</span>
+      <span class="organic-content chip">RPA</span>
+      <span class="organic-content chip">SAP HANA</span>
+      <span class="organic-content chip">Playwright</span>
+      <span class="organic-content chip">BPMN</span>
+      <span class="organic-content chip">Modelagem de Regras de Negócio</span>
+    </div>
+  </div>
+</section>
+
+<section id="trajetoria">
+  <div class="container">
+    <div class="node-target section-head" data-type="title">
+      <h2 class="organic-content">Trajetória</h2>
+    </div>
+    <div class="timeline">
+      <div class="node-target tl-item" data-type="box">
+        <div class="organic-content tl-body">
+          <span class="tl-dot"></span>
+          <div class="tl-year">2017</div>
+          <div class="tl-role">Estoquista</div>
+          <div class="tl-scope">Operação</div>
+          <ul class="tl-list">
+            <li>Rotinas de estoque, conferência e expedição</li>
+            <li>Leitura prática de como a operação funciona na ponta</li>
+            <li>Primeiro contato com os sistemas internos</li>
+          </ul>
         </div>
-        <div class="case-card reveal" id="case-alocacao">
-          <div class="case-node"></div>
-          <div class="eyebrow">ALOCAÇÃO EM ESCALA</div>
-          <h3>Redistribuo com múltiplos critérios simultâneos</h3>
-          <p>Mapeio os critérios de negócio envolvidos — geografia, senioridade, capacidade, relevância histórica de faturamento — modelo o problema e construo uma ferramenta que simula e prevê o resultado antes de qualquer execução.</p>
-          <div class="case-evidence">
-            <span class="ev-label">Evidência</span>
-            <p>Segmentação de carteira: 60 vendedores, 25 hubs, 10.000+ clientes. Prazo de <span class="hl">3 meses</span> concluído — revisado — em <span class="hl">14 dias</span>. 4.154 clientes realocados com precisão.</p>
-          </div>
+      </div>
+      <div class="node-target tl-item" data-type="box">
+        <div class="organic-content tl-body">
+          <span class="tl-dot"></span>
+          <div class="tl-year">2021</div>
+          <div class="tl-role">Assistente Administrativo Financeiro</div>
+          <div class="tl-scope">Processos financeiros</div>
+          <ul class="tl-list">
+            <li>Conciliações e controles administrativos recorrentes</li>
+            <li>Padronização de planilhas e rotinas de fechamento</li>
+            <li>Primeiras automações de tarefas repetitivas</li>
+          </ul>
         </div>
-        <div class="case-card reveal" id="case-auditoria">
-          <div class="case-node"></div>
-          <div class="eyebrow">AUDITORIA &amp; PADRONIZAÇÃO</div>
-          <h3>Corrijo inconsistências e formalizo critérios</h3>
-          <p>Identifico inconsistências em indicadores e regras de negócio, conduzo a correção junto às equipes responsáveis e formalizo critérios em documentação de referência.</p>
-          <div class="case-evidence">
-            <span class="ev-label">Evidência</span>
-            <p><span class="hl">268 cadastros</span> corrigidos em <span class="hl">104 grupos econômicos</span>. Documento oficial de critérios de qualificação de clientes, hoje referência única da equipe comercial.</p>
-          </div>
+      </div>
+      <div class="node-target tl-item" data-type="box">
+        <div class="organic-content tl-body">
+          <span class="tl-dot"></span>
+          <div class="tl-year">2023</div>
+          <div class="tl-role">Assistente de Crédito e Cobrança</div>
+          <div class="tl-scope">Processos de crédito e cobrança</div>
+          <ul class="tl-list">
+            <li>Análise de crédito e acompanhamento de carteira</li>
+            <li>Estruturação de dados e indicadores de cobrança</li>
+            <li>Início do trabalho com Python, SQL e APIs</li>
+          </ul>
+        </div>
+      </div>
+      <div class="node-target tl-item" data-type="box">
+        <div class="organic-content tl-body">
+          <span class="tl-dot"></span>
+          <div class="tl-year">2024 · atual</div>
+          <div class="tl-role">Assistente Comercial</div>
+          <div class="tl-scope">Processos comerciais</div>
+          <ul class="tl-list">
+            <li>Segmentação e estruturação de carteiras comerciais</li>
+            <li>Automação de cadastro de clientes e de indicadores</li>
+            <li>Validação de regras de negócio junto ao time técnico</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="stack" id="stack">
+<section id="contato">
   <div class="container">
-    <div class="section-head reveal">
-      <div class="eyebrow">STACK TÉCNICO</div>
-      <h2>Ferramentas usadas em produção</h2>
+    <div class="node-target section-head" data-type="title">
+      <div class="organic-content eyebrow">CONTATO</div>
+      <h2 class="organic-content">Vamos conversar</h2>
     </div>
-    <div class="stack-row reveal">
-      <span class="chip">Python</span>
-      <span class="chip">RPA</span>
-      <span class="chip">SQL</span>
-      <span class="chip">SAP / SAP HANA</span>
-      <span class="chip">Playwright</span>
-      <span class="chip">APIs (CNPJá, Google Geocoding)</span>
-      <span class="chip">BPMN</span>
-      <span class="chip">Modelagem de regras de negócio</span>
+    <div class="node-target contact-links" data-type="box">
+      <a class="organic-content contact-link" href="mailto:gust4dev@gmail.com">E-mail</a>
+      <a class="organic-content contact-link" href="https://www.linkedin.com/in/gustavo-galhaci" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="organic-content contact-link" href="https://github.com/gust4vodev" target="_blank" rel="noopener">GitHub</a>
+      <a class="organic-content contact-link" href="https://wa.me/5543991849218" target="_blank" rel="noopener">WhatsApp</a>
     </div>
   </div>
 </section>
 
-<section class="trajetoria" id="trajetoria">
-  <div class="container">
-    <div class="section-head reveal">
-      <div class="eyebrow">TRAJETÓRIA</div>
-      <h2>Evolução de escopo</h2>
-    </div>
-    <div class="timeline reveal">
-      <div class="tl-item"><div class="tl-year">2017</div><div class="tl-label">Operação</div></div>
-      <div class="tl-item"><div class="tl-year">2021</div><div class="tl-label">Processos administrativos</div></div>
-      <div class="tl-item"><div class="tl-year">2024</div><div class="tl-label">Automação e integração</div></div>
-      <div class="tl-item"><div class="tl-year">2026</div><div class="tl-label">Dados, inteligência comercial e automação em escala</div></div>
-    </div>
-  </div>
-</section>
-
-<section class="contato" id="contato">
-  <div class="container">
-    <div class="section-head reveal">
-      <div class="eyebrow">CONTATO</div>
-      <h2>Vamos conversar</h2>
-      <p class="lead">Aberto a novas oportunidades em automação, dados e inteligência comercial.</p>
-    </div>
-    <div class="contact-links reveal">
-      <a class="contact-link" href="mailto:gust4dev@gmail.com">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-        gust4dev@gmail.com
-      </a>
-      <a class="contact-link" href="https://www.linkedin.com/in/gustavo-galhaci" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/><path d="M10 9v12M10 13c0-2 2-4 4-4s4 1.5 4 4v8"/></svg>
-        linkedin.com/in/gustavo-galhaci
-      </a>
-      <a class="contact-link" href="https://github.com/gust4vodev" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.3-.4-4.1 1.3a13.4 13.4 0 0 0-7 0C4.6 2.7 3.3 3.1 3.3 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 1.9 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
-        github.com/gust4vodev
-      </a>
-      <a class="contact-link" href="https://wa.me/5543991849218" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1M21 11.5 22 22l-6-2"/></svg>
-        (43) 99184-9218
-      </a>
-    </div>
-  </div>
-</section>
-
-<footer class="foot">Gustavo Djonatan Galhaci — atualizado em 2026</footer>
+<footer>gust4vodev.github.io<br>A colônia cresce conforme você explora.</footer>
 
 <script>
-(function(){
-  var root = document.documentElement;
-  var toggle = document.getElementById('themeToggle');
-  var saved = localStorage.getItem('theme');
-  if(saved){ root.setAttribute('data-theme', saved); }
-  toggle.addEventListener('click', function(){
-    var current = root.getAttribute('data-theme');
-    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    var effectiveDark = current ? current === 'dark' : prefersDark;
-    var next = effectiveDark ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W = 0, H = 0;
+
+const PALETTE_STOPS = [
+  { t: 0.0, r: 255, g: 196, b: 96 },
+  { t: 0.18, r: 232, g: 163, b: 61 },
+  { t: 0.45, r: 196, g: 166, b: 72 },
+  { t: 0.72, r: 138, g: 172, b: 118 },
+  { t: 1.0, r: 62, g: 92, b: 68 },
+];
+
+function paletteColor(t) {
+  const v = Math.max(0, Math.min(1, t));
+  let a = PALETTE_STOPS[0], b = PALETTE_STOPS[PALETTE_STOPS.length - 1];
+  for (let i = 0; i < PALETTE_STOPS.length - 1; i++) {
+    if (v >= PALETTE_STOPS[i].t && v <= PALETTE_STOPS[i + 1].t) { a = PALETTE_STOPS[i]; b = PALETTE_STOPS[i + 1]; break; }
+  }
+  const f = (v - a.t) / (b.t - a.t || 1);
+  return { r: a.r + (b.r - a.r) * f, g: a.g + (b.g - a.g) * f, b: a.b + (b.b - a.b) * f };
+}
+
+function easeOutBack(t, k) {
+  const m = t - 1;
+  return 1 + (k + 1) * m * m * m + k * m * m;
+}
+
+/* A colônia vive em COORDENADAS DA PÁGINA, não do viewport: ela persiste e
+   acumula massa conforme a página rola, em vez de sumir ao sair da tela. */
+let genesisX, genesisY, cells, tips, links, targets, occupancy, docHeight, lastTick;
+let liveCount, tickNo, mouse, freeSlots;
+
+/* Ondulação lenta do tecido: nada num organismo fica perfeitamente parado.
+   A fase vem da própria coordenada, então um ponto compartilhado entre pai e
+   filho recebe o MESMO deslocamento e a veia não se rompe. */
+function undX(x, y, ts) { return x + Math.sin(ts / 3100 + y * 0.011) * 1.7; }
+function undY(x, y, ts) { return y + Math.cos(ts / 3600 + x * 0.009) * 1.5; }
+
+const STEP = 13;
+const TICK_MS = 55;
+/* Com renovação contínua as pontas rebrotam sempre perto do viewport, então a
+   massa se concentra onde o visitante está — 4200 saturava a tela e o texto
+   passava a disputar espaço com o fundo. */
+const MAX_CELLS = 2400;
+const REVEAL_FALLBACK_MS = 5000;
+const MAX_TIPS = 80;
+const BRANCH_CHANCE = 0.17;
+const TIP_DIE_CHANCE = 0.015;
+const WANDER = 0.5;
+const SEEK_PULL = 0.38;
+const OCC_SIZE = 15;
+const POP_MS = 620;
+
+/* Fluxo: quando uma ponta alcança um alvo, todo o caminho de volta ao gênese
+   é reforçado. É isso que cria poucas veias-tronco grossas + franja fina,
+   em vez de uma teia de espessura uniforme. */
+/* 70 calibrado por simulação: mantém ~75% da rede em fio fino e deixa o
+   tronco grosso como minoria com gradação. Valores baixos (26) saturavam
+   quase tudo e a hierarquia sumia. */
+const FLOW_MAX = 70;
+const FLOW_WALK_CAP = 500;
+/* Anastomose: distância de linhagem mínima para dois ramos poderem se fundir.
+   Sem isso um ramo "fundiria" com o próprio pai a cada passo. */
+const FUSE_MIN_LINEAGE = 8;
+const FRESH_MS = 2600;
+const WAVE_LEN = 90;
+/* Shuttle streaming: no organismo real o sentido inverte a cada ~1-2 min.
+   Aqui ~7s, para o efeito ser percebido durante a visita. */
+const SHUTTLE_MS = 3400;
+const SHUTTLE_SWING = 8;
+
+/* Rearranjo contínuo: sem decaimento o fluxo só sobe e a rede congela.
+   Com ele, veia que deixa de ser usada afina e é reabsorvida enquanto outras
+   engrossam — a colônia nunca fica igual a si mesma. */
+const MAINTAIN_EVERY = 6;
+const FLOW_DECAY = 0.4;
+const FLOW_DEAD = 0.6;
+const REINFORCE_PER_TICK = 3;
+const RETRACT_MS = 900;
+const CELL_ARRAY_CAP = 11000;
+const MIN_AGE_TO_DIE = 4000;
+/* Reação ao cursor. */
+const MOUSE_R = 190;
+const MOUSE_PULL = 0.55;
+
+function makeSpots() {
+  const spots = [];
+  const n = 5 + Math.floor(Math.random() * 4);
+  for (let i = 0; i < n; i++) {
+    const ang = Math.random() * Math.PI * 2;
+    const rad = Math.random() * Math.random() * 10;
+    spots.push({
+      dx: Math.cos(ang) * rad,
+      dy: Math.sin(ang) * rad,
+      r: 1.4 + Math.random() * 3.0,
+      shade: 0.82 + Math.random() * 0.36,
+      jitter: Math.random() * 0.45,
+    });
+  }
+  return spots;
+}
+
+function occKey(x, y) {
+  return Math.round(x / OCC_SIZE) + '_' + Math.round(y / OCC_SIZE);
+}
+
+/* Sprites de mancha pré-renderizados (um por faixa de tom). Criar um
+   createRadialGradient por mancha/frame custava milhares de alocações por
+   quadro; aqui é só um drawImage. */
+const SPRITE_TONES = 14;
+const SPRITE_PX = 40;
+let sprites = null;
+
+function buildSprites() {
+  sprites = [];
+  for (let i = 0; i < SPRITE_TONES; i++) {
+    const col = paletteColor(i / (SPRITE_TONES - 1));
+    const cv = document.createElement('canvas');
+    cv.width = cv.height = SPRITE_PX;
+    const c2 = cv.getContext('2d');
+    const half = SPRITE_PX / 2;
+    const g = c2.createRadialGradient(half, half, 0, half, half, half);
+    g.addColorStop(0, `rgba(${col.r | 0},${col.g | 0},${col.b | 0},0.95)`);
+    g.addColorStop(0.5, `rgba(${col.r | 0},${col.g | 0},${col.b | 0},0.42)`);
+    g.addColorStop(1, `rgba(${col.r | 0},${col.g | 0},${col.b | 0},0)`);
+    c2.fillStyle = g;
+    c2.fillRect(0, 0, SPRITE_PX, SPRITE_PX);
+    sprites.push(cv);
+  }
+}
+
+function spriteFor(tone) {
+  const i = Math.max(0, Math.min(SPRITE_TONES - 1, Math.round(tone * (SPRITE_TONES - 1))));
+  return sprites[i];
+}
+
+function resize() {
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W * DPR;
+  canvas.height = H * DPR;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  docHeight = Math.max(document.body.scrollHeight, H);
+}
+
+/* Substrato: em vez de um preto chapado, um leve granulado quente (tipo ágar
+   / matéria orgânica). Gerado uma vez e aplicado como background do body —
+   custo ZERO por frame, e sem depender de imagem externa que pode falhar. */
+function buildSubstrate() {
+  const N = 160;
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = N;
+  const c2 = cv.getContext('2d');
+  const img = c2.createImageData(N, N);
+  const d = img.data;
+  for (let i = 0; i < N * N; i++) {
+    const n = Math.random();
+    const grain = (n * n * n) * 26;
+    const o = i * 4;
+    d[o] = 22 + grain * 1.15;
+    d[o + 1] = 17 + grain * 0.95;
+    d[o + 2] = 13 + grain * 0.6;
+    d[o + 3] = 255;
+  }
+  c2.putImageData(img, 0, 0);
+  document.body.style.backgroundImage =
+    'radial-gradient(120% 80% at 50% 0%, rgba(48,38,26,.55), rgba(0,0,0,0) 60%),' +
+    'radial-gradient(100% 60% at 50% 100%, rgba(30,42,30,.45), rgba(0,0,0,0) 65%),' +
+    'url(' + cv.toDataURL() + ')';
+  document.body.style.backgroundRepeat = 'no-repeat, no-repeat, repeat';
+  document.body.style.backgroundAttachment = 'fixed, fixed, fixed';
+}
+
+function init() {
+  resize();
+  if (!sprites) { buildSprites(); buildSubstrate(); }
+  genesisX = W * 0.5;
+  genesisY = H * 0.30;
+
+  targets = Array.from(document.querySelectorAll('.node-target')).map((el, i) => ({
+    el,
+    type: el.getAttribute('data-type'),
+    order: i,
+    built: false,
+    biomass: 0,
+    need: el.getAttribute('data-type') === 'box' ? 12 : 8,
+    feeders: [],
+  }));
+
+  /* A grade guarda o ÍNDICE da célula, não só "ocupado": é o que permite
+     saber COM QUEM um ramo colidiu e decidir se pode se fundir. */
+  occupancy = new Map();
+  occupancy.set(occKey(genesisX, genesisY), 0);
+  links = [];
+
+  cells = [{
+    x: genesisX, y: genesisY, px: genesisX, py: genesisY,
+    spots: makeSpots(), tone: 0, sprite: spriteFor(0),
+    born: 0, bow: 0, dist: 0, gran: 0.9, parentIdx: -1, flow: FLOW_MAX,
+    childCount: 0, dead: false, retreatAt: -1, gen: 0,
+  }];
+  liveCount = 1;
+  tickNo = 0;
+  freeSlots = [];
+  mouse = { x: -9999, y: -9999, on: false };
+
+  tips = [];
+  const n = 7;
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2 + Math.random() * 0.4;
+    tips.push({
+      x: genesisX, y: genesisY,
+      angle: a,
+      depth: 0,
+      cellIdx: 0,
+      target: null,
+    });
+  }
+  lastTick = 0;
+}
+
+/* Reforça o caminho inteiro de volta ao gênese. */
+function reinforcePath(idx) {
+  let i = idx, steps = 0;
+  while (i >= 0 && steps < FLOW_WALK_CAP) {
+    const c = cells[i];
+    if (c.flow < FLOW_MAX) c.flow++;
+    i = c.parentIdx;
+    steps++;
+  }
+}
+
+/* A fusão só vale entre ramos realmente distintos — senão um ramo se
+   "reconectaria" ao próprio pai a cada passo e não formaria laço nenhum. */
+function sharesRecentLineage(aIdx, bIdx) {
+  let i = aIdx, steps = 0;
+  while (i >= 0 && steps < FUSE_MIN_LINEAGE) {
+    if (i === bIdx) return true;
+    i = cells[i].parentIdx;
+    steps++;
+  }
+  i = bIdx; steps = 0;
+  while (i >= 0 && steps < FUSE_MIN_LINEAGE) {
+    if (i === aIdx) return true;
+    i = cells[i].parentIdx;
+    steps++;
+  }
+  return false;
+}
+
+/* Alvos em coordenadas da página (rect + scrollY), para casarem com a colônia. */
+function refreshTargets(ts) {
+  const sy = window.scrollY;
+  targets.forEach(t => {
+    const r = t.el.getBoundingClientRect();
+    t.x = r.left + r.width / 2;
+    t.y = r.top + sy + r.height / 2;
+    t.w = Math.max(60, r.width);
+    t.h = Math.max(40, r.height);
+    t.screenTop = r.top;
+
+    const onScreen = r.top < H && r.bottom > 0;
+    if (onScreen && t.seenAt === undefined) t.seenAt = ts;
+
+    /* Rede de segurança: conteúdo NUNCA pode ficar preso atrás da animação.
+       Se a colônia não chegar (teto de células, aba em segundo plano, etc.),
+       o bloco se revela sozinho depois de alguns segundos visível. */
+    const stalled = onScreen && t.seenAt !== undefined && (ts - t.seenAt) > REVEAL_FALLBACK_MS;
+    if (!t.built && (t.biomass >= t.need || stalled)) {
+      t.built = true;
+      t.el.querySelectorAll('.organic-content').forEach(c => c.classList.add('built'));
+    }
   });
-})();
+}
 
-(function(){
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var revealEls = document.querySelectorAll('.reveal');
-  if(reduceMotion){
-    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+/* Cada ponta escolhe o SEU alvo (sorteio ponderado por proximidade) em vez de
+   todas perseguirem o mesmo. É isso que faz a colônia se abrir em leque pela
+   largura da página, em vez de descer como uma coluna única no centro.
+   Só entram alvos já perto do viewport — o resto ainda "não existe" para ela. */
+function pickTarget(x, y) {
+  const cands = [];
+  let sum = 0;
+  for (const t of targets) {
+    if (t.built) continue;
+    if (t.screenTop > H + 260) continue;
+    const d = Math.hypot(t.x - x, t.y - y) + 120;
+    const w = 1 / (d * d);
+    sum += w;
+    cands.push({ t, w });
+  }
+  if (!cands.length) return null;
+  let roll = Math.random() * sum;
+  for (const c of cands) {
+    roll -= c.w;
+    if (roll <= 0) return c.t;
+  }
+  return cands[cands.length - 1].t;
+}
+
+function feedTarget(x, y, idx) {
+  for (const t of targets) {
+    if (Math.abs(x - t.x) < t.w / 2 + 24 && Math.abs(y - t.y) < t.h / 2 + 24) {
+      if (!t.built) t.biomass += 1;
+      /* Guarda quem chegou nesse bloco: são essas rotas que a colônia continua
+         "usando" depois, mantendo os troncos vivos contra o decaimento. */
+      if (t.feeders.length < 40) t.feeders.push(idx);
+      else t.feeders[Math.floor(Math.random() * 40)] = idx;
+      return true;
+    }
+  }
+  return false;
+}
+
+/* Rearranjo contínuo da rede: o que continua sendo usado engrossa, o que parou
+   de ser usado afina, morre e é reabsorvido. Sem isso a colônia congela assim
+   que termina de crescer. */
+function maintainTick(ts) {
+  /* 1. As rotas ainda "em uso" (as que chegaram nos blocos) são reforçadas. */
+  for (let k = 0; k < REINFORCE_PER_TICK; k++) {
+    const t = targets[Math.floor(Math.random() * targets.length)];
+    if (!t || !t.feeders.length) continue;
+    const idx = t.feeders[Math.floor(Math.random() * t.feeders.length)];
+    if (cells[idx] && !cells[idx].dead) reinforcePath(idx);
+  }
+
+  /* 2. Todo o resto decai. */
+  for (let i = 0; i < cells.length; i++) {
+    const c = cells[i];
+    if (c.dead) continue;
+    if (c.flow > 0) c.flow -= FLOW_DECAY;
+
+    /* 3. Ponta sem filhos e sem fluxo começa a RECUAR — a massa é puxada de
+       volta, como o organismo reabsorvendo um ramo improdutivo. */
+    if (c.retreatAt < 0 && c.parentIdx >= 0 && c.childCount === 0 &&
+        c.flow <= FLOW_DEAD && (ts - c.born) > MIN_AGE_TO_DIE) {
+      c.retreatAt = ts;
+    }
+
+    /* 4. Terminou de recuar: some de vez e devolve o espaço para novo
+       crescimento. As células mortas ficam no array (índices precisam ser
+       estáveis para parentIdx/ocupação/laços), só deixam de contar e desenhar. */
+    if (c.retreatAt >= 0 && ts - c.retreatAt > RETRACT_MS) {
+      c.dead = true;
+      c.gen++;
+      liveCount--;
+      occupancy.delete(occKey(c.x, c.y));
+      if (c.parentIdx >= 0 && cells[c.parentIdx]) cells[c.parentIdx].childCount--;
+      /* A vaga volta para reuso. Sem isso o array enche, o crescimento para de
+         vez e a colônia morre lentamente — só o decaimento continua rodando. */
+      freeSlots.push(i);
+    }
+  }
+}
+
+function growTick(ts, sy) {
+  if (liveCount >= MAX_CELLS || cells.length >= CELL_ARRAY_CAP) return;
+
+  /* Rebrota: se a frente de crescimento se extinguir (pontas encurraladas por
+     vizinhos), a colônia volta a brotar de massa já existente perto do que o
+     usuário está vendo — sem isso ela morre no meio da página. */
+  if (tips.length < 6) {
+    const pool = [];
+    for (let i = 0; i < cells.length; i++) {
+      const c = cells[i];
+      if (c.dead) continue;
+      const dy = c.y - sy;
+      if (dy > -200 && dy < H + 200) pool.push(i);
+    }
+    if (pool.length) {
+      for (let i = tips.length; i < 8; i++) {
+        const idx = pool[Math.floor(Math.random() * pool.length)];
+        const c = cells[idx];
+        tips.push({
+          x: c.x, y: c.y, angle: Math.random() * Math.PI * 2, depth: 0,
+          cellIdx: idx, target: null,
+        });
+      }
+    }
+  }
+  if (!tips.length) return;
+
+  const next = [];
+  for (const tip of tips) {
+    if (liveCount + next.length >= MAX_CELLS) break;
+    if (Math.random() < TIP_DIE_CHANCE && tips.length > 3) continue;
+
+    /* Alvo "grudado" na ponta: se ela re-sorteasse todo ciclo, a média puxaria
+       tudo de volta para o centro e o leque desapareceria. */
+    if (!tip.target || tip.target.built) tip.target = pickTarget(tip.x, tip.y);
+    const target = tip.target;
+    let baseAngle = tip.angle;
+    if (target) {
+      const want = Math.atan2(target.y - tip.y, target.x - tip.x);
+      let diff = want - baseAngle;
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      baseAngle += diff * SEEK_PULL;
+    }
+
+    /* O cursor age como fonte de alimento: pontas por perto se curvam na
+       direção dele. Algo vivo responde a quem chega perto. */
+    if (mouse.on) {
+      const mdx = mouse.x - tip.x, mdy = mouse.y - tip.y;
+      const md = Math.hypot(mdx, mdy);
+      if (md < MOUSE_R * 2 && md > 1) {
+        const pull = MOUSE_PULL * (1 - md / (MOUSE_R * 2));
+        let diff = Math.atan2(mdy, mdx) - baseAngle;
+        while (diff > Math.PI) diff -= Math.PI * 2;
+        while (diff < -Math.PI) diff += Math.PI * 2;
+        baseAngle += diff * pull;
+      }
+    }
+
+    /* Se a vaga estiver ocupada, a ponta TENTA outros ângulos em vez de morrer.
+       Sem isso a colônia se autoextingue: pontas nascidas juntas disputam a
+       mesma célula do grid e somem todas nos primeiros ciclos. */
+    let angle = 0, nx = 0, ny = 0, placed = false, hitIdx = -1;
+    for (let attempt = 0; attempt < 7 && !placed; attempt++) {
+      const spread = WANDER * (1 + attempt * 0.9);
+      angle = baseAngle + (Math.random() - 0.5) * spread;
+      const len = STEP * (0.75 + Math.random() * 0.5);
+      nx = tip.x + Math.cos(angle) * len;
+      ny = tip.y + Math.sin(angle) * len;
+      if (nx < 10) { nx = 10; angle = Math.PI - angle; }
+      if (nx > W - 10) { nx = W - 10; angle = Math.PI - angle; }
+      if (ny < 4) { ny = 4; angle = -angle; }
+      if (ny > docHeight - 4) { ny = docHeight - 4; angle = -angle; }
+      const occ = occupancy.get(occKey(nx, ny));
+      if (occ === undefined) placed = true;
+      else if (hitIdx < 0) hitIdx = occ;
+    }
+
+    if (!placed) {
+      /* ANASTOMOSE: bateu num ramo de outra linhagem → os dois se FUNDEM,
+         fechando um laço. É o que transforma a árvore numa malha, como numa
+         colônia real, onde as veias se reencontram. */
+      if (hitIdx >= 0 && cells[hitIdx] && !cells[hitIdx].dead &&
+          !sharesRecentLineage(tip.cellIdx, hitIdx)) {
+        links.push({
+          a: tip.cellIdx, b: hitIdx, born: ts,
+          /* Geração de cada ponta: se a vaga for reaproveitada por outra
+             célula, o laço deixa de valer em vez de ligar pontos errados. */
+          genA: cells[tip.cellIdx].gen, genB: cells[hitIdx].gen,
+        });
+        reinforcePath(tip.cellIdx);
+        reinforcePath(hitIdx);
+        continue;
+      }
+      /* Sem vaga e sem fusão: a ponta sobrevive e tenta de novo no próximo ciclo. */
+      next.push({
+        x: tip.x, y: tip.y, angle: Math.random() * Math.PI * 2,
+        depth: tip.depth, cellIdx: tip.cellIdx, target: tip.target,
+      });
+      continue;
+    }
+
+    const dist = Math.hypot(nx - genesisX, ny - genesisY);
+    const tone = Math.min(1, dist / (docHeight * 0.62));
+    /* Reaproveita a vaga de uma célula reabsorvida; os índices continuam
+       estáveis (parentIdx/ocupação/laços dependem disso). */
+    const reuse = freeSlots.length ? freeSlots.pop() : -1;
+    const newIdx = reuse >= 0 ? reuse : cells.length;
+    const gen = reuse >= 0 ? cells[reuse].gen : 0;
+    occupancy.set(occKey(nx, ny), newIdx);
+    const nc = {
+      x: nx, y: ny, px: tip.x, py: tip.y,
+      spots: makeSpots(),
+      tone,
+      sprite: spriteFor(tone),
+      born: ts,
+      bow: (Math.random() - 0.5) * 0.7,
+      dist,
+      gran: Math.random(),
+      parentIdx: tip.cellIdx,
+      flow: 0,
+      childCount: 0,
+      dead: false,
+      retreatAt: -1,
+      gen,
+    };
+    if (reuse >= 0) cells[reuse] = nc; else cells.push(nc);
+    liveCount++;
+    if (cells[tip.cellIdx]) cells[tip.cellIdx].childCount++;
+    if (feedTarget(nx, ny, newIdx)) reinforcePath(newIdx);
+
+    next.push({ x: nx, y: ny, angle, depth: tip.depth + 1, cellIdx: newIdx, target: tip.target });
+    if (next.length < MAX_TIPS && Math.random() < BRANCH_CHANCE) {
+      /* O ramo lateral sorteia um alvo próprio: é assim que a colônia se
+         reparte entre os vários cards em vez de virar um fluxo único. */
+      next.push({
+        x: nx, y: ny,
+        angle: angle + (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.6),
+        depth: tip.depth + 1,
+        cellIdx: newIdx,
+        target: pickTarget(nx, ny),
+      });
+    }
+  }
+  tips = next.slice(0, MAX_TIPS);
+}
+
+function qpt(x0, y0, cx, cy, x1, y1, u) {
+  const iu = 1 - u;
+  return {
+    x: iu * iu * x0 + 2 * iu * u * cx + u * u * x1,
+    y: iu * iu * y0 + 2 * iu * u * cy + u * u * y1,
+  };
+}
+
+/* Fita afunilada: a veia vai da espessura DO PAI até a sua própria, em vez de
+   cada segmento ter largura constante. É o que tira o aspecto de "linguiça
+   segmentada" e faz o conjunto ler como um tubo contínuo que afina para fora. */
+function veinRibbon(x0, y0, cx, cy, x1, y1, w0, w1) {
+  const N = 4;
+  const L = [], R = [];
+  for (let i = 0; i <= N; i++) {
+    const u = i / N;
+    const p = qpt(x0, y0, cx, cy, x1, y1, u);
+    const q = qpt(x0, y0, cx, cy, x1, y1, Math.min(1, u + 0.01));
+    let tx = q.x - p.x, ty = q.y - p.y;
+    const tl = Math.hypot(tx, ty) || 1;
+    const nx = -ty / tl, ny = tx / tl;
+    const hw = (w0 + (w1 - w0) * u) / 2;
+    L.push({ x: p.x + nx * hw, y: p.y + ny * hw });
+    R.push({ x: p.x - nx * hw, y: p.y - ny * hw });
+  }
+  ctx.beginPath();
+  ctx.moveTo(L[0].x, L[0].y);
+  for (let i = 1; i <= N; i++) ctx.lineTo(L[i].x, L[i].y);
+  for (let i = N; i >= 0; i--) ctx.lineTo(R[i].x, R[i].y);
+  ctx.closePath();
+}
+
+/* CORRENTE CITOPLASMÁTICA (shuttle streaming): grânulos ESCUROS correndo
+   dentro da veia iluminada — é assim que se enxerga no organismo real, e a
+   única forma de ter contraste aqui, já que o tronco é claro.
+   Passe próprio com composição normal: em mistura aditiva, pintar escuro
+   não faz absolutamente nada.
+   A velocidade segue um cosseno, então o fluxo desacelera, PARA e INVERTE
+   o sentido — exatamente como no Physarum. */
+function drawStreaming(cell, ts, sy) {
+  if (cell.dead) return;
+  const ux = undX(cell.x, cell.y, ts);
+  const y = undY(cell.x, cell.y, ts) - sy;
+  if (y < -70 || y > H + 70) return;
+  const f = cell.flow / FLOW_MAX;
+  const fw = f * f;
+  /* Limiar baixo = MAIS veias carregam grânulo (inclusive as médias/finas).
+     A densidade ao longo de cada veia continua controlada pelo sorteio abaixo,
+     que é o que evita o aspecto de linha tracejada. */
+  if (fw < 0.04) return;
+  if (cell.gran > 0.5) return;
+  let t = Math.min(1, (ts - cell.born) / POP_MS);
+  if (cell.retreatAt >= 0) t *= Math.max(0, 1 - (ts - cell.retreatAt) / RETRACT_MS);
+  if (t <= 0) return;
+
+  const pxu = undX(cell.px, cell.py, ts);
+  const py = undY(cell.px, cell.py, ts) - sy;
+  const dx = ux - pxu, dy = y - py;
+  const seg = Math.hypot(dx, dy) || 1;
+  const nx = -dy / seg, ny = dx / seg;
+  const mx = (pxu + ux) / 2 + nx * cell.bow * seg * 0.35;
+  const my = (py + y) / 2 + ny * cell.bow * seg * 0.35;
+
+  const swing = Math.sin(ts / SHUTTLE_MS) * SHUTTLE_SWING;
+  /* Grânulo proporcional à veia: numa veia fina um ponto grande a apagaria. */
+  const gr = 0.5 + fw * 2.2;
+
+  /* A COR do grânulo segue o brilho da veia, senão ele some.
+     Veia grossa é clara → grânulo escuro contrasta (é o que se vê no
+     organismo real). Veia fina é escura sobre fundo escuro → ali o grânulo
+     precisa ser CLARO, ou vira escuro sobre escuro e não aparece.
+     Antes eram todos escuros: metade era desenhada e nunca vista. */
+  let k = (fw - 0.06) / 0.24;
+  k = k < 0 ? 0 : k > 1 ? 1 : k;
+  k = k * k * (3 - 2 * k);
+  const gR = 250 + (44 - 250) * k;
+  const gG = 234 + (24 - 234) * k;
+  const gB = 184 + (6 - 184) * k;
+  const a = (0.34 + fw * 0.5) * t;
+  ctx.fillStyle = `rgba(${gR | 0},${gG | 0},${gB | 0},${a > 0.62 ? 0.62 : a})`;
+  /* Um grânulo, e só em parte dos segmentos (sorteio fixo por célula): com um
+     ponto a cada poucos pixels a veia lê como linha tracejada, não como
+     partículas soltas sendo carregadas pelo fluxo. */
+  const phase = cell.gran + cell.dist * 0.02 - swing;
+  const u = phase - Math.floor(phase);
+  const g = qpt(pxu, py, mx, my, ux, y, u);
+  ctx.beginPath();
+  ctx.arc(g.x, g.y, gr, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawCell(cell, ts, sy) {
+  if (cell.dead) return;
+  const ux = undX(cell.x, cell.y, ts), uy = undY(cell.x, cell.y, ts);
+  const y = uy - sy;
+  if (y < -70 || y > H + 70) return;
+  const pxu = undX(cell.px, cell.py, ts);
+  const py = undY(cell.px, cell.py, ts) - sy;
+
+  const age = ts - cell.born;
+  let t = Math.min(1, age / POP_MS);
+  /* Retração: o ramo abandonado ENCOLHE de volta em vez de simplesmente
+     apagar — a massa está sendo puxada para o tronco. */
+  if (cell.retreatAt >= 0) {
+    t *= Math.max(0, 1 - (ts - cell.retreatAt) / RETRACT_MS);
+  }
+  if (t <= 0) return;
+  const col = paletteColor(cell.tone);
+
+  /* Onda peristáltica: a fase vem da DISTÂNCIA até o gênese, então o pulso
+     viaja pela veia para fora, em vez de cada célula piscar por conta própria. */
+  const wave = Math.sin(ts / 1050 - cell.dist / WAVE_LEN);
+  const pulse = 1 + wave * 0.14;
+
+  /* Fluxo → veia-tronco grossa e clara; sem fluxo → franja fina e discreta. */
+  const f = cell.flow / FLOW_MAX;
+  const fw = f * f;
+  /* Frente de avanço: o que acabou de nascer lê mais vivo que o interior. */
+  const fresh = Math.max(0, 1 - age / FRESH_MS);
+
+  /* Reação ao cursor: as veias por perto acendem — o organismo "percebe". */
+  let near = 0;
+  if (mouse.on) {
+    const md = Math.hypot(ux - mouse.x, uy - mouse.y);
+    if (md < MOUSE_R) {
+      near = 1 - md / MOUSE_R;
+      near = near * near;
+    }
+  }
+
+  const dx = ux - pxu, dy = y - py;
+  const seg = Math.hypot(dx, dy) || 1;
+  const nx = -dy / seg, ny = dx / seg;
+  const mx = (pxu + ux) / 2 + nx * cell.bow * seg * 0.35;
+  const my = (py + y) / 2 + ny * cell.bow * seg * 0.35;
+
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+
+  /* Alfa CAI conforme a veia engrossa: ao longo de um tronco dezenas de tubos
+     se sobrepõem e, com mistura aditiva, o acúmulo estoura em branco — vira
+     raio elétrico em vez de veia. Largura sobe, opacidade por traço desce. */
+  const tubeW = (0.8 + fw * 4.4) * pulse;
+  const tubeA = (0.10 + fw * 0.13) * t;
+  ctx.lineCap = 'round';
+
+  /* Largura do PAI → largura própria, para a veia afunilar de forma contínua. */
+  const pf = cell.parentIdx >= 0 ? cells[cell.parentIdx].flow / FLOW_MAX : f;
+  const pfw = pf * pf;
+  const parentW = (0.8 + pfw * 4.4) * pulse;
+
+  /* Bainha: larga e quase transparente, preenche o vão entre os aglomerados
+     de manchas — sem ela a veia lê como "pérolas num cordão". */
+  ctx.strokeStyle = `rgba(${col.r | 0},${col.g | 0},${col.b | 0},${(0.035 + fw * 0.05) * t})`;
+  ctx.lineWidth = tubeW * 2.8 + 3;
+  ctx.beginPath();
+  ctx.moveTo(pxu, py);
+  ctx.quadraticCurveTo(mx, my, ux, y);
+  ctx.stroke();
+
+  /* A fita afunilada só vale a pena onde a espessura é perceptível; nos ~75%
+     de veia fina um traço simples fica idêntico e custa muito menos. */
+  if (fw > 0.06) {
+    ctx.fillStyle = `rgba(${col.r | 0},${col.g | 0},${col.b | 0},${tubeA})`;
+    veinRibbon(pxu, py, mx, my, ux, y, parentW, tubeW);
+    ctx.fill();
   } else {
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
-        }
-      });
-    }, {threshold:0.15});
-    revealEls.forEach(function(el){ io.observe(el); });
-  }
-})();
-
-(function(){
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var nums = document.querySelectorAll('.stat .num');
-  function formatNum(val, format){
-    val = Math.round(val);
-    if(format === 'dot'){
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    }
-    return val.toString();
-  }
-  function animate(el){
-    if(reduceMotion){ return; } /* already shows the correct static value in the HTML */
-    var target = parseFloat(el.getAttribute('data-target'));
-    var suffix = el.getAttribute('data-suffix') || '';
-    var format = el.getAttribute('data-format');
-    el.textContent = formatNum(0, format) + suffix;
-    var start = null;
-    var duration = 1300;
-    function step(ts){
-      if(!start) start = ts;
-      var progress = Math.min((ts - start) / duration, 1);
-      var eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = formatNum(target * eased, format) + suffix;
-      if(progress < 1){ requestAnimationFrame(step); }
-    }
-    requestAnimationFrame(step);
-  }
-  var statsGrid = document.getElementById('statsGrid');
-  var done = false;
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting && !done){
-        done = true;
-        nums.forEach(animate);
-        io.unobserve(entry.target);
-      }
-    });
-  }, {threshold:0.3});
-  if(statsGrid){ io.observe(statsGrid); }
-})();
-
-/* ============ MYCELIUM NETWORK ENGINE ============ */
-(function(){
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function hexToRgb(hex){
-    hex = hex.replace('#','');
-    if(hex.length===3){ hex = hex.split('').map(function(c){return c+c;}).join(''); }
-    var num = parseInt(hex,16);
-    return {r:(num>>16)&255, g:(num>>8)&255, b:num&255};
-  }
-  function mix(a,b,t){ return {r:a.r+(b.r-a.r)*t, g:a.g+(b.g-a.g)*t, b:a.b+(b.b-a.b)*t}; }
-
-  /* Colors only change when the theme changes, not every frame — computed once
-     and refreshed on theme toggle / OS scheme change instead of on every rAF tick. */
-  var theme = {};
-  function refreshTheme(){
-    var cs = getComputedStyle(document.documentElement);
-    var lineRgb = hexToRgb(cs.getPropertyValue('--line-strong').trim() || '#443823');
-    var accentRgb = hexToRgb(cs.getPropertyValue('--accent').trim() || '#E8A33D');
-    var mossRgb = hexToRgb(cs.getPropertyValue('--moss').trim() || '#7BAE8F');
-    theme.accentRgb = accentRgb;
-    theme.threadRgb = mix(lineRgb, accentRgb, 0.55);
-    theme.threadMossRgb = mix(lineRgb, mossRgb, 0.6);
-  }
-  refreshTheme();
-  var themeToggleBtn = document.getElementById('themeToggle');
-  if(themeToggleBtn){ themeToggleBtn.addEventListener('click', function(){ requestAnimationFrame(refreshTheme); }); }
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', refreshTheme);
-
-  function buildNetwork(width, height, opts){
-    opts = opts || {};
-    var seedCount = opts.seedCount || 4;
-    var maxEdges = opts.maxEdges || 90;
-    var fromBottom = opts.fromBottom !== false;
-    var edges = [];
-    var tips = [];
-    for(var i=0;i<seedCount;i++){
-      var sx = width * (0.08 + 0.84 * (i/(seedCount-1||1))) + (Math.random()-0.5)*40;
-      var sy = fromBottom ? height * (0.94 + Math.random()*0.04) : height*(0.5+(Math.random()-0.5)*0.6);
-      tips.push({x:sx, y:sy, angle: -Math.PI/2 + (Math.random()-0.5)*0.7, depth:0, parentIndex:-1, alive:true});
-    }
-    var guard = 0;
-    while(edges.length < maxEdges && guard < 4000){
-      guard++;
-      var anyAlive = false;
-      for(var t=0; t<tips.length && edges.length < maxEdges; t++){
-        var tip = tips[t];
-        if(!tip.alive) continue;
-        anyAlive = true;
-        var termChance = 0.02 + tip.depth*0.012;
-        if(Math.random() < termChance){ tip.alive=false; continue; }
-        var angle = tip.angle + (Math.random()-0.5)*0.55;
-        var len = (22 + Math.random()*20) * Math.max(0.45, 1 - tip.depth*0.045);
-        var nx = tip.x + Math.cos(angle)*len;
-        var ny = tip.y + Math.sin(angle)*len;
-        var isMoss = Math.random() < 0.16;
-        var edgeIndex = edges.length;
-        edges.push({x1:tip.x, y1:tip.y, x2:nx, y2:ny, parentIndex: tip.parentIndex, order: edgeIndex, moss:isMoss, depth:tip.depth});
-        tip.x = nx; tip.y = ny; tip.angle = angle; tip.depth++;
-        tip.parentIndex = edgeIndex;
-        var forkChance = 0.16 - tip.depth*0.004;
-        if(Math.random() < forkChance && edges.length < maxEdges-1){
-          tips.push({x:nx, y:ny, angle: angle + (Math.random()<0.5?-1:1)*(0.5+Math.random()*0.6), depth:tip.depth, parentIndex: edgeIndex, alive:true});
-        }
-        if(ny < height*0.04 || nx < -20 || nx > width+20){ tip.alive = false; }
-      }
-      if(!anyAlive) break;
-    }
-    return edges;
+    ctx.strokeStyle = `rgba(${col.r | 0},${col.g | 0},${col.b | 0},${tubeA})`;
+    ctx.lineWidth = tubeW;
+    ctx.beginPath();
+    ctx.moveTo(pxu, py);
+    ctx.quadraticCurveTo(mx, my, ux, y);
+    ctx.stroke();
   }
 
-  function chainFor(edges, targetIndex){
-    var chain = [];
-    var idx = targetIndex;
-    var guard = 0;
-    while(idx !== -1 && idx !== undefined && guard < 500){
-      var e = edges[idx];
-      chain.unshift(e);
-      idx = e.parentIndex;
-      guard++;
-    }
-    return chain;
+  /* Núcleo claro: veia real é um cilindro — borda mais escura, centro mais
+     claro. Só nas grossas, onde o volume é perceptível. */
+  if (fw > 0.25) {
+    ctx.fillStyle = `rgba(255,240,200,${(fw - 0.25) * 0.16 * t})`;
+    veinRibbon(pxu, py, mx, my, ux, y, parentW * 0.34, tubeW * 0.34);
+    ctx.fill();
   }
 
-  function initNetwork(canvas, opts){
-    if(!canvas) return;
-    opts = opts || {};
-    var ctx = canvas.getContext('2d');
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var width, height, edges, chains;
-    var pulses = [];
-    var growthStart = null;
-    var growthDuration = opts.showGrowth ? 3200 : 0;
-    var lastSpawn = 0;
-    var mouse = null; /* {x,y} in canvas CSS-pixel space, or null when not hovering */
 
-    if(opts.mouseReactive){
-      /* Listen on the wrapping section, not the canvas: the canvas sits BEHIND the
-         hero text/buttons (lower z-index), so pointer events over that content would
-         never reach a listener on the canvas itself. Pointermove bubbles, so a listener
-         on the ancestor still fires no matter which child element was actually hit. */
-      var listenTarget = opts.mouseTarget || canvas;
-      listenTarget.addEventListener('pointermove', function(e){
-        var rect = canvas.getBoundingClientRect();
-        mouse = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-      });
-      listenTarget.addEventListener('pointerleave', function(){ mouse = null; });
-    }
+  const spotBoost = 1 + fw * 0.75 + near * 0.35;
+  const alphaBoost = 0.23 + fw * 0.09 + fresh * 0.13 + near * 0.3;
+  for (const s of cell.spots) {
+    const st = Math.min(1, Math.max(0, (t - s.jitter) / (1 - s.jitter || 1)));
+    if (st <= 0) continue;
+    const e = easeOutBack(st, 0.5);
+    const sx = ux + s.dx * e, sy2 = y + s.dy * e;
+    const r = Math.max(0.5, s.r * e * pulse * spotBoost) * 2.1;
+    ctx.globalAlpha = alphaBoost * st * s.shade;
+    ctx.drawImage(cell.sprite, sx - r, sy2 - r, r * 2, r * 2);
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
 
-    function buildChainCache(){
-      chains = [];
-      var candidates = edges.map(function(e,i){return i;}).filter(function(i){ return edges[i].depth >= 2; });
-      if(!candidates.length) candidates = edges.map(function(e,i){return i;});
-      var count = Math.min(14, Math.max(4, Math.floor(edges.length/6)));
-      for(var i=0;i<count;i++){
-        var idx = candidates[Math.floor(Math.random()*candidates.length)];
-        var chain = chainFor(edges, idx);
-        var len = 0;
-        chain.forEach(function(e){ len += Math.hypot(e.x2-e.x1, e.y2-e.y1); });
-        chains.push({chain:chain, len:len});
-      }
-    }
+/* Laços fechados pela anastomose. */
+function drawLinks(ts, sy) {
+  if (!links.length) return;
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.lineCap = 'round';
+  let alive = 0;
+  for (let i = 0; i < links.length; i++) {
+    const l = links[i];
+    const a = cells[l.a], b = cells[l.b];
+    /* Descarta o laço se qualquer ponta morreu OU se a vaga foi reaproveitada
+       por outra célula (geração diferente). */
+    if (!a || !b || a.dead || b.dead || a.gen !== l.genA || b.gen !== l.genB) continue;
+    links[alive++] = l;
+    const aux = undX(a.x, a.y, ts), auy = undY(a.x, a.y, ts);
+    const bux = undX(b.x, b.y, ts), buy = undY(b.x, b.y, ts);
+    const ay = auy - sy, by = buy - sy;
+    if ((ay < -60 && by < -60) || (ay > H + 60 && by > H + 60)) continue;
+    const t = Math.min(1, (ts - l.born) / POP_MS);
+    const f = Math.min(a.flow, b.flow) / FLOW_MAX;
+    const fw = f * f;
+    const wave = Math.sin(ts / 1050 - a.dist / WAVE_LEN);
+    const col = paletteColor((a.tone + b.tone) / 2);
+    ctx.strokeStyle = `rgba(${col.r | 0},${col.g | 0},${col.b | 0},${(0.10 + fw * 0.13) * t})`;
+    ctx.lineWidth = (0.8 + fw * 4.0) * (1 + wave * 0.14);
+    ctx.beginPath();
+    ctx.moveTo(aux, ay);
+    ctx.lineTo(bux, by);
+    ctx.stroke();
+  }
+  links.length = alive;
+  ctx.restore();
+}
 
-    function resize(){
-      var rect = canvas.getBoundingClientRect();
-      width = rect.width; height = rect.height;
-      canvas.width = Math.max(1, Math.floor(width*dpr));
-      canvas.height = Math.max(1, Math.floor(height*dpr));
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-      ctx.lineCap = 'round'; /* resizing the backing store resets context state, so re-set once here, not per frame */
-      edges = buildNetwork(width, height, opts);
-      buildChainCache();
-      growthStart = null;
-    }
+function frame(ts) {
+  const sy = window.scrollY;
+  refreshTargets(ts);
 
-    function pointAt(chainObj, dist){
-      var acc = 0;
-      var chain = chainObj.chain;
-      for(var i=0;i<chain.length;i++){
-        var e = chain[i];
-        var segLen = Math.hypot(e.x2-e.x1, e.y2-e.y1);
-        if(acc + segLen >= dist || i === chain.length-1){
-          var t = segLen ? Math.max(0,Math.min(1,(dist-acc)/segLen)) : 1;
-          return { x: e.x1 + (e.x2-e.x1)*t, y: e.y1 + (e.y2-e.y1)*t };
-        }
-        acc += segLen;
-      }
-      return {x:chain[0].x1, y:chain[0].y1};
-    }
-
-    function draw(ts){
-      if(document.hidden){ requestAnimationFrame(draw); return; }
-      var breathe = 0.85 + 0.15*Math.sin(ts/1800);
-
-      ctx.clearRect(0,0,width,height);
-
-      var revealCount = edges.length;
-      if(opts.showGrowth){
-        if(growthStart===null) growthStart = ts;
-        var gp = Math.min(1, (ts-growthStart)/growthDuration);
-        revealCount = Math.floor(gp * edges.length);
-      }
-
-      var reactRadius = opts.mouseRadius || 160;
-      for(var i=0;i<revealCount;i++){
-        var e = edges[i];
-        var rgb = e.moss ? theme.threadMossRgb : theme.threadRgb;
-        var alpha = (opts.baseAlpha!==undefined ? opts.baseAlpha : 0.55) * (1 - e.depth*0.007) * breathe;
-        alpha = Math.max(0.14, alpha);
-        var glow = (opts.glow!==undefined? opts.glow : 5);
-        var lw = Math.max(0.9, 2.6 - e.depth*0.05);
-        if(mouse){
-          var mx = (e.x1+e.x2)/2, my = (e.y1+e.y2)/2;
-          var d = Math.hypot(mx-mouse.x, my-mouse.y);
-          if(d < reactRadius){
-            var boost = 1 - d/reactRadius; /* 0..1, stronger the closer the cursor is */
-            alpha = Math.min(1, alpha + boost*0.5);
-            glow = glow + boost*10;
-            lw = lw + boost*1.2;
-          }
-        }
-        ctx.shadowColor = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+',0.8)';
-        ctx.shadowBlur = glow;
-        ctx.strokeStyle = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')';
-        ctx.lineWidth = lw;
-        ctx.beginPath();
-        ctx.moveTo(e.x1,e.y1);
-        ctx.lineTo(e.x2,e.y2);
-        ctx.stroke();
-      }
-      ctx.shadowBlur = 0;
-
-      if(!opts.showGrowth || revealCount >= edges.length){
-        if(ts - lastSpawn > (opts.spawnEvery || 1300) && pulses.length < (opts.maxPulses || 5)){
-          lastSpawn = ts;
-          var co = chains[Math.floor(Math.random()*chains.length)];
-          if(co && co.len > 0){
-            pulses.push({ chain:co, start: ts, duration: Math.max(1400, co.len * (opts.pulseSpeed || 11)) });
-          }
-        }
-        for(var p=pulses.length-1;p>=0;p--){
-          var pulse = pulses[p];
-          var prog = (ts - pulse.start)/pulse.duration;
-          if(prog >= 1){ pulses.splice(p,1); continue; }
-          var pos = pointAt(pulse.chain, prog * pulse.chain.len);
-          var ar = theme.accentRgb;
-          var grad = ctx.createRadialGradient(pos.x,pos.y,0,pos.x,pos.y, opts.pulseGlow || 10);
-          grad.addColorStop(0, 'rgba('+ar.r+','+ar.g+','+ar.b+',0.9)');
-          grad.addColorStop(1, 'rgba('+ar.r+','+ar.g+','+ar.b+',0)');
-          ctx.fillStyle = grad;
-          ctx.beginPath();
-          ctx.arc(pos.x,pos.y, opts.pulseGlow || 10, 0, Math.PI*2);
-          ctx.fill();
-          ctx.fillStyle = 'rgba(255,250,240,0.9)';
-          ctx.beginPath();
-          ctx.arc(pos.x,pos.y, 2, 0, Math.PI*2);
-          ctx.fill();
-        }
-      }
-
-      requestAnimationFrame(draw);
-    }
-
-    function staticRender(){
-      ctx.clearRect(0,0,width,height);
-      edges.forEach(function(e){
-        var rgb = e.moss ? theme.threadMossRgb : theme.threadRgb;
-        var alpha = Math.max(0.16, (opts.baseAlpha!==undefined?opts.baseAlpha:0.55) * (1 - e.depth*0.007));
-        ctx.strokeStyle = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')';
-        ctx.lineWidth = Math.max(0.9, 2.6 - e.depth*0.05);
-        ctx.beginPath(); ctx.moveTo(e.x1,e.y1); ctx.lineTo(e.x2,e.y2); ctx.stroke();
-      });
-    }
-
-    var resizeTimer;
-    window.addEventListener('resize', function(){
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(function(){
-        var newWidth = canvas.getBoundingClientRect().width;
-        /* ignore height-only changes (mobile address bar show/hide fires resize too) */
-        if(Math.abs(newWidth - width) < 40) return;
-        resize();
-        if(reduceMotion) staticRender();
-      }, 250);
-    });
-
-    resize();
-    if(reduceMotion){
-      staticRender();
-    } else {
-      requestAnimationFrame(draw);
-    }
+  if (ts - lastTick > TICK_MS) {
+    lastTick = ts;
+    tickNo++;
+    growTick(ts, sy);
+    if (tickNo % MAINTAIN_EVERY === 0) maintainTick(ts);
   }
 
-  var bg = document.getElementById('bgCanvas');
-  var hero = document.getElementById('heroCanvas');
-  var heroSection = document.querySelector('.hero');
-  initNetwork(bg, { seedCount:8, maxEdges:190, showGrowth:false, baseAlpha:0.32, glow:3, spawnEvery:2200, maxPulses:4, pulseSpeed:16, pulseGlow:7, fromBottom:false });
-  initNetwork(hero, { seedCount:7, maxEdges:170, showGrowth:true, baseAlpha:0.85, glow:7, spawnEvery:1000, maxPulses:7, pulseSpeed:10, pulseGlow:13, mouseReactive:true, mouseTarget:heroSection, mouseRadius:170 });
-})();
+  ctx.clearRect(0, 0, W, H);
+  for (let i = 0; i < cells.length; i++) drawCell(cells[i], ts, sy);
+  drawLinks(ts, sy);
+  /* Grânulos por último e com composição normal, para poderem ser escuros
+     sobre a veia já iluminada. */
+  for (let i = 0; i < cells.length; i++) drawStreaming(cells[i], ts, sy);
+
+  requestAnimationFrame(frame);
+}
+
+/* O cursor em coordenadas da PÁGINA, para casar com a colônia. */
+window.addEventListener('pointermove', e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY + window.scrollY;
+  mouse.on = true;
+}, { passive: true });
+window.addEventListener('pointerleave', () => { mouse.on = false; }, { passive: true });
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { init(); }, 200);
+});
+
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.organic-content').forEach(c => c.classList.add('built'));
+} else {
+  init();
+  requestAnimationFrame(frame);
+}
 </script>
 </body>
 </html>
