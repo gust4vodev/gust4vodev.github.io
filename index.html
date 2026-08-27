@@ -37,7 +37,9 @@
         texto solto (as duas regras logo abaixo);
      2) sombra no próprio texto, como garantia — se uma veia clara passar
         exatamente sob uma linha, a película sozinha pode não dar contraste. */
-  h1,h2,h3,p,.eyebrow,.btn,.chip,.tl-body,.contact-link{
+  /* .btn fica FORA desta lista: ele é preenchido e opaco, então já tem
+     contraste próprio — e sombra escura sob texto escuro só suja a letra. */
+  h1,h2,h3,p,.eyebrow,.chip,.tl-body,.contact-link{
     text-shadow:0 1px 3px rgba(12,9,7,.95), 0 2px 16px rgba(12,9,7,.85), 0 0 34px rgba(12,9,7,.6);
   }
 
@@ -86,12 +88,16 @@
   }
   .hero h1{font-size:clamp(2.6rem,6vw,4.6rem); margin:16px 0 20px; line-height:1.08;}
   .hero .thesis{font-size:clamp(1.02rem,1.5vw,1.22rem); color:var(--ink-soft); max-width:44ch;}
+  /* CTA preenchido: é o único elemento da página que a colônia não atravessa.
+     Usa o creme --ink em vez de branco puro — #FFF é mais frio que toda a
+     paleta e destoaria do conjunto quente. Hover vira âmbar. */
   .btn{
     font-family:'IBM Plex Mono',monospace; padding:13px 20px; border-radius:var(--radius);
-    display:inline-flex; border:1px solid var(--accent); color:var(--accent); text-decoration:none;
-    transition:all .2s; margin-top:30px;
+    display:inline-flex; text-decoration:none; transition:all .2s; margin-top:30px;
+    background:var(--ink); color:var(--bg); border:1px solid var(--ink); font-weight:600;
+    box-shadow:0 10px 26px -12px rgba(6,4,3,.7);
   }
-  .btn:hover{background:var(--accent); color:var(--bg);}
+  .btn:hover{background:var(--accent); border-color:var(--accent); color:var(--bg); transform:translateY(-2px);}
 
   .section-head{margin-bottom:44px;}
   .section-head h2{font-size:clamp(1.5rem,2.6vw,2.1rem); margin-top:10px;}
