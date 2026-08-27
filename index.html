@@ -37,9 +37,10 @@
         texto solto (as duas regras logo abaixo);
      2) sombra no próprio texto, como garantia — se uma veia clara passar
         exatamente sob uma linha, a película sozinha pode não dar contraste. */
-  /* .btn fica FORA desta lista: ele é preenchido e opaco, então já tem
-     contraste próprio — e sombra escura sob texto escuro só suja a letra. */
-  h1,h2,h3,p,.eyebrow,.chip,.tl-body,.contact-link{
+  /* .btn e .contact-link ficam FORA desta lista: são preenchidos e opacos,
+     então já têm contraste próprio — e sombra escura sob texto escuro só
+     suja a letra. */
+  h1,h2,h3,p,.eyebrow,.chip,.tl-body{
     text-shadow:0 1px 3px rgba(12,9,7,.95), 0 2px 16px rgba(12,9,7,.85), 0 0 34px rgba(12,9,7,.6);
   }
 
@@ -88,16 +89,22 @@
   }
   .hero h1{font-size:clamp(2.6rem,6vw,4.6rem); margin:16px 0 20px; line-height:1.08;}
   .hero .thesis{font-size:clamp(1.02rem,1.5vw,1.22rem); color:var(--ink-soft); max-width:44ch;}
-  /* CTA preenchido: é o único elemento da página que a colônia não atravessa.
-     Usa o creme --ink em vez de branco puro — #FFF é mais frio que toda a
-     paleta e destoaria do conjunto quente. Hover vira âmbar. */
-  .btn{
-    font-family:'IBM Plex Mono',monospace; padding:13px 20px; border-radius:var(--radius);
-    display:inline-flex; text-decoration:none; transition:all .2s; margin-top:30px;
+  /* Botões preenchidos: os únicos elementos que a colônia não atravessa.
+     Usam o creme --ink em vez de branco puro — #FFF é mais frio que toda a
+     paleta e destoaria do conjunto quente. Hover vira âmbar.
+     CTA e links de contato compartilham a regra de propósito: são o mesmo
+     componente em lugares diferentes, e separá-los só os deixaria divergir. */
+  .btn, .contact-link{
+    font-family:'IBM Plex Mono',monospace; border-radius:var(--radius);
+    display:inline-flex; text-decoration:none; transition:all .2s;
     background:var(--ink); color:var(--bg); border:1px solid var(--ink); font-weight:600;
     box-shadow:0 10px 26px -12px rgba(6,4,3,.7);
   }
-  .btn:hover{background:var(--accent); border-color:var(--accent); color:var(--bg); transform:translateY(-2px);}
+  .btn:hover, .contact-link:hover{
+    background:var(--accent); border-color:var(--accent); color:var(--bg);
+    transform:translateY(-2px);
+  }
+  .btn{padding:13px 20px; margin-top:30px;}
 
   .section-head{margin-bottom:44px;}
   .section-head h2{font-size:clamp(1.5rem,2.6vw,2.1rem); margin-top:10px;}
@@ -141,8 +148,7 @@
   }
 
   .contact-links{display:flex; flex-wrap:wrap; gap:14px; margin-top:8px;}
-  .contact-link{font-family:'IBM Plex Mono',monospace; font-size:.9rem; padding:12px 18px; border:1px solid var(--line); border-radius:4px; color:var(--ink); text-decoration:none; background:rgba(16,12,9,.46);}
-  .contact-link:hover{border-color:var(--accent); color:var(--accent);}
+  .contact-link{font-size:.9rem; padding:12px 18px;}
 
   .perfil p{color:var(--ink-soft); font-size:1.02rem; max-width:64ch;}
   .perfil p strong{color:var(--ink); font-weight:600;}
