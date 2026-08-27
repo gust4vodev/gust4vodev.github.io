@@ -20,10 +20,41 @@
   }
   h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif; margin:0; font-weight:600;}
 
-  /* Legibilidade sobre a colônia: a sombra vai no TEXTO, não num escurecimento
-     do fundo. Assim o texto sempre lê e a animação continua inteira por trás. */
-  h1,h2,h3,p,.eyebrow,.btn,.stat .num,.stat .label{
+  /* Legibilidade sobre a colônia, em DUAS camadas:
+     1) película translúcida atrás dos blocos (.pane / gradientes abaixo);
+     2) sombra no próprio texto, como garantia — se uma veia clara passar
+        exatamente sob uma linha, a película sozinha pode não dar contraste. */
+  h1,h2,h3,p,.eyebrow,.btn,.chip,.tl-body,.contact-link{
     text-shadow:0 1px 3px rgba(12,9,7,.95), 0 2px 16px rgba(12,9,7,.85), 0 0 34px rgba(12,9,7,.6);
+  }
+
+  /* Película: escurece o suficiente para o texto ganhar contraste, mas a
+     colônia continua visível através dela — desfocada, não escondida. */
+  .case-card, .timeline, .perfil .node-target:not(.section-head){
+    background:rgba(16,12,9,.40);
+    border:1px solid rgba(232,163,61,.08);
+    border-radius:16px;
+    backdrop-filter:blur(10px) saturate(120%);
+    -webkit-backdrop-filter:blur(10px) saturate(120%);
+    /* Elevação (mesma ideia do .readout do index.html): a sombra projetada
+       descola o painel da colônia e escurece o entorno, o que reforça o
+       contraste na borda — onde a película é mais fraca. O fio âmbar interno
+       define a aresta sem precisar de borda mais forte. */
+    box-shadow:0 18px 50px -22px rgba(6,4,3,.58), 0 0 0 1px rgba(232,163,61,.05) inset;
+  }
+  /* Sem backdrop-filter o desfoque não acontece, então a película precisa ser
+     mais densa para entregar o mesmo contraste. */
+  @supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+    .case-card, .timeline, .perfil .node-target:not(.section-head){background:rgba(16,12,9,.66);}
+  }
+  .perfil .node-target:not(.section-head){padding:23px 22px; max-width:72ch;}
+  /* Blocos soltos (hero, títulos de seção) não levam retângulo: um gradiente
+     radial sem borda dá o contraste sem enquadrar o texto numa caixa. */
+  .hero .container{
+    background:radial-gradient(58% 66% at 26% 46%, rgba(12,9,7,.72), rgba(12,9,7,0) 72%);
+  }
+  .section-head{
+    background:radial-gradient(52% 140% at 2% 50%, rgba(12,9,7,.66), rgba(12,9,7,0) 76%);
   }
   .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:0.72rem; letter-spacing:0.14em; color:var(--accent); font-weight:600; text-transform:uppercase;}
   .container{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
@@ -32,6 +63,13 @@
   #c{position:fixed; inset:0; z-index:0; pointer-events:none;}
 
   .hero{position:relative; padding-top:16vh; min-height:82vh; z-index:2;}
+  /* Epígrafe: linha temática acima do rótulo. Itálico em mono para ler como
+     citação, não como mais um label — senão disputa atenção com o eyebrow. */
+  .hero-epigraph{
+    font-family:'IBM Plex Mono',monospace; font-style:italic;
+    font-size:clamp(.88rem,1.15vw,1.02rem);
+    color:var(--ink-faint); margin:0 0 15px; max-width:42ch;
+  }
   .hero h1{font-size:clamp(2.6rem,6vw,4.6rem); margin:16px 0 20px; line-height:1.08;}
   .hero .thesis{font-size:clamp(1.02rem,1.5vw,1.22rem); color:var(--ink-soft); max-width:44ch;}
   .btn{
@@ -44,19 +82,60 @@
   .section-head{margin-bottom:44px;}
   .section-head h2{font-size:clamp(1.5rem,2.6vw,2.1rem); margin-top:10px;}
 
-  .stats-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--line);}
-  .stat{background:var(--bg); padding:34px 26px; position:relative;}
-  .stat .num{font-family:'Bricolage Grotesque',sans-serif; font-size:2.4rem; font-weight:700; color:var(--accent);}
-  .stat .label{color:var(--ink-soft); font-size:.92rem; margin-top:6px;}
+  .case-card .impact{margin-top:10px; padding-top:10px; border-top:1px dashed var(--line); font-size:.9rem;}
 
-  .cases-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px;}
-  .case-card{padding:32px 26px; position:relative;}
+  .stack-row{display:flex; flex-wrap:wrap; gap:10px;}
+  /* Chips e links de contato levam a mesma película, mas sem blur: são muitos
+     elementos pequenos e o desfoque neles não é perceptível — só custaria. */
+  .chip{font-family:'IBM Plex Mono',monospace; font-size:.82rem; padding:9px 16px; border:1px solid var(--line); border-radius:20px; color:var(--ink-soft); background:rgba(16,12,9,.46);}
+
+  /* Trajetória: linha horizontal com marcadores, um marco por cargo. */
+  .timeline{display:grid; grid-template-columns:repeat(4,1fr); position:relative; padding:28px 22px 24px;}
+  /* top = padding-top + 9 (metade do marcador), senão a linha desalinha dos pontos. */
+  .timeline::before{
+    content:""; position:absolute; left:22px; right:22px; top:37px; height:1px;
+    background:linear-gradient(90deg, var(--line), var(--accent), var(--line));
+    opacity:.6;
+  }
+  .tl-item{position:relative; padding:40px 26px 0 0;}
+  .tl-body{position:relative;}
+  .tl-dot{
+    position:absolute; top:-40px; left:0; width:18px; height:18px;
+    border-radius:50%; box-sizing:border-box;
+    background:var(--bg); border:2px solid var(--accent);
+  }
+  .tl-year{font-family:'IBM Plex Mono',monospace; color:var(--accent); font-weight:600; font-size:.9rem;}
+  .tl-role{font-family:'Bricolage Grotesque',sans-serif; font-weight:600; font-size:1.06rem; margin-top:7px; line-height:1.25;}
+  .tl-scope{color:var(--ink-soft); font-size:.86rem; margin-top:3px;}
+  .tl-list{list-style:none; margin:13px 0 0; padding:0;}
+  .tl-list li{color:var(--ink-soft); font-size:.85rem; line-height:1.5; margin-bottom:6px; padding-left:13px; position:relative;}
+  .tl-list li::before{content:"·"; position:absolute; left:2px; color:var(--accent); font-weight:700;}
+  @media (max-width:760px){
+    .timeline{grid-template-columns:1fr; gap:32px; padding:24px 20px;}
+    .timeline::before{
+      left:29px; top:24px; bottom:24px; right:auto; width:1px; height:auto;
+      background:linear-gradient(180deg, var(--line), var(--accent), var(--line));
+    }
+    .tl-item{padding:0 0 0 32px;}
+    .tl-dot{top:1px; left:-32px;}
+  }
+
+  .contact-links{display:flex; flex-wrap:wrap; gap:14px; margin-top:8px;}
+  .contact-link{font-family:'IBM Plex Mono',monospace; font-size:.9rem; padding:12px 18px; border:1px solid var(--line); border-radius:4px; color:var(--ink); text-decoration:none; background:rgba(16,12,9,.46);}
+  .contact-link:hover{border-color:var(--accent); color:var(--accent);}
+
+  .perfil p{color:var(--ink-soft); font-size:1.02rem; max-width:64ch;}
+  .perfil p strong{color:var(--ink); font-weight:600;}
+
+  .cases-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:28px;}
+  .case-card{padding:26px 22px; position:relative;}
   .case-card h3{font-size:1.15rem; margin:10px 0 12px;}
-  .case-card p{color:var(--ink-soft); font-size:.94rem;}
+  .case-card p{color:var(--ink-soft); font-size:.94rem; margin:0 0 11px;}
+  .case-card p:last-child{margin-bottom:0;}
   .case-card .hl{color:var(--accent); font-weight:600;}
 
   @media (max-width:860px){
-    .stats-grid, .cases-grid{grid-template-columns:1fr;}
+    .cases-grid{grid-template-columns:1fr;}
   }
 
   .organic-content{
@@ -78,26 +157,22 @@
 
 <header class="hero">
   <div class="container node-target" data-type="hero">
-    <div class="organic-content eyebrow">AUTOMAÇÃO · DADOS · OPERAÇÕES COMERCIAIS</div>
+    <p class="organic-content hero-epigraph">Onde existem caminhos, existem possibilidades de conexão.</p>
+    <div class="organic-content eyebrow">AUTOMAÇÃO · DADOS · OPERAÇÕES DE NEGÓCIO</div>
     <h1 class="organic-content">Gustavo Djonatan<br>Galhaci</h1>
-    <p class="organic-content thesis">Transformo <strong>processos manuais</strong> em <strong>sistemas que rodam sozinhos</strong> — e meço o resultado em horas, escala e prazo.</p>
-    <a class="organic-content btn" href="mailto:gust4dev@gmail.com">enviar e-mail →</a>
+    <p class="organic-content thesis">Transformo <strong>necessidades de negócio</strong> em <strong>processos estruturados, automações e soluções tecnológicas</strong> aplicáveis à operação.</p>
+    <a class="organic-content btn" href="mailto:gust4dev@gmail.com">Enviar e-mail →</a>
   </div>
 </header>
 
-<section id="resultados">
+<section class="perfil" id="perfil">
   <div class="container">
     <div class="node-target section-head" data-type="title">
-      <div class="organic-content eyebrow">RESULTADOS-CHAVE</div>
-      <h2 class="organic-content">Números que sustentam a conversa</h2>
+      <div class="organic-content eyebrow">PERFIL</div>
+      <h2 class="organic-content">Quem constrói o que está abaixo</h2>
     </div>
-    <div class="stats-grid">
-      <div class="node-target stat" data-type="box"><div class="organic-content num">176h/mês</div><div class="organic-content label">de trabalho manual eliminadas na automação de cadastro</div></div>
-      <div class="node-target stat" data-type="box"><div class="organic-content num">6x</div><div class="organic-content label">mais rápido que o prazo estabelecido pela gerência</div></div>
-      <div class="node-target stat" data-type="box"><div class="organic-content num">10.000+</div><div class="organic-content label">clientes em projetos de reestruturação comercial</div></div>
-      <div class="node-target stat" data-type="box"><div class="organic-content num">4.154</div><div class="organic-content label">clientes realocados com precisão (38,3% da carteira)</div></div>
-      <div class="node-target stat" data-type="box"><div class="organic-content num">268</div><div class="organic-content label">cadastros corrigidos em 104 grupos econômicos</div></div>
-      <div class="node-target stat" data-type="box"><div class="organic-content num">60+</div><div class="organic-content label">vendedores atendidos por automação de indicadores</div></div>
+    <div class="node-target" data-type="box">
+      <p class="organic-content">Profissional de operações de negócio com atuação em <strong>processos, dados e automação</strong>. Desde 2017, trabalho em uma operação de grande porte e, a partir de 2023, passei a atuar mais diretamente com dados, automação e desenvolvimento de soluções. Ao longo dessa trajetória, desenvolvi projetos para estruturar processos, automatizar atividades e transformar regras de negócio em soluções aplicáveis à operação. Possuo conhecimentos em desenvolvimento de software, <strong>Python, SQL, APIs, RPA</strong> e integração de sistemas, conectando necessidades de negócio à execução tecnológica.</p>
     </div>
   </div>
 </section>
@@ -106,29 +181,140 @@
   <div class="container">
     <div class="node-target section-head" data-type="title">
       <div class="organic-content eyebrow">O QUE SEI RESOLVER</div>
-      <h2 class="organic-content">Três tipos de problema, com prova</h2>
+      <h2 class="organic-content">Alguns exemplos de atuação</h2>
     </div>
     <div class="cases-grid">
       <div class="node-target case-card" data-type="box">
-        <div class="organic-content eyebrow">AUTOMAÇÃO DE PROCESSOS</div>
-        <h3 class="organic-content">Elimino trabalho manual repetitivo</h3>
-        <p class="organic-content">Cadastro de clientes: de <span class="hl">16 min</span> manual (3 sistemas, cada um com captcha) para <span class="hl">100% autônomo</span>, a cada 10 min — <span class="hl">~176h/mês</span> eliminadas.</p>
+        <div class="organic-content eyebrow">01 · ESTRUTURAÇÃO DE REGRAS DE NEGÓCIO</div>
+        <h3 class="organic-content">Automação da Segmentação de Carteiras Comerciais</h3>
+        <p class="organic-content"><span class="hl">Desafio:</span> Conciliar múltiplos critérios de negócio para estruturar carteiras comerciais em uma operação com múltiplas filiais e grande volume de clientes.</p>
+        <p class="organic-content"><span class="hl">Entrega:</span> Solução automatizada para consolidação e aplicação integrada das regras de segmentação.</p>
+        <p class="organic-content impact"><span class="hl">Impacto:</span> Transformação de critérios complexos de negócio em uma estrutura operacional padronizada, escalável e consistente. 4.154 clientes realocados, 60+ vendedores, 25 hubs.</p>
       </div>
       <div class="node-target case-card" data-type="box">
-        <div class="organic-content eyebrow">ALOCAÇÃO EM ESCALA</div>
-        <h3 class="organic-content">Redistribuo com múltiplos critérios simultâneos</h3>
-        <p class="organic-content">Segmentação de carteira: 60 vendedores, 25 hubs, 10.000+ clientes. Prazo de <span class="hl">3 meses</span> concluído em <span class="hl">14 dias</span>. 4.154 clientes realocados com precisão.</p>
+        <div class="organic-content eyebrow">02 · AUTOMAÇÃO DE PROCESSOS</div>
+        <h3 class="organic-content">Automação do Cadastro de Clientes</h3>
+        <p class="organic-content"><span class="hl">Desafio:</span> Processo manual de consulta, validação e cadastro de informações de clientes.</p>
+        <p class="organic-content"><span class="hl">Entrega:</span> Protótipo funcional com integração a APIs e lógica do processo estruturada para implementação em produção.</p>
+        <p class="organic-content impact"><span class="hl">Impacto:</span> Redução do tempo por ocorrência de 16 min para 1 min.</p>
+        <p class="organic-content"><span class="hl">Ganho estimado:</span> 176 h/mês, com redução de 93,8% no tempo operacional.</p>
       </div>
       <div class="node-target case-card" data-type="box">
-        <div class="organic-content eyebrow">AUDITORIA &amp; PADRONIZAÇÃO</div>
-        <h3 class="organic-content">Corrijo inconsistências e formalizo critérios</h3>
-        <p class="organic-content"><span class="hl">268 cadastros</span> corrigidos em <span class="hl">104 grupos econômicos</span>. Documento de critérios que hoje é referência única da equipe comercial.</p>
+        <div class="organic-content eyebrow">03 · VALIDAÇÃO DE PROCESSOS E SISTEMAS</div>
+        <h3 class="organic-content">Validação de Processos e Soluções de Negócio</h3>
+        <p class="organic-content"><span class="hl">Desafio:</span> Garantir que processos e soluções tecnológicas estivessem alinhados às necessidades do processo e regras do negócio.</p>
+        <p class="organic-content"><span class="hl">Atuação:</span> Análise e validação das regras de negócio, auditoria de indicadores, processos e comportamento das soluções implementadas nos sistemas.</p>
+        <p class="organic-content"><span class="hl">Entrega:</span> Identificação de divergências entre o processo esperado e o implementado, correção e desenvolvimento de indicadores.</p>
+        <p class="organic-content impact"><span class="hl">Impacto:</span> Maior aderência entre processos, soluções tecnológicas e necessidades reais da operação.</p>
+      </div>
+      <div class="node-target case-card" data-type="box">
+        <div class="organic-content eyebrow">04 · DADOS E INDICADORES</div>
+        <h3 class="organic-content">Inteligência Operacional</h3>
+        <p class="organic-content"><span class="hl">Desafio:</span> Transformar grandes volumes de dados operacionais em informações estruturadas para acompanhamento e identificação de pontos de atuação.</p>
+        <p class="organic-content"><span class="hl">Entrega:</span> Desenvolvimento de dashboards e indicadores, com consolidação e tratamento de dados de diferentes fontes e aplicação de regras de negócio para identificação de desvios e oportunidades.</p>
+        <p class="organic-content impact"><span class="hl">Impacto:</span> Transformação de dados operacionais em informações direcionadas para análise, tomada de decisão e atuação.</p>
       </div>
     </div>
   </div>
 </section>
 
-<footer>gust4vodev.github.io — a colônia acima cresce conforme você rola a página</footer>
+<section id="stack">
+  <div class="container">
+    <div class="node-target section-head" data-type="title">
+      <div class="organic-content eyebrow">STACK</div>
+      <h2 class="organic-content">Tecnologias e métodos</h2>
+    </div>
+    <div class="node-target stack-row" data-type="box">
+      <span class="organic-content chip">Python</span>
+      <span class="organic-content chip">SQL</span>
+      <span class="organic-content chip">APIs</span>
+      <span class="organic-content chip">RPA</span>
+      <span class="organic-content chip">SAP HANA</span>
+      <span class="organic-content chip">Playwright</span>
+      <span class="organic-content chip">BPMN</span>
+      <span class="organic-content chip">Modelagem de Regras de Negócio</span>
+    </div>
+  </div>
+</section>
+
+<section id="trajetoria">
+  <div class="container">
+    <div class="node-target section-head" data-type="title">
+      <h2 class="organic-content">Trajetória</h2>
+    </div>
+    <div class="timeline">
+      <div class="node-target tl-item" data-type="box">
+        <div class="organic-content tl-body">
+          <span class="tl-dot"></span>
+          <div class="tl-year">2017</div>
+          <div class="tl-role">Estoquista</div>
+          <div class="tl-scope">Operação</div>
+          <ul class="tl-list">
+            <li>Rotinas de estoque, conferência e expedição</li>
+            <li>Leitura prática de como a operação funciona na ponta</li>
+            <li>Primeiro contato com os sistemas internos</li>
+          </ul>
+        </div>
+      </div>
+      <div class="node-target tl-item" data-type="box">
+        <div class="organic-content tl-body">
+          <span class="tl-dot"></span>
+          <div class="tl-year">2021</div>
+          <div class="tl-role">Assistente Administrativo Financeiro</div>
+          <div class="tl-scope">Processos financeiros</div>
+          <ul class="tl-list">
+            <li>Conciliações e controles administrativos recorrentes</li>
+            <li>Padronização de planilhas e rotinas de fechamento</li>
+            <li>Primeiras automações de tarefas repetitivas</li>
+          </ul>
+        </div>
+      </div>
+      <div class="node-target tl-item" data-type="box">
+        <div class="organic-content tl-body">
+          <span class="tl-dot"></span>
+          <div class="tl-year">2023</div>
+          <div class="tl-role">Assistente de Crédito e Cobrança</div>
+          <div class="tl-scope">Processos de crédito e cobrança</div>
+          <ul class="tl-list">
+            <li>Análise de crédito e acompanhamento de carteira</li>
+            <li>Estruturação de dados e indicadores de cobrança</li>
+            <li>Início do trabalho com Python, SQL e APIs</li>
+          </ul>
+        </div>
+      </div>
+      <div class="node-target tl-item" data-type="box">
+        <div class="organic-content tl-body">
+          <span class="tl-dot"></span>
+          <div class="tl-year">2024 · atual</div>
+          <div class="tl-role">Assistente Comercial</div>
+          <div class="tl-scope">Processos comerciais</div>
+          <ul class="tl-list">
+            <li>Segmentação e estruturação de carteiras comerciais</li>
+            <li>Automação de cadastro de clientes e de indicadores</li>
+            <li>Validação de regras de negócio junto ao time técnico</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contato">
+  <div class="container">
+    <div class="node-target section-head" data-type="title">
+      <div class="organic-content eyebrow">CONTATO</div>
+      <h2 class="organic-content">Vamos conversar</h2>
+    </div>
+    <div class="node-target contact-links" data-type="box">
+      <a class="organic-content contact-link" href="mailto:gust4dev@gmail.com">E-mail</a>
+      <a class="organic-content contact-link" href="https://www.linkedin.com/in/gustavo-galhaci" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="organic-content contact-link" href="https://github.com/gust4vodev" target="_blank" rel="noopener">GitHub</a>
+      <a class="organic-content contact-link" href="https://wa.me/5543991849218" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<footer>gust4vodev.github.io<br>A colônia cresce conforme você explora.</footer>
 
 <script>
 const canvas = document.getElementById('c');
