@@ -1122,10 +1122,21 @@ window.addEventListener('pointermove', e => {
 }, { passive: true });
 window.addEventListener('pointerleave', () => { mouse.on = false; }, { passive: true });
 
-let resizeTimer;
+/* No celular, mostrar/esconder a barra de endereço dispara 'resize' com
+   mudança apenas de ALTURA — e isso acontece a cada toque ou rolagem. Chamar
+   init() ali reiniciava a colônia do zero, então a página parecia recarregar
+   sozinha. Só a LARGURA invalida de fato as posições (as células são clampadas
+   em W), então só ela justifica recomeçar; para o resto basta ajustar o canvas
+   e a altura do documento, o que preserva a colônia inteira. */
+let resizeTimer, larguraAnterior = window.innerWidth;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => { init(); }, 200);
+  resizeTimer = setTimeout(() => {
+    const novaLargura = window.innerWidth;
+    if (Math.abs(novaLargura - larguraAnterior) < 40) { resize(); return; }
+    larguraAnterior = novaLargura;
+    init();
+  }, 200);
 });
 
 if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
